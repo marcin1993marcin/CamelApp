@@ -2,6 +2,8 @@ package com.app.camel;
 
 import com.app.camel.DAO.UserRepository;
 import com.app.camel.DAO.UserRepositoryImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -9,13 +11,14 @@ import org.apache.camel.builder.RouteBuilder;
 public class UserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        final UserRepository userRepository = new UserRepositoryImpl();
+        final UserRepository userRepository= new UserRepositoryImpl();
 
+        final Gson gson = new GsonBuilder().create();
         from("restlet:http://localhost:9091/user?restletMethod=get").to("direct:select");
         from("restlet:http://localhost:9091/user/{id}?restletMethod=get").to("direct:idSelect");
         from("restlet:http://localhost:9091/user?restletMethod=post").to("direct:post");
         from("restlet:http://localhost:9091/user?restletMethod=put").to("direct:put");
-        from("restlet:http://localhost:9091/user/{id}?restletMethod=put}").to("direct:putId");
+        from("restlet:http://localhost:9091/user/{id}?restletMethod=put").to("direct:putId");
         from("restlet:http://localhost:9091/user?restletMethod=delete").to("direct:delete");
         from("restlet:http://localhost:9091/user/{id}?restletMethod=delete").to("direct:deleteId");
 
@@ -41,21 +44,38 @@ public class UserRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        System.out.println(exchange.getIn().getBody(String.class));
+                        String json= exchange.getIn().getBody(String.class);
+                        User user= gson.fromJson(json, User.class);
+                        UserStatus status=UserStatus.ACTIVE;
+                        if(user.isActive()==0) {
+                            status = UserStatus.DISABLED;
+                        }
+
+                        userRepository.addUser(user.getFirstName(),user.getLastName(),user.getEmail(),status );
+
+
                     }
                 });
         from("direct:put")
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        //edit all user
+
                     }
                 });
         from("direct:putId")
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        //edit user by id
+                        String id =exchange.getIn().getHeader("id", String.class);
+                        String json= exchange.getIn().getBody(String.class);
+                        User user= gson.fromJson(json, User.class);
+
+                        UserStatus status=UserStatus.ACTIVE;
+                        if(user.isActive()==0) {
+                            status = UserStatus.DISABLED;
+                        }
+                        userRepository.updateUserWithId(Integer.parseInt(id), user.getFirstName(), user.getLastName(), user.getEmail(),status);
                     }
                 });
         from("direct:delete")
@@ -69,7 +89,8 @@ public class UserRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        //delete user by id
+                        String id =exchange.getIn().getHeader("id", String.class);
+                        userRepository.deleteUser(Integer.parseInt(id));
                     }
                 });
     }
