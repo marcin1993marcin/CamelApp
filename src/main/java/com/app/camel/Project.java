@@ -1,5 +1,12 @@
 package com.app.camel;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class Project {
 
     private final long id;
@@ -8,25 +15,5 @@ public class Project {
     public Project(long id, String projectName) {
         this.id = id;
         this.projectName = projectName;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", projectName='" + projectName + '\'' +
-                '}';
     }
 }
