@@ -14,7 +14,7 @@ public class Application {
         context.addRoutes(restfulRoute);
         context.addRoutes(projectRoute);
         context.start();
-        Thread.sleep(500000);
+        Thread.sleep(5000000);
         context.stop();
     }
 }
