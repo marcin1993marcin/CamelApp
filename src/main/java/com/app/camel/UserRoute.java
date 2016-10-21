@@ -12,8 +12,8 @@ public class UserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         final UserRepository userRepository= new UserRepositoryImpl();
-
         final Gson gson = new GsonBuilder().create();
+
         from("restlet:http://localhost:9091/user?restletMethod=get").to("direct:select");
         from("restlet:http://localhost:9091/user/{id}?restletMethod=get").to("direct:idSelect");
         from("restlet:http://localhost:9091/user?restletMethod=post").to("direct:post");

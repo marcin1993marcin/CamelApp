@@ -1,5 +1,9 @@
 package com.app.camel;
 
+import com.app.camel.DAO.ProjectRepository;
+import com.app.camel.DAO.ProjectRepositoryImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -11,6 +15,8 @@ public class ProjectRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        final ProjectRepository projectRepository= new ProjectRepositoryImpl();
+        final Gson gson = new GsonBuilder().create();
 
         from("restlet:http://localhost:9091/project?restletMethod=get").to("direct:projectSelect");
         from("restlet:http://localhost:9091/project/{id}?restletMethod=get").to("direct:projectSelectId");
@@ -24,6 +30,8 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
+                        String select= projectRepository.getAllProjects();
+                        exchange.getIn().setBody(select);
 
                     }
                 })
@@ -32,7 +40,9 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-
+                        String id =exchange.getIn().getHeader("id", String.class);
+                        String select=projectRepository.getProjectById(Integer.parseInt(id));
+                        exchange.getIn().setBody(select);
                     }
                 })
                 .transform().body();
@@ -40,6 +50,9 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
+                        String select= exchange.getIn().getBody(String.class);
+                        Project project= gson.fromJson(select, Project.class);
+                        projectRepository.addProject(project.getProjectName());
 
                     }
                 });
@@ -54,6 +67,10 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
+                        String id =exchange.getIn().getHeader("id", String.class);
+                        String select= exchange.getIn().getBody(String.class);
+                        Project project= gson.fromJson(select, Project.class);
+                        projectRepository.updateProjectWithId(Integer.parseInt(id), project.getProjectName());
 
                     }
                 });
@@ -68,7 +85,8 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-
+                        String id =exchange.getIn().getHeader("id", String.class);
+                        projectRepository.deleteProject(Integer.parseInt(id));
                     }
                 });
 
