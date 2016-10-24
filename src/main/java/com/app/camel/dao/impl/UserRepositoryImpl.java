@@ -1,6 +1,6 @@
 package com.app.camel.dao.impl;
 
-import com.app.camel.configuration.Config;
+import com.app.camel.configuration.DatabaseConfiguration;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.model.tables.records.UserRecord;
 import org.jooq.*;
@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     public String getAllUserWithProject() {
 
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserRecord get(Integer id) {
 
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -74,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         Collection<UserRecord> users = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -97,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(UserRecord entity) {
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -116,7 +116,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void insert(UserRecord entity) {
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -137,7 +137,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(Integer id) {
 
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
