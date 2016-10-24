@@ -13,7 +13,9 @@ import org.apache.camel.component.restlet.RestletConstants;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by britenet on 2016-10-21.
@@ -41,6 +43,15 @@ public class ProjectRoute extends RouteBuilder {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         Collection<ProjectRecord> projects = projectRepository.getAll();
+                        List<Project> projectlist = new ArrayList<Project>();
+                        for(ProjectRecord projectRecord: projects)
+                        {
+                            Project project= new Project(projectRecord.getId(),projectRecord.getProjectName());
+                            projectlist.add(project);
+                        }
+                        String json= gson.toJson(projectlist);
+                        exchange.getIn().setBody(json);
+
 
                     }
                 })
@@ -50,8 +61,10 @@ public class ProjectRoute extends RouteBuilder {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         String id = exchange.getIn().getHeader("id", String.class);
-                        ProjectRecord project = projectRepository.get(Integer.parseInt("id"));
-
+                        ProjectRecord projectRecord = projectRepository.get(Integer.parseInt("id"));
+                        Project project = new Project(projectRecord.getId(), projectRecord.getProjectName());
+                        String json= gson.toJson(project);
+                        exchange.getIn().setBody(json);
                     }
                 })
                 .transform().body();
@@ -91,8 +104,7 @@ public class ProjectRoute extends RouteBuilder {
                         ProjectRecord projectRecord = new ProjectRecord();
                         projectRecord.setProjectName(project.getProjectName());
                         projectRecord.setId(Integer.parseInt("id"));
-                        projectRepository.insert(projectRecord);
-
+                        projectRepository.update(projectRecord);
                     }
                 });
         from("direct:projectDelete")

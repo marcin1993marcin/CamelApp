@@ -59,7 +59,8 @@ public class UserRoute extends RouteBuilder {
                 String id = exchange.getIn().getHeader("id", String.class);
                 UserRecord userRecord= userRepository.get(Integer.parseInt(id));
                 User user= new User(userRecord.getId(), userRecord.getFirstName(), userRecord.getLastName(), userRecord.getEmail(), userRecord.getStatus());
-               System.out.println(user);
+                String json= gson.toJson(user);
+                exchange.getIn().setBody(json);
 
             }
         }).transform().body();
@@ -105,7 +106,7 @@ public class UserRoute extends RouteBuilder {
                         userRecord.setEmail(user.getEmail());
                         userRecord.setFirstName(user.getEmail());
                         userRecord.setStatus(user.getStatus());
-                        userRepository.insert(userRecord);
+                        userRepository.update(userRecord);
 
                     }
                 });
