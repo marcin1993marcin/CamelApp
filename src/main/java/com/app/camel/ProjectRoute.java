@@ -7,6 +7,9 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.restlet.RestletConstants;
+import org.restlet.Response;
+import org.restlet.data.Status;
 
 /**
  * Created by britenet on 2016-10-21.
@@ -53,9 +56,13 @@ public class ProjectRoute extends RouteBuilder {
                         String select= exchange.getIn().getBody(String.class);
                         Project project= gson.fromJson(select, Project.class);
                         projectRepository.addProject(project.getProjectName());
-
+                        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+                        response.setStatus(Status.SUCCESS_CREATED);
+                        exchange.getOut().setBody(response);
                     }
-                });
+                }).transform().body();
+
+
         from("direct:projectPut")
                 .process(new Processor() {
                     @Override
@@ -87,8 +94,11 @@ public class ProjectRoute extends RouteBuilder {
                     public void process(Exchange exchange) throws Exception {
                         String id =exchange.getIn().getHeader("id", String.class);
                         projectRepository.deleteProject(Integer.parseInt(id));
+                        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+                        response.setStatus(Status.SUCCESS_NO_CONTENT);
+                        exchange.getOut().setBody(response);
                     }
-                });
+                }).transform().body();
 
 
     }

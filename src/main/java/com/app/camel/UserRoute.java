@@ -7,6 +7,10 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.restlet.RestletConstants;
+import org.restlet.Response;
+import org.restlet.data.MediaType;
+import org.restlet.data.Status;
 
 public class UserRoute extends RouteBuilder {
     @Override
@@ -53,9 +57,12 @@ public class UserRoute extends RouteBuilder {
 
                         userRepository.addUser(user.getFirstName(), user.getLastName(), user.getEmail(), status);
 
+                        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+                        response.setStatus(Status.SUCCESS_CREATED);
+                        exchange.getOut().setBody(response);
 
                     }
-                });
+                }).transform().body();
         from("direct:put")
                 .process(new Processor() {
                     @Override
@@ -91,7 +98,11 @@ public class UserRoute extends RouteBuilder {
                     public void process(Exchange exchange) throws Exception {
                         String id = exchange.getIn().getHeader("id", String.class);
                         userRepository.deleteUser(Integer.parseInt(id));
+
+                        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+                        response.setStatus(Status.SUCCESS_NO_CONTENT);
+                        exchange.getOut().setBody(response);
                     }
-                });
+                }).transform().body();
     }
 }
