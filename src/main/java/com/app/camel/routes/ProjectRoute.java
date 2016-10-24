@@ -61,7 +61,7 @@ public class ProjectRoute extends RouteBuilder {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         String id = exchange.getIn().getHeader("id", String.class);
-                        ProjectRecord projectRecord = projectRepository.get(Integer.parseInt("id"));
+                        ProjectRecord projectRecord = projectRepository.get(Integer.parseInt(id));
                         Project project = new Project(projectRecord.getId(), projectRecord.getProjectName());
                         String json= gson.toJson(project);
                         exchange.getIn().setBody(json);
@@ -103,7 +103,7 @@ public class ProjectRoute extends RouteBuilder {
                         Project project = gson.fromJson(select, Project.class);
                         ProjectRecord projectRecord = new ProjectRecord();
                         projectRecord.setProjectName(project.getProjectName());
-                        projectRecord.setId(Integer.parseInt("id"));
+                        projectRecord.setId(Integer.parseInt(id));
                         projectRepository.update(projectRecord);
                     }
                 });
@@ -118,9 +118,9 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id = exchange.getIn().getHeader("id", String.class);
-                        projectRepository.delete(Integer.parseInt("id"));
 
+                        String iddelete = exchange.getIn().getHeader("id", String.class);
+                        projectRepository.delete(Integer.parseInt(iddelete));
                         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
                         response.setStatus(Status.SUCCESS_NO_CONTENT);
                         exchange.getOut().setBody(response);
