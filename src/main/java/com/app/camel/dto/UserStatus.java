@@ -1,8 +1,8 @@
-package com.app.camel;
+package com.app.camel.dto;
 
 public enum UserStatus {
 
-    ACTIVE(1), DISABLED(0);
+    DISABLED(0), ACTIVE(1);
 
     private final int status;
 

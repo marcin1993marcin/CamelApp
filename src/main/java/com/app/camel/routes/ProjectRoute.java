@@ -1,7 +1,8 @@
-package com.app.camel;
+package com.app.camel.routes;
 
-import com.app.camel.DAO.ProjectRepository;
-import com.app.camel.DAO.ProjectRepositoryImpl;
+import com.app.camel.dao.ProjectRepository;
+import com.app.camel.dao.impl.ProjectRepositoryImpl;
+import com.app.camel.dto.Project;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;

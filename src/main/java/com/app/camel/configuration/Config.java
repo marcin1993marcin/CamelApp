@@ -1,4 +1,4 @@
-package com.app.camel;
+package com.app.camel.configuration;
 
 public class Config {
 

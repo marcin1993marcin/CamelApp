@@ -1,7 +1,8 @@
-package com.app.camel.DAO;
+package com.app.camel.dao.impl;
 
-import com.app.camel.Config;
-import com.app.camel.Project;
+import com.app.camel.configuration.Config;
+import com.app.camel.dto.Project;
+import com.app.camel.dao.ProjectRepository;
 import com.app.camel.model.tables.records.ProjectRecord;
 import com.google.gson.Gson;
 import org.jooq.DSLContext;

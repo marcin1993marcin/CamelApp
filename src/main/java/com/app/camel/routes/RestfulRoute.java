@@ -1,7 +1,7 @@
-package com.app.camel;
+package com.app.camel.routes;
 
-import com.app.camel.DAO.UserRepository;
-import com.app.camel.DAO.UserRepositoryImpl;
+import com.app.camel.dao.UserRepository;
+import com.app.camel.dao.impl.UserRepositoryImpl;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;

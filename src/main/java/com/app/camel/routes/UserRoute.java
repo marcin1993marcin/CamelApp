@@ -1,7 +1,9 @@
-package com.app.camel;
+package com.app.camel.routes;
 
-import com.app.camel.DAO.UserRepository;
-import com.app.camel.DAO.UserRepositoryImpl;
+import com.app.camel.dao.UserRepository;
+import com.app.camel.dao.impl.UserRepositoryImpl;
+import com.app.camel.dto.User;
+import com.app.camel.dto.UserStatus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -9,7 +11,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.restlet.RestletConstants;
 import org.restlet.Response;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 
 public class UserRoute extends RouteBuilder {
