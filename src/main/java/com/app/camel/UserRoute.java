@@ -11,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
 public class UserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        final UserRepository userRepository= new UserRepositoryImpl();
+        final UserRepository userRepository = new UserRepositoryImpl();
         final Gson gson = new GsonBuilder().create();
 
         from("restlet:http://localhost:9091/user?restletMethod=get").to("direct:select");
@@ -34,7 +34,7 @@ public class UserRoute extends RouteBuilder {
             @Override
             public void process(Exchange exchange) throws Exception {
 
-                String id =exchange.getIn().getHeader("id", String.class);
+                String id = exchange.getIn().getHeader("id", String.class);
                 String body = userRepository.getUserById(Integer.parseInt(id));
                 exchange.getIn().setBody(body);
             }
@@ -44,14 +44,14 @@ public class UserRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String json= exchange.getIn().getBody(String.class);
-                        User user= gson.fromJson(json, User.class);
-                        UserStatus status=UserStatus.ACTIVE;
-                        if(user.isActive()==0) {
+                        String json = exchange.getIn().getBody(String.class);
+                        User user = gson.fromJson(json, User.class);
+                        UserStatus status = UserStatus.ACTIVE;
+                        if (user.getIsActive() == 0) {
                             status = UserStatus.DISABLED;
                         }
 
-                        userRepository.addUser(user.getFirstName(),user.getLastName(),user.getEmail(),status );
+                        userRepository.addUser(user.getFirstName(), user.getLastName(), user.getEmail(), status);
 
 
                     }
@@ -67,15 +67,15 @@ public class UserRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id =exchange.getIn().getHeader("id", String.class);
-                        String json= exchange.getIn().getBody(String.class);
-                        User user= gson.fromJson(json, User.class);
+                        String id = exchange.getIn().getHeader("id", String.class);
+                        String json = exchange.getIn().getBody(String.class);
+                        User user = gson.fromJson(json, User.class);
 
-                        UserStatus status=UserStatus.ACTIVE;
-                        if(user.isActive()==0) {
+                        UserStatus status = UserStatus.ACTIVE;
+                        if (user.getIsActive() == 0) {
                             status = UserStatus.DISABLED;
                         }
-                        userRepository.updateUserWithId(Integer.parseInt(id), user.getFirstName(), user.getLastName(), user.getEmail(),status);
+                        userRepository.updateUserWithId(Integer.parseInt(id), user.getFirstName(), user.getLastName(), user.getEmail(), status);
                     }
                 });
         from("direct:delete")
@@ -89,7 +89,7 @@ public class UserRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id =exchange.getIn().getHeader("id", String.class);
+                        String id = exchange.getIn().getHeader("id", String.class);
                         userRepository.deleteUser(Integer.parseInt(id));
                     }
                 });
