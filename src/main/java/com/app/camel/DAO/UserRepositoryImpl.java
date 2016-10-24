@@ -5,10 +5,7 @@ import com.app.camel.User;
 import com.app.camel.UserStatus;
 import com.app.camel.model.tables.records.UserRecord;
 import com.google.gson.Gson;
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;
@@ -16,14 +13,41 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.app.camel.model.Tables.PROJECT;
 import static com.app.camel.model.Tables.USER;
+import static com.app.camel.model.Tables.USER_HAS_PROJECT;
 
 public class UserRepositoryImpl implements UserRepository {
 
-    public UserRepositoryImpl() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    public UserRepositoryImpl() {
     }
 
-    public String getAllUsers() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public String getAllUserWithProject() {
+
+        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+
+            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+
+            Result<Record5<Integer, String, String, String, Integer>> result = dslContext
+                    .select(USER.ID, USER.FIRST_NAME, USER.LAST_NAME, DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"), DSL.count().as("number_of_projects"))
+                    .from(USER)
+                    .join(USER_HAS_PROJECT)
+                    .on(USER.ID.equal(USER_HAS_PROJECT.USERS_ID))
+                    .join(PROJECT)
+                    .on(USER_HAS_PROJECT.PROJECTS_ID.equal(PROJECT.ID))
+                    .groupBy(USER.ID)
+                    .fetch();
+
+            return String.valueOf(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String getAllUsers() {
 
         List<User> users = new ArrayList<>();
 
@@ -48,7 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public String getUserById(Integer id) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public String getUserById(Integer id){
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
@@ -73,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public void addUser(String firstName, String lastName, String email, UserStatus isActive) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public void addUser(String firstName, String lastName, String email, UserStatus isActive) {
 
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
@@ -94,7 +118,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    public void deleteUser(Integer id) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public void deleteUser(Integer id) {
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
@@ -107,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    public void updateUserWithId(Integer id, String firstName, String lastName, String email, UserStatus isActive) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public void updateUserWithId(Integer id, String firstName, String lastName, String email, UserStatus isActive) {
 
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
