@@ -6,7 +6,7 @@ package com.app.camel.model;
 
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.User;
-import com.app.camel.model.tables.UserHasProject;
+import com.app.camel.model.tables.UserProjects;
 
 import javax.annotation.Generated;
 
@@ -35,7 +35,7 @@ public class Tables {
     public static final User USER = com.app.camel.model.tables.User.USER;
 
     /**
-     * The table <code>library.user_has_project</code>.
+     * The table <code>library.user_projects</code>.
      */
-    public static final UserHasProject USER_HAS_PROJECT = com.app.camel.model.tables.UserHasProject.USER_HAS_PROJECT;
+    public static final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
 }

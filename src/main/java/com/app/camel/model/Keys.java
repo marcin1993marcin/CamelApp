@@ -6,9 +6,9 @@ package com.app.camel.model;
 
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.User;
-import com.app.camel.model.tables.UserHasProject;
+import com.app.camel.model.tables.UserProjects;
 import com.app.camel.model.tables.records.ProjectRecord;
-import com.app.camel.model.tables.records.UserHasProjectRecord;
+import com.app.camel.model.tables.records.UserProjectsRecord;
 import com.app.camel.model.tables.records.UserRecord;
 
 import javax.annotation.Generated;
@@ -46,14 +46,14 @@ public class Keys {
 
     public static final UniqueKey<ProjectRecord> KEY_PROJECT_PRIMARY = UniqueKeys0.KEY_PROJECT_PRIMARY;
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
-    public static final UniqueKey<UserHasProjectRecord> KEY_USER_HAS_PROJECT_PRIMARY = UniqueKeys0.KEY_USER_HAS_PROJECT_PRIMARY;
+    public static final UniqueKey<UserProjectsRecord> KEY_USER_PROJECTS_PRIMARY = UniqueKeys0.KEY_USER_PROJECTS_PRIMARY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<UserHasProjectRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = ForeignKeys0.FK_USERS_HAS_PROJECTS_USERS;
-    public static final ForeignKey<UserHasProjectRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = ForeignKeys0.FK_USERS_HAS_PROJECTS_PROJECTS1;
+    public static final ForeignKey<UserProjectsRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = ForeignKeys0.FK_USERS_HAS_PROJECTS_USERS;
+    public static final ForeignKey<UserProjectsRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = ForeignKeys0.FK_USERS_HAS_PROJECTS_PROJECTS1;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -67,11 +67,11 @@ public class Keys {
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<ProjectRecord> KEY_PROJECT_PRIMARY = createUniqueKey(Project.PROJECT, "KEY_project_PRIMARY", Project.PROJECT.ID);
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
-        public static final UniqueKey<UserHasProjectRecord> KEY_USER_HAS_PROJECT_PRIMARY = createUniqueKey(UserHasProject.USER_HAS_PROJECT, "KEY_user_has_project_PRIMARY", UserHasProject.USER_HAS_PROJECT.USERS_ID, UserHasProject.USER_HAS_PROJECT.PROJECTS_ID);
+        public static final UniqueKey<UserProjectsRecord> KEY_USER_PROJECTS_PRIMARY = createUniqueKey(UserProjects.USER_PROJECTS, "KEY_user_projects_PRIMARY", UserProjects.USER_PROJECTS.USERS_ID, UserProjects.USER_PROJECTS.PROJECTS_ID);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
-        public static final ForeignKey<UserHasProjectRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = createForeignKey(com.app.camel.model.Keys.KEY_USER_PRIMARY, UserHasProject.USER_HAS_PROJECT, "fk_Users_has_Projects_Users", UserHasProject.USER_HAS_PROJECT.USERS_ID);
-        public static final ForeignKey<UserHasProjectRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = createForeignKey(com.app.camel.model.Keys.KEY_PROJECT_PRIMARY, UserHasProject.USER_HAS_PROJECT, "fk_Users_has_Projects_Projects1", UserHasProject.USER_HAS_PROJECT.PROJECTS_ID);
+        public static final ForeignKey<UserProjectsRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = createForeignKey(com.app.camel.model.Keys.KEY_USER_PRIMARY, UserProjects.USER_PROJECTS, "fk_Users_has_Projects_Users", UserProjects.USER_PROJECTS.USERS_ID);
+        public static final ForeignKey<UserProjectsRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = createForeignKey(com.app.camel.model.Keys.KEY_PROJECT_PRIMARY, UserProjects.USER_PROJECTS, "fk_Users_has_Projects_Projects1", UserProjects.USER_PROJECTS.PROJECTS_ID);
     }
 }
