@@ -3,6 +3,7 @@ package com.app.camel.routes;
 import com.app.camel.dao.ProjectRepository;
 import com.app.camel.dao.impl.ProjectRepositoryImpl;
 import com.app.camel.dto.Project;
+import com.app.camel.model.tables.records.ProjectRecord;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -12,30 +13,34 @@ import org.apache.camel.component.restlet.RestletConstants;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
+import java.util.Collection;
+
 /**
  * Created by britenet on 2016-10-21.
  */
 public class ProjectRoute extends RouteBuilder {
+    public static final String Url = "restlet:http://localhost:9091/project";
+
     @Override
     public void configure() throws Exception {
 
-        final ProjectRepository projectRepository= new ProjectRepositoryImpl();
+
+        final ProjectRepository projectRepository = new ProjectRepositoryImpl();
         final Gson gson = new GsonBuilder().create();
 
-        from("restlet:http://localhost:9091/project?restletMethod=get").to("direct:projectSelect");
-        from("restlet:http://localhost:9091/project/{id}?restletMethod=get").to("direct:projectSelectId");
-        from("restlet:http://localhost:9091/project?restletMethod=post").to("direct:projectPost");
-        from("restlet:http://localhost:9091/project?restletMethod=put").to("direct:projectPut");
-        from("restlet:http://localhost:9091/project/{id}?restletMethod=put").to("direct:projectPutId");
-        from("restlet:http://localhost:9091/project?restletMethod=delete").to("direct:projectDelete");
-        from("restlet:http://localhost:9091/project/{id}?restletMethod=delete").to("direct:projectDeleteId");
+        from(Url + "?restletMethod=get").to("direct:projectSelect");
+        from(Url + "/{id}?restletMethod=get").to("direct:projectSelectId");
+        from(Url + "?restletMethod=post").to("direct:projectPost");
+        from(Url + "?restletMethod=put").to("direct:projectPut");
+        from(Url + "/{id}?restletMethod=put").to("direct:projectPutId");
+        from(Url + "?restletMethod=delete").to("direct:projectDelete");
+        from(Url + "/{id}?restletMethod=delete").to("direct:projectDeleteId");
 
-        from("direct:projectSelect")
+       from("direct:projectSelect")
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String select= projectRepository.getAllProjects();
-                        exchange.getIn().setBody(select);
+                        Collection<ProjectRecord> projects = projectRepository.getAll();
 
                     }
                 })
@@ -44,9 +49,9 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id =exchange.getIn().getHeader("id", String.class);
-                        String select=projectRepository.getProjectById(Integer.parseInt(id));
-                        exchange.getIn().setBody(select);
+                        String id = exchange.getIn().getHeader("id", String.class);
+                        ProjectRecord project = projectRepository.get(Integer.parseInt("id"));
+
                     }
                 })
                 .transform().body();
@@ -54,9 +59,14 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String select= exchange.getIn().getBody(String.class);
-                        Project project= gson.fromJson(select, Project.class);
-                        projectRepository.addProject(project.getProjectName());
+                        String select = exchange.getIn().getBody(String.class);
+                        Project project = gson.fromJson(select, Project.class);
+
+                        ProjectRecord projectRecord = new ProjectRecord();
+                        projectRecord.setProjectName(project.getProjectName());
+                        projectRepository.insert(projectRecord);
+
+
                         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
                         response.setStatus(Status.SUCCESS_CREATED);
                         exchange.getOut().setBody(response);
@@ -75,10 +85,13 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id =exchange.getIn().getHeader("id", String.class);
-                        String select= exchange.getIn().getBody(String.class);
-                        Project project= gson.fromJson(select, Project.class);
-                        projectRepository.updateProjectWithId(Integer.parseInt(id), project.getProjectName());
+                        String id = exchange.getIn().getHeader("id", String.class);
+                        String select = exchange.getIn().getBody(String.class);
+                        Project project = gson.fromJson(select, Project.class);
+                        ProjectRecord projectRecord = new ProjectRecord();
+                        projectRecord.setProjectName(project.getProjectName());
+                        projectRecord.setId(Integer.parseInt("id"));
+                        projectRepository.insert(projectRecord);
 
                     }
                 });
@@ -93,8 +106,9 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
-                        String id =exchange.getIn().getHeader("id", String.class);
-                        projectRepository.deleteProject(Integer.parseInt(id));
+                        String id = exchange.getIn().getHeader("id", String.class);
+                        projectRepository.delete(Integer.parseInt("id"));
+
                         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
                         response.setStatus(Status.SUCCESS_NO_CONTENT);
                         exchange.getOut().setBody(response);

@@ -4,6 +4,8 @@ import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.UserRepositoryImpl;
 import com.app.camel.dto.User;
 import com.app.camel.dto.UserStatus;
+import com.app.camel.model.tables.records.UserRecord;
+import com.app.camel.processor.user.SelectAll;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -13,35 +15,52 @@ import org.apache.camel.component.restlet.RestletConstants;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 public class UserRoute extends RouteBuilder {
+    public static final String Uri = "restlet:http://localhost:9091/user";
+
     @Override
     public void configure() throws Exception {
         final UserRepository userRepository = new UserRepositoryImpl();
         final Gson gson = new GsonBuilder().create();
 
-        from("restlet:http://localhost:9091/user?restletMethod=get").to("direct:select");
-        from("restlet:http://localhost:9091/user/{id}?restletMethod=get").to("direct:idSelect");
-        from("restlet:http://localhost:9091/user?restletMethod=post").to("direct:post");
-        from("restlet:http://localhost:9091/user?restletMethod=put").to("direct:put");
-        from("restlet:http://localhost:9091/user/{id}?restletMethod=put").to("direct:putId");
-        from("restlet:http://localhost:9091/user?restletMethod=delete").to("direct:delete");
-        from("restlet:http://localhost:9091/user/{id}?restletMethod=delete").to("direct:deleteId");
+        from(Uri + "?restletMethod=get").to("direct:select");
+        from(Uri + "/{id}?restletMethod=get").to("direct:idSelect");
+        from(Uri + "?restletMethod=post").to("direct:post");
+        from(Uri + "?restletMethod=put").to("direct:put");
+        from(Uri + "/{id}?restletMethod=put").to("direct:putId");
+        from(Uri + "?restletMethod=delete").to("direct:delete");
+        from(Uri + "/{id}?restletMethod=delete").to("direct:deleteId");
 
         from("direct:select").process(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
-                String body = userRepository.getAllUsers();
-                exchange.getIn().setBody(body);
+                Collection<UserRecord> users= userRepository.getAll();
+                List<User> userlist=new ArrayList<User>();
+                for(UserRecord userRecord: users)
+                {
+                    User user= new User(userRecord.getId(), userRecord.getFirstName(), userRecord.getLastName(), userRecord.getEmail(), userRecord.getStatus());
+                    userlist.add(user);
+                }
+                String json= gson.toJson(userlist);
+                exchange.getIn().setBody(json);
             }
-        }).transform().body();
+        })
+        .transform().body();
 
         from("direct:idSelect").process(new Processor() {
             @Override
             public void process(Exchange exchange) throws Exception {
 
                 String id = exchange.getIn().getHeader("id", String.class);
-                String body = userRepository.getUserById(Integer.parseInt(id));
-                exchange.getIn().setBody(body);
+                UserRecord userRecord= userRepository.get(Integer.parseInt(id));
+                User user= new User(userRecord.getId(), userRecord.getFirstName(), userRecord.getLastName(), userRecord.getEmail(), userRecord.getStatus());
+               System.out.println(user);
+
             }
         }).transform().body();
 
@@ -51,12 +70,13 @@ public class UserRoute extends RouteBuilder {
                     public void process(Exchange exchange) throws Exception {
                         String json = exchange.getIn().getBody(String.class);
                         User user = gson.fromJson(json, User.class);
-                        UserStatus status = UserStatus.ACTIVE;
-                        if (user.getIsActive() == 0) {
-                            status = UserStatus.DISABLED;
-                        }
 
-                        userRepository.addUser(user.getFirstName(), user.getLastName(), user.getEmail(), status);
+                        UserRecord userRecord= new UserRecord();
+                        userRecord.setLastName(user.getLastName());
+                        userRecord.setEmail(user.getEmail());
+                        userRecord.setFirstName(user.getEmail());
+                        userRecord.setStatus(user.getStatus());
+                        userRepository.insert(userRecord);
 
                         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
                         response.setStatus(Status.SUCCESS_CREATED);
@@ -79,11 +99,14 @@ public class UserRoute extends RouteBuilder {
                         String json = exchange.getIn().getBody(String.class);
                         User user = gson.fromJson(json, User.class);
 
-                        UserStatus status = UserStatus.ACTIVE;
-                        if (user.getIsActive() == 0) {
-                            status = UserStatus.DISABLED;
-                        }
-                        userRepository.updateUserWithId(Integer.parseInt(id), user.getFirstName(), user.getLastName(), user.getEmail(), status);
+                        UserRecord userRecord= new UserRecord();
+                        userRecord.setId(Integer.parseInt(id));
+                        userRecord.setLastName(user.getLastName());
+                        userRecord.setEmail(user.getEmail());
+                        userRecord.setFirstName(user.getEmail());
+                        userRecord.setStatus(user.getStatus());
+                        userRepository.insert(userRecord);
+
                     }
                 });
         from("direct:delete")
@@ -98,7 +121,8 @@ public class UserRoute extends RouteBuilder {
                     @Override
                     public void process(Exchange exchange) throws Exception {
                         String id = exchange.getIn().getHeader("id", String.class);
-                        userRepository.deleteUser(Integer.parseInt(id));
+
+                        userRepository.delete(Integer.parseInt(id));
 
                         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
                         response.setStatus(Status.SUCCESS_NO_CONTENT);
