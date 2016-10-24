@@ -2,15 +2,15 @@ package com.app.camel.dto;
 
 public enum UserStatus {
 
-    DISABLED(0), ACTIVE(1);
+    RETIRED("Retired"), ACTIVE("Active");
 
-    private final int status;
+    private final String status;
 
-    UserStatus(int i) {
-        this.status = i;
+    UserStatus(String status) {
+        this.status = status;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 }
