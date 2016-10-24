@@ -37,7 +37,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public Collection<ProjectRecord> getAll() {
-
         Collection<ProjectRecord> projects = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
@@ -83,8 +82,10 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
-            dslContext.insertInto(project)
-                    .set(project.PROJECT_NAME, projectName)
+            com.app.camel.model.tables.Project p = com.app.camel.model.tables.Project.PROJECT;
+
+            dslContext.insertInto(p)
+                    .set(p.PROJECT_NAME, project.getProjectName())
                     .execute();
 
         } catch (Exception e) {
