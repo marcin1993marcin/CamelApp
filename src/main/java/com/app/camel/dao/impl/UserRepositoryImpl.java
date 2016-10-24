@@ -1,22 +1,17 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.configuration.Config;
-import com.app.camel.dto.User;
-import com.app.camel.dto.UserStatus;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.model.tables.records.UserRecord;
-import com.google.gson.Gson;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-import static com.app.camel.model.Tables.PROJECT;
-import static com.app.camel.model.Tables.USER;
-import static com.app.camel.model.Tables.USER_HAS_PROJECT;
+import static com.app.camel.model.Tables.*;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -32,10 +27,10 @@ public class UserRepositoryImpl implements UserRepository {
             Result<Record5<Integer, String, String, String, Integer>> result = dslContext
                     .select(USER.ID, USER.FIRST_NAME, USER.LAST_NAME, DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"), DSL.count().as("number_of_projects"))
                     .from(USER)
-                    .join(USER_HAS_PROJECT)
-                    .on(USER.ID.equal(USER_HAS_PROJECT.USERS_ID))
+                    .join(USER_PROJECTS)
+                    .on(USER.ID.equal(USER_PROJECTS.USERS_ID))
                     .join(PROJECT)
-                    .on(USER_HAS_PROJECT.PROJECTS_ID.equal(PROJECT.ID))
+                    .on(USER_PROJECTS.PROJECTS_ID.equal(PROJECT.ID))
                     .groupBy(USER.ID)
                     .fetch();
 
@@ -48,9 +43,36 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public String getAllUsers() {
 
-        List<User> users = new ArrayList<>();
+    @Override
+    public UserRecord get(Integer id) {
+
+        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
+
+            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+
+            UserRecord userRecords = dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne();
+
+            UserRecord user = new UserRecord(
+                    userRecords.getValue(USER.ID),
+                    userRecords.getValue(USER.FIRST_NAME),
+                    userRecords.getValue(USER.LAST_NAME),
+                    userRecords.getValue(USER.EMAIL),
+                    userRecords.getValue(USER.STATUS));
+
+            return user;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public Collection<UserRecord> getAll() {
+
+        Collection<UserRecord> users = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
@@ -59,12 +81,12 @@ public class UserRepositoryImpl implements UserRepository {
             Result<Record> result = dslContext.select().from(USER).fetch();
 
             for (Record r : result) {
-                User user = new User(r.getValue(USER.ID), r.getValue(USER.FIRST_NAME), r.getValue(USER.LAST_NAME), r.getValue(USER.EMAIL), r.getValue(USER.IS_ACTIVE));
+                UserRecord user = new UserRecord(r.getValue(USER.ID), r.getValue(USER.FIRST_NAME), r.getValue(USER.LAST_NAME), r.getValue(USER.EMAIL), r.getValue(USER.STATUS));
 
                 users.add(user);
             }
 
-            return new Gson().toJson(users);
+            return users;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,34 +95,27 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
-    public String getUserById(Integer id){
-
+    @Override
+    public void update(UserRecord entity) {
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
-            UserRecord userRecords = dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne();
-
-            User user = new User(
-                    userRecords.getValue(USER.ID),
-                    userRecords.getValue(USER.FIRST_NAME),
-                    userRecords.getValue(USER.LAST_NAME),
-                    userRecords.getValue(USER.EMAIL),
-                    userRecords.getValue(USER.IS_ACTIVE));
-
-            return new Gson().toJson(user);
-
+            dslContext.update(USER)
+                    .set(USER.FIRST_NAME, entity.getFirstName())
+                    .set(USER.LAST_NAME, entity.getLastName())
+                    .set(USER.EMAIL, entity.getEmail())
+                    .set(USER.STATUS, entity.getStatus())
+                    .where(USER.ID.eq(entity.getId()))
+                    .execute();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
-    public void addUser(String firstName, String lastName, String email, UserStatus isActive) {
-
-
+    @Override
+    public void insert(UserRecord entity) {
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -108,10 +123,10 @@ public class UserRepositoryImpl implements UserRepository {
             com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
 
             dslContext.insertInto(user)
-                    .set(user.FIRST_NAME, firstName)
-                    .set(user.LAST_NAME, lastName)
-                    .set(user.EMAIL, email)
-                    .set(user.IS_ACTIVE, isActive.getStatus())
+                    .set(user.FIRST_NAME, entity.getFirstName())
+                    .set(user.LAST_NAME, entity.getLastName())
+                    .set(user.EMAIL, entity.getEmail())
+                    .set(user.STATUS, entity.getStatus())
                     .execute();
 
         } catch (Exception e) {
@@ -119,33 +134,14 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    public void deleteUser(Integer id) {
+    @Override
+    public void delete(Integer id) {
 
         try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
             dslContext.delete(USER).where(USER.ID.eq(id)).execute();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateUserWithId(Integer id, String firstName, String lastName, String email, UserStatus isActive) {
-
-
-        try (Connection connection = DriverManager.getConnection(Config.URL, Config.USER, Config.PASSWORD)) {
-
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
-
-            dslContext.update(USER)
-                    .set(USER.FIRST_NAME, firstName)
-                    .set(USER.LAST_NAME, lastName)
-                    .set(USER.EMAIL, email)
-                    .set(USER.IS_ACTIVE, isActive.getStatus())
-                    .where(USER.ID.eq(id))
-                    .execute();
 
         } catch (Exception e) {
             e.printStackTrace();
