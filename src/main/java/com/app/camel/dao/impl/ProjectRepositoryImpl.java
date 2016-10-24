@@ -67,7 +67,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
             dslContext.update(PROJECT)
-                    .set(PROJECT.PROJECT_NAME, project)
+                    .set(PROJECT.PROJECT_NAME, project.getProjectName())
                     .where(PROJECT.ID.eq(project.getId()))
                     .execute();
 
