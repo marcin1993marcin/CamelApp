@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.app.camel.model.Tables.USER;
 import static com.app.camel.model.tables.Project.PROJECT;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
@@ -102,15 +103,41 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
             dslContext.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
+    }
+
+    @Override
+    public boolean deleteAll() {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+
+            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+
+            Result<Record> result = dslContext.select().from(PROJECT).fetch();
+
+            for (Record r : result) {
+
+                dslContext.delete(PROJECT).where(PROJECT.ID.eq(r.getValue(PROJECT.ID))).execute();
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

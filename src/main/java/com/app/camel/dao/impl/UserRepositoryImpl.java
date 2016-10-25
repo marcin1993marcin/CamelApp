@@ -143,7 +143,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
@@ -151,8 +151,35 @@ public class UserRepositoryImpl implements UserRepository {
 
             dslContext.delete(USER).where(USER.ID.eq(id)).execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
+    }
+
+    @Override
+    public boolean deleteAll() {
+
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+
+            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+
+            Result<Record> result = dslContext.select().from(USER).fetch();
+
+            for (Record r : result) {
+
+                dslContext.delete(USER).where(USER.ID.eq(r.getValue(USER.ID))).execute();
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
