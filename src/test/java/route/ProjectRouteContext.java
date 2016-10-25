@@ -6,12 +6,18 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class ProjectRouteContext {
 
-    public void run() throws Exception
-    {
-        CamelContext context= new DefaultCamelContext();
-        ProjectRoute projectRoute= new ProjectRoute();
+    CamelContext context = new DefaultCamelContext();
+
+
+    public void run() throws Exception {
+
+        ProjectRoute projectRoute = new ProjectRoute();
         context.addRoutes(projectRoute);
         context.start();
 
+    }
+
+    public void stop() throws Exception {
+        context.stop();
     }
 }
