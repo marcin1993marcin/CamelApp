@@ -17,9 +17,9 @@ public class DeleteByIdProject implements Processor {
 
         String iddelete = exchange.getIn().getHeader("id", String.class);
         projectRepository.delete(Integer.parseInt(iddelete));
+
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
         exchange.getOut().setBody(response);
-
     }
 }

@@ -5,6 +5,7 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Project;
+import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
 
@@ -28,6 +29,11 @@ public class Tables {
      * The table <code>library.project</code>.
      */
     public static final Project PROJECT = com.app.camel.model.tables.Project.PROJECT;
+
+    /**
+     * The table <code>library.schema_version</code>.
+     */
+    public static final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
 
     /**
      * The table <code>library.user</code>.

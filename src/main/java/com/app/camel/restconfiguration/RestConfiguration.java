@@ -1,13 +1,26 @@
 package com.app.camel.restconfiguration;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 public class RestConfiguration {
 
-    public static final String RestUrl= "restlet:http://localhost:9091/";
-    public static final String MethodGet= "?restletMethod=get";
-    public static final String MethodPost="?restletMethod=post";
-    public static final String MethodPut="?restletMethod=put";
-    public static final String MethodDelete="?restletMethod=delete";
 
+    private static org.apache.commons.configuration.Configuration restConfiguration;
+
+    static {
+        try {
+            restConfiguration = new PropertiesConfiguration("restConfiguration.properties");
+        } catch (ConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final String RestUrl = restConfiguration.getString("RestUrl");
+    public static final String MethodGet = restConfiguration.getString("MethodGet");
+    public static final String MethodPost = restConfiguration.getString("MethodPost");
+    public static final String MethodPut = restConfiguration.getString("MethodPut");
+    public static final String MethodDelete = restConfiguration.getString("MethodDelete");
 
 
 }

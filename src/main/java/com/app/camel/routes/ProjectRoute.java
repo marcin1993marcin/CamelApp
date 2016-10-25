@@ -19,7 +19,7 @@ public class ProjectRoute extends RouteBuilder {
         from(RestUrl + "project "+ MethodPut).to("direct:projectPut");
         from(RestUrl + "project/{id}" + MethodPut).to("direct:projectPutId");
         from(RestUrl + "project" + MethodDelete).to("direct:projectDelete");
-        from(RestUrl + "project/{id}?" + MethodPost).to("direct:projectDeleteId");
+        from(RestUrl + "project/{id}?" + MethodDelete).to("direct:projectDeleteId");
 
         from("direct:projectSelect").process(new SelectAllProject())
                 .transform().body();

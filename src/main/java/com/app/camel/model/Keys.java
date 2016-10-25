@@ -5,9 +5,11 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Project;
+import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
 import com.app.camel.model.tables.records.ProjectRecord;
+import com.app.camel.model.tables.records.SchemaVersionRecord;
 import com.app.camel.model.tables.records.UserProjectsRecord;
 import com.app.camel.model.tables.records.UserRecord;
 
@@ -45,6 +47,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<ProjectRecord> KEY_PROJECT_PRIMARY = UniqueKeys0.KEY_PROJECT_PRIMARY;
+    public static final UniqueKey<SchemaVersionRecord> KEY_SCHEMA_VERSION_PRIMARY = UniqueKeys0.KEY_SCHEMA_VERSION_PRIMARY;
     public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = UniqueKeys0.KEY_USER_PRIMARY;
     public static final UniqueKey<UserProjectsRecord> KEY_USER_PROJECTS_PRIMARY = UniqueKeys0.KEY_USER_PROJECTS_PRIMARY;
 
@@ -66,6 +69,7 @@ public class Keys {
 
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<ProjectRecord> KEY_PROJECT_PRIMARY = createUniqueKey(Project.PROJECT, "KEY_project_PRIMARY", Project.PROJECT.ID);
+        public static final UniqueKey<SchemaVersionRecord> KEY_SCHEMA_VERSION_PRIMARY = createUniqueKey(SchemaVersion.SCHEMA_VERSION, "KEY_schema_version_PRIMARY", SchemaVersion.SCHEMA_VERSION.INSTALLED_RANK);
         public static final UniqueKey<UserRecord> KEY_USER_PRIMARY = createUniqueKey(User.USER, "KEY_user_PRIMARY", User.USER.ID);
         public static final UniqueKey<UserProjectsRecord> KEY_USER_PROJECTS_PRIMARY = createUniqueKey(UserProjects.USER_PROJECTS, "KEY_user_projects_PRIMARY", UserProjects.USER_PROJECTS.USERS_ID, UserProjects.USER_PROJECTS.PROJECTS_ID);
     }
