@@ -97,7 +97,8 @@ public class ProjectRouteTest {
     public void TestDeleteProjectById() throws Exception {
         String url = "http://localhost:9091/project/11";
         String post = "{\"projectName\": \"puting test\"}";
-        client = new Client(Protocol.HTTP);
+
+       client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
         response = client.handle(request);
         assertEquals(204, response.getStatus().getCode());
