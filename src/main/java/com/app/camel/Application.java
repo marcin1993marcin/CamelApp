@@ -15,7 +15,8 @@ public class Application {
 
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
-        flyway.setDataSource(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD);
+        flyway.setDataSource(DatabaseConfiguration.URL_FOR_FLYWAY_CONFIGURATION, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD);
+        flyway.setSchemas("library");
         flyway.migrate();
 
         UserRoute restfulRoute = new UserRoute();
