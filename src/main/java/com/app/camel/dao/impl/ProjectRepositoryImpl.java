@@ -1,6 +1,6 @@
 package com.app.camel.dao.impl;
 
-import com.app.camel.configuration.DatabaseConfiguration;
+import com.app.camel.configuration.Configuration;
 import com.app.camel.dao.ProjectRepository;
 import com.app.camel.model.tables.records.ProjectRecord;
 import org.jooq.DSLContext;
@@ -20,7 +20,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public ProjectRecord get(Integer id) {
-        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -39,7 +39,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     public Collection<ProjectRecord> getAll() {
         Collection<ProjectRecord> projects = new ArrayList<>();
 
-        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -62,7 +62,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void update(ProjectRecord project) {
-        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -78,7 +78,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void insert(ProjectRecord project) {
-        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
@@ -95,7 +95,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
     public void delete(Integer id) {
-        try (Connection connection = DriverManager.getConnection(DatabaseConfiguration.URL, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 

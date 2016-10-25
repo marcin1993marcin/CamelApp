@@ -1,7 +1,6 @@
 package com.app.camel;
 
-import com.app.camel.configuration.DatabaseConfiguration;
-import com.app.camel.configuration.FlywayConfiguration;
+import com.app.camel.configuration.Configuration;
 import com.app.camel.routes.ProjectRoute;
 import com.app.camel.routes.UserRoute;
 import org.apache.camel.CamelContext;
@@ -11,13 +10,13 @@ import org.flywaydb.core.Flyway;
 public class Application {
     public static void main(String[] args) throws Exception {
 
-        Class.forName(DatabaseConfiguration.DRIVER).newInstance();
+        Class.forName(Configuration.DATABASE_DRIVER).newInstance();
         CamelContext context = new DefaultCamelContext();
 
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
-        flyway.setDataSource(FlywayConfiguration.URL_FOR_FLYWAY_CONFIGURATION, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD);
-        flyway.setSchemas(FlywayConfiguration.SCHEMA_NAME);
+        flyway.setDataSource(Configuration.FLYWAY_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD);
+        flyway.setSchemas(Configuration.FLYWAY_SCHEMA_NAME);
         flyway.migrate();
 
         UserRoute restfulRoute = new UserRoute();
