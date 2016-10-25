@@ -16,7 +16,7 @@ public class Application {
 
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
-        flyway.setDataSource(DatabaseConfiguration.URL_FOR_FLYWAY_CONFIGURATION, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD);
+        flyway.setDataSource(FlywayConfiguration.URL_FOR_FLYWAY_CONFIGURATION, DatabaseConfiguration.USER, DatabaseConfiguration.PASSWORD);
         flyway.setSchemas(FlywayConfiguration.SCHEMA_NAME);
         flyway.migrate();
 
