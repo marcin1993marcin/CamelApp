@@ -96,7 +96,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void update(UserRecord entity) {
+    public boolean update(UserRecord entity) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -109,13 +109,17 @@ public class UserRepositoryImpl implements UserRepository {
                     .where(USER.ID.eq(entity.getId()))
                     .execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     @Override
-    public void insert(UserRecord entity) {
+    public boolean insert(UserRecord entity) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -129,9 +133,13 @@ public class UserRepositoryImpl implements UserRepository {
                     .set(user.STATUS, entity.getStatus())
                     .execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     @Override

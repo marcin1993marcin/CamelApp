@@ -61,7 +61,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
     }
 
     @Override
-    public void update(ProjectRecord project) {
+    public boolean update(ProjectRecord project) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -71,13 +71,17 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     .where(PROJECT.ID.eq(project.getId()))
                     .execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     @Override
-    public void insert(ProjectRecord project) {
+    public boolean insert(ProjectRecord project) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -88,9 +92,13 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     .set(p.PROJECT_NAME, project.getProjectName())
                     .execute();
 
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return false;
     }
 
     @Override
