@@ -8,5 +8,6 @@ public interface GenericRepository<ID, T> {
     Collection<T> getAll();
     boolean update(T entity);
     boolean insert(T entity);
-    void delete(ID id);
+    boolean delete(ID id);
+    boolean deleteAll();
 }
