@@ -46,7 +46,6 @@ public class ProjectRouteTest {
         Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
         String responseString = response.getEntityAsText();
         Assert.assertNotNull(responseString);
-        projectRouteContext.stop();
     }
 
     @Test
@@ -62,7 +61,6 @@ public class ProjectRouteTest {
         Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
         String responseString = response.getEntityAsText();
         Assert.assertNotNull(responseString);
-        projectRouteContext.stop();
     }
 
     @Test
@@ -76,7 +74,6 @@ public class ProjectRouteTest {
         request.setEntity(post, MediaType.APPLICATION_ALL);
         response = client.handle(request);
         assertEquals(201, response.getStatus().getCode());
-        projectRouteContext.stop();
     }
 
     @Test
@@ -90,19 +87,16 @@ public class ProjectRouteTest {
         request.setEntity(post, MediaType.APPLICATION_ALL);
         response = client.handle(request);
         assertEquals(200, response.getStatus().getCode());
-        projectRouteContext.stop();
     }
 
     @Test
     public void TestDeleteProjectById() throws Exception {
         String url = "http://localhost:9091/project/11";
-        String post = "{\"projectName\": \"puting test\"}";
 
        client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
         response = client.handle(request);
         assertEquals(204, response.getStatus().getCode());
-        projectRouteContext.stop();
     }
 
 
