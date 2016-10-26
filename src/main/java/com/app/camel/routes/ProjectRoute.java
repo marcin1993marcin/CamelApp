@@ -1,7 +1,6 @@
 package com.app.camel.routes;
 
 import com.app.camel.processor.project.*;
-import com.app.camel.restconfiguration.RestConfiguration;
 import org.apache.camel.builder.RouteBuilder;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;

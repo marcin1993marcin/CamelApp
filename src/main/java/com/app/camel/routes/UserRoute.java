@@ -1,9 +1,6 @@
 package com.app.camel.routes;
 
 import com.app.camel.processor.user.*;
-import com.app.camel.restconfiguration.RestConfiguration;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;
@@ -16,7 +13,6 @@ public class UserRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-
 
 
         from(USER_REST_URL + METHOD_GET).to("direct:select");
@@ -46,7 +42,7 @@ public class UserRoute extends RouteBuilder {
                 .process(new PutUser());
 
         from("direct:delete")
-               .process(new DeleteAllUser());
+                .process(new DeleteAllUser());
 
         from("direct:deleteId").process(new DeleteByIdUser())
                 .transform().body();

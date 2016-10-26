@@ -9,9 +9,10 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class SelectAllProject implements Processor {
 
@@ -22,12 +23,11 @@ public class SelectAllProject implements Processor {
     public void process(Exchange exchange) throws Exception {
         Collection<ProjectRecord> projects = projectRepository.getAll();
 
-        List<Project> projectlist = new ArrayList<Project>();
-        for (ProjectRecord projectRecord : projects) {
-            Project project = new Project(projectRecord.getId(), projectRecord.getProjectName());
-            projectlist.add(project);
-        }
-        String json = gson.toJson(projectlist);
-        exchange.getIn().setBody(json);
+        List<Project> projectList = projects.stream().map(projectEntity -> Project.builder()
+                .projectName(projectEntity.getProjectName())
+                .build()
+        ).collect(toList());
+
+        exchange.getIn().setBody(gson.toJson(projectList));
     }
 }
