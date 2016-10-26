@@ -43,12 +43,8 @@ public class UserRoute extends RouteBuilder {
                 .process(new PutUser());
 
         from("direct:delete")
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        //TODO delete all
-                    }
-                });
+               .process(new DeleteAllUser());
+
         from("direct:deleteId").process(new DeleteByIdUser())
                 .transform().body();
     }

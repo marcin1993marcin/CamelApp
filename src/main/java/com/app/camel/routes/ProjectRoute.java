@@ -42,13 +42,7 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new PutByIdProject());
 
         from("direct:projectDelete")
-
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-
-                    }
-                });
+                .process(new DeleteAllProject());
 
         from("direct:projectDeleteId")
                 .process(new DeleteByIdProject())

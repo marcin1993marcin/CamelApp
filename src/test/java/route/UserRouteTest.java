@@ -16,14 +16,14 @@ public class UserRouteTest {
     @Rule
     public ExpectedException exception =
             ExpectedException.none();
-    private UserRouteContext userRouteContext= new UserRouteContext();
+    private UserRouteContext userRouteContext = new UserRouteContext();
     private Client client = new Client(Protocol.HTTP);
     private Request request;
     private Response response;
 
     @Before
     public final void before() throws Exception {
-        userRouteContext=new UserRouteContext();
+        userRouteContext = new UserRouteContext();
         userRouteContext.run();
     }
 
@@ -56,11 +56,14 @@ public class UserRouteTest {
         request = new Request(Method.GET, url);
         response = client.handle(request);
 
-        assertEquals(200, response.getStatus().getCode());
-        Assert.assertTrue(response.isEntityAvailable());
-        Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
-        String responseString = response.getEntityAsText();
-        Assert.assertNotNull(responseString);
+        if (response.isEntityAvailable()) {
+            assertEquals(200, response.getStatus().getCode());
+            Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
+            String responseString = response.getEntityAsText();
+        } else {
+            assertEquals(204, response.getStatus().getCode());
+        }
+
 
     }
 
@@ -101,6 +104,15 @@ public class UserRouteTest {
         response = client.handle(request);
         assertEquals(204, response.getStatus().getCode());
 
+    }
+
+    @Test
+    public void TestDeleteAll() throws Exception {
+        String url = "http://localhost:9091/user";
+        client = new Client(Protocol.HTTP);
+        request = new Request(Method.DELETE, url);
+        response = client.handle(request);
+        assertEquals(200, response.getStatus().getCode());
     }
 
 }
