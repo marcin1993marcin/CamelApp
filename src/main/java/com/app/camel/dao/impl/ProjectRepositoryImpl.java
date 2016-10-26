@@ -11,8 +11,10 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import static com.app.camel.model.Tables.USER;
 import static com.app.camel.model.tables.Project.PROJECT;
@@ -20,24 +22,23 @@ import static com.app.camel.model.tables.Project.PROJECT;
 public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
-    public ProjectRecord get(Integer id) {
+    public Optional<ProjectRecord> get(Integer id) {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
-            ProjectRecord project = dslContext.selectFrom(PROJECT).where(PROJECT.ID.equal(id)).fetchOne();
+            Optional<ProjectRecord> project = Optional.ofNullable(dslContext.selectFrom(PROJECT).where(PROJECT.ID.equal(id)).fetchOne());
 
             return project;
 
         } catch (Exception e) {
             e.printStackTrace();
+            return Optional.empty();
         }
-
-        return null;
     }
 
     @Override
-    public Collection<ProjectRecord> getAll() {
+    public Collection<ProjectRecord> getAll() throws SQLException {
         Collection<ProjectRecord> projects = new ArrayList<>();
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
@@ -54,11 +55,7 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             return projects;
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return null;
     }
 
     @Override

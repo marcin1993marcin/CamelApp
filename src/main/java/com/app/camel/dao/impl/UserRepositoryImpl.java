@@ -8,8 +8,10 @@ import org.jooq.impl.DSL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import static com.app.camel.model.Tables.*;
 
@@ -45,32 +47,24 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public UserRecord get(Integer id) {
+    public Optional<UserRecord> get(Integer id) {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
 
-            UserRecord userRecords = dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne();
+            Optional<UserRecord> userRecords = Optional.ofNullable(dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne());
 
-            UserRecord user = new UserRecord(
-                    userRecords.getValue(USER.ID),
-                    userRecords.getValue(USER.FIRST_NAME),
-                    userRecords.getValue(USER.LAST_NAME),
-                    userRecords.getValue(USER.EMAIL),
-                    userRecords.getValue(USER.STATUS));
-
-            return user;
+            return userRecords;
 
         } catch (Exception e) {
             e.printStackTrace();
+            return Optional.empty();
         }
-
-        return null;
     }
 
     @Override
-    public Collection<UserRecord> getAll() {
+    public Collection<UserRecord> getAll() throws SQLException {
 
         Collection<UserRecord> users = new ArrayList<>();
 
@@ -88,11 +82,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             return users;
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return null;
     }
 
     @Override
