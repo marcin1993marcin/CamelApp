@@ -6,6 +6,6 @@ import java.sql.SQLException;
 
 public interface UserRepository extends GenericRepository<Integer, UserRecord>{
 
-    String getAllUserWithProject() throws SQLException;
+    String getAllUserWithProject();
 
 }
