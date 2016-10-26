@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import static com.app.camel.model.Tables.USER;
 import static com.app.camel.model.tables.Project.PROJECT;
 
 public class ProjectRepositoryImpl implements ProjectRepository {
@@ -30,7 +29,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             Optional<ProjectRecord> project = Optional.ofNullable(dslContext.selectFrom(PROJECT).where(PROJECT.ID.equal(id)).fetchOne());
 
             return project;
-
         }
     }
 
@@ -51,12 +49,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             }
 
             return projects;
-
         }
     }
 
     @Override
-    public boolean update(ProjectRecord project) {
+    public boolean update(ProjectRecord project) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -68,15 +65,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             return true;
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean insert(ProjectRecord project) {
+    public boolean insert(ProjectRecord project) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -88,16 +81,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                     .execute();
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Integer id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -105,16 +93,11 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             dslContext.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean deleteAll() {
+    public boolean deleteAll() throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -127,11 +110,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             }
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 }
