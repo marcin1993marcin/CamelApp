@@ -19,6 +19,7 @@ public class PostProject implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String select = exchange.getIn().getBody(String.class);
         Project project = gson.fromJson(select, Project.class);
 

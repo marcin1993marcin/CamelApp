@@ -16,6 +16,7 @@ public class PutByIdProject implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String id = exchange.getIn().getHeader("id", String.class);
         String select = exchange.getIn().getBody(String.class);
         Project project = gson.fromJson(select, Project.class);

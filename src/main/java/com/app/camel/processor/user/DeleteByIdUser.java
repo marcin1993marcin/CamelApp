@@ -14,6 +14,7 @@ public class DeleteByIdUser implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String id = exchange.getIn().getHeader("id", String.class);
         userRepository.delete(Integer.parseInt(id));
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
