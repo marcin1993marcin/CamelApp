@@ -1,14 +1,12 @@
 package com.app.camel.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 public class User {
 
     private final long id;
