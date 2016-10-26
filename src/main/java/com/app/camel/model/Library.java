@@ -5,8 +5,9 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Project;
+import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
-import com.app.camel.model.tables.UserHasProject;
+import com.app.camel.model.tables.UserProjects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = -473692979;
+    private static final long serialVersionUID = 137156991;
 
     /**
      * The reference instance of <code>library</code>
@@ -45,14 +46,19 @@ public class Library extends SchemaImpl {
     public final Project PROJECT = com.app.camel.model.tables.Project.PROJECT;
 
     /**
+     * The table <code>library.schema_version</code>.
+     */
+    public final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
+
+    /**
      * The table <code>library.user</code>.
      */
     public final User USER = com.app.camel.model.tables.User.USER;
 
     /**
-     * The table <code>library.user_has_project</code>.
+     * The table <code>library.user_projects</code>.
      */
-    public final UserHasProject USER_HAS_PROJECT = com.app.camel.model.tables.UserHasProject.USER_HAS_PROJECT;
+    public final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
 
     /**
      * No further instances allowed
@@ -80,7 +86,8 @@ public class Library extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Project.PROJECT,
+            SchemaVersion.SCHEMA_VERSION,
             User.USER,
-            UserHasProject.USER_HAS_PROJECT);
+            UserProjects.USER_PROJECTS);
     }
 }
