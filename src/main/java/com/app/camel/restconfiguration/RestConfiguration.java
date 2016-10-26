@@ -22,5 +22,7 @@ public class RestConfiguration {
     public static final String METHOD_PUT = configuration.getString("MethodPut");
     public static final String METHOD_DELETE = configuration.getString("MethodDelete");
 
+    public static final String PARAM_ID = "/{id}";
+
 
 }
