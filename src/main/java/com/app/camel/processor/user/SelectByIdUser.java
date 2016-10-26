@@ -9,6 +9,8 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
+import java.util.Optional;
+
 public class SelectByIdUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
@@ -17,9 +19,12 @@ public class SelectByIdUser implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        UserRecord userRecord= userRepository.get(Integer.parseInt(id));
-        User user= new User(userRecord.getId(), userRecord.getFirstName(), userRecord.getLastName(), userRecord.getEmail(), userRecord.getStatus());
-        String json= gson.toJson(user);
-        exchange.getIn().setBody(json);
+        Optional<UserRecord> userRecord= userRepository.get(Integer.parseInt(id));
+
+        if (userRecord.isPresent()) {
+            User user= new User(userRecord.get().getId(), userRecord.get().getFirstName(), userRecord.get().getLastName(), userRecord.get().getEmail(), userRecord.get().getStatus());
+            String json= gson.toJson(user);
+            exchange.getIn().setBody(json);
+        }
     }
 }

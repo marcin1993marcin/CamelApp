@@ -9,6 +9,8 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
+import java.util.Optional;
+
 
 public class SelectByIdProject implements Processor {
 
@@ -19,10 +21,11 @@ public class SelectByIdProject implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
-        ProjectRecord projectRecord = projectRepository.get(Integer.parseInt(id));
-        Project project = new Project(projectRecord.getId(), projectRecord.getProjectName());
-        String json = gson.toJson(project);
-        exchange.getIn().setBody(json);
-
+        Optional<ProjectRecord> projectRecord = projectRepository.get(Integer.parseInt(id));
+        if (projectRecord.isPresent()) {
+            Project project = new Project(projectRecord.get().getId(), projectRecord.get().getProjectName());
+            String json = gson.toJson(project);
+            exchange.getIn().setBody(json);
+        }
     }
 }
