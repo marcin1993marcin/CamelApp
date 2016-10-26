@@ -22,7 +22,7 @@ import static com.app.camel.model.tables.Project.PROJECT;
 public class ProjectRepositoryImpl implements ProjectRepository {
 
     @Override
-    public Optional<ProjectRecord> get(Integer id) {
+    public Optional<ProjectRecord> get(Integer id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -31,9 +31,6 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             return project;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Optional.empty();
         }
     }
 

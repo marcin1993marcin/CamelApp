@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl() {
     }
 
-    public String getAllUserWithProject() {
+    public String getAllUserWithProject() throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
@@ -37,17 +37,12 @@ public class UserRepositoryImpl implements UserRepository {
                     .fetch();
 
             return String.valueOf(result);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return null;
     }
 
 
     @Override
-    public Optional<UserRecord> get(Integer id) {
+    public Optional<UserRecord> get(Integer id) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
@@ -56,10 +51,6 @@ public class UserRepositoryImpl implements UserRepository {
             Optional<UserRecord> userRecords = Optional.ofNullable(dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne());
 
             return userRecords;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Optional.empty();
         }
     }
 
@@ -81,12 +72,11 @@ public class UserRepositoryImpl implements UserRepository {
             }
 
             return users;
-
         }
     }
 
     @Override
-    public boolean update(UserRecord entity) {
+    public boolean update(UserRecord entity) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -100,16 +90,11 @@ public class UserRepositoryImpl implements UserRepository {
                     .execute();
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean insert(UserRecord entity) {
+    public boolean insert(UserRecord entity) throws SQLException {
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
             DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
@@ -124,16 +109,11 @@ public class UserRepositoryImpl implements UserRepository {
                     .execute();
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean delete(Integer id) {
+    public boolean delete(Integer id) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
@@ -142,16 +122,11 @@ public class UserRepositoryImpl implements UserRepository {
             dslContext.delete(USER).where(USER.ID.eq(id)).execute();
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 
     @Override
-    public boolean deleteAll() {
+    public boolean deleteAll() throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
 
@@ -165,11 +140,6 @@ public class UserRepositoryImpl implements UserRepository {
             }
 
             return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
 }
