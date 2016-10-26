@@ -1,45 +1,53 @@
 package com.app.camel.dao.impl;
 
-import com.app.camel.configuration.Configuration;
 import com.app.camel.dao.ProjectRepository;
 import com.app.camel.model.tables.records.ProjectRecord;
+import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
+import org.jooq.exception.DataAccessException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 import static com.app.camel.model.tables.Project.PROJECT;
 
-public class ProjectRepositoryImpl implements ProjectRepository {
+public class ProjectRepositoryImpl extends GenericRepository implements ProjectRepository {
+
+    final static Logger logger = Logger.getLogger(ProjectRepositoryImpl.class);
 
     @Override
-    public Optional<ProjectRecord> get(Integer id) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public Optional<ProjectRecord> get(Integer id) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
-            Optional<ProjectRecord> project = Optional.ofNullable(dslContext.selectFrom(PROJECT).where(PROJECT.ID.equal(id)).fetchOne());
+        Optional<ProjectRecord> project = Optional.empty();
 
-            return project;
+        try {
+
+            project = Optional.ofNullable(dslContext.selectFrom(PROJECT).where(PROJECT.ID.equal(id)).fetchOne());
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to access data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return project;
     }
 
     @Override
-    public Collection<ProjectRecord> getAll() throws SQLException {
-        Collection<ProjectRecord> projects = new ArrayList<>();
+    public Collection<ProjectRecord> getAll() {
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        Collection<ProjectRecord> projects = Lists.newArrayList();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
+        try {
             Result<Record> result = dslContext.select().from(PROJECT).fetch();
 
             for (Record r : result) {
@@ -48,16 +56,24 @@ public class ProjectRepositoryImpl implements ProjectRepository {
                 projects.add(project);
             }
 
-            return projects;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to access data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return projects;
     }
 
+
     @Override
-    public boolean update(ProjectRecord project) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean update(ProjectRecord project) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
+        try {
             dslContext.update(PROJECT)
                     .set(PROJECT.PROJECT_NAME, project.getProjectName())
                     .where(PROJECT.ID.eq(project.getId()))
@@ -65,43 +81,71 @@ public class ProjectRepositoryImpl implements ProjectRepository {
 
             return true;
 
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to update data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 
+
     @Override
-    public boolean insert(ProjectRecord project) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean insert(ProjectRecord project) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
-            com.app.camel.model.tables.Project p = com.app.camel.model.tables.Project.PROJECT;
+        com.app.camel.model.tables.Project p = com.app.camel.model.tables.Project.PROJECT;
 
+        try {
             dslContext.insertInto(p)
                     .set(p.PROJECT_NAME, project.getProjectName())
                     .execute();
 
             return true;
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to insert data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 
+
     @Override
-    public boolean delete(Integer id) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean delete(Integer id) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
+        try {
             dslContext.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
 
             return true;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to delete data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 
+
     @Override
-    public boolean deleteAll() throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean deleteAll() {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
+        try {
             Result<Record> result = dslContext.select().from(PROJECT).fetch();
 
             for (Record r : result) {
@@ -110,6 +154,14 @@ public class ProjectRepositoryImpl implements ProjectRepository {
             }
 
             return true;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to delete data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 }

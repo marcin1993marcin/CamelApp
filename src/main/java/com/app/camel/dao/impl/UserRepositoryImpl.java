@@ -1,86 +1,111 @@
 package com.app.camel.dao.impl;
 
-import com.app.camel.configuration.Configuration;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.model.tables.records.UserRecord;
-import org.jooq.*;
+import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Record5;
+import org.jooq.Result;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 import static com.app.camel.model.Tables.*;
 
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl extends GenericRepository implements UserRepository {
+
+    final static Logger logger = Logger.getLogger(UserRepositoryImpl.class);
 
     public UserRepositoryImpl() {
     }
 
-    public String getAllUserWithProject() throws SQLException {
+    public String getAllUserWithProject() {
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        DSLContext dslContext = getDSLContext();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        Result<Record5<Integer, String, String, String, Integer>> result = dslContext
+                .select(USER.ID,
+                        USER.FIRST_NAME,
+                        USER.LAST_NAME,
+                        DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"),
+                        DSL.count().as("number_of_projects"))
+                .from(USER)
+                .join(USER_PROJECTS)
+                .on(USER.ID.equal(USER_PROJECTS.USERS_ID))
+                .join(PROJECT)
+                .on(USER_PROJECTS.PROJECTS_ID.equal(PROJECT.ID))
+                .groupBy(USER.ID)
+                .fetch();
 
-            Result<Record5<Integer, String, String, String, Integer>> result = dslContext
-                    .select(USER.ID, USER.FIRST_NAME, USER.LAST_NAME, DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"), DSL.count().as("number_of_projects"))
-                    .from(USER)
-                    .join(USER_PROJECTS)
-                    .on(USER.ID.equal(USER_PROJECTS.USERS_ID))
-                    .join(PROJECT)
-                    .on(USER_PROJECTS.PROJECTS_ID.equal(PROJECT.ID))
-                    .groupBy(USER.ID)
-                    .fetch();
-
-            return String.valueOf(result);
-        }
+        return String.valueOf(result);
     }
 
 
     @Override
-    public Optional<UserRecord> get(Integer id) throws SQLException {
+    public Optional<UserRecord> get(Integer id) {
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        DSLContext dslContext = getDSLContext();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        Optional<UserRecord> userRecords = Optional.empty();
 
-            Optional<UserRecord> userRecords = Optional.ofNullable(dslContext.selectFrom(USER).where(USER.ID.equal(id)).fetchOne());
+        try {
+            userRecords = Optional.ofNullable(
+                    dslContext.selectFrom(USER)
+                            .where(USER.ID.equal(id))
+                            .fetchOne());
 
-            return userRecords;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to access data");
+
+        } finally {
+            dslContext.close();
         }
+
+        return userRecords;
     }
 
     @Override
-    public Collection<UserRecord> getAll() throws SQLException {
+    public Collection<UserRecord> getAll() {
 
-        Collection<UserRecord> users = new ArrayList<>();
+        Collection<UserRecord> users = Lists.newArrayList();
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        DSLContext dslContext = getDSLContext();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
-
+        try {
             Result<Record> result = dslContext.select().from(USER).fetch();
 
             for (Record r : result) {
-                UserRecord user = new UserRecord(r.getValue(USER.ID), r.getValue(USER.FIRST_NAME), r.getValue(USER.LAST_NAME), r.getValue(USER.EMAIL), r.getValue(USER.STATUS));
+                UserRecord user = new UserRecord(
+                        r.getValue(USER.ID),
+                        r.getValue(USER.FIRST_NAME),
+                        r.getValue(USER.LAST_NAME),
+                        r.getValue(USER.EMAIL),
+                        r.getValue(USER.STATUS));
 
                 users.add(user);
             }
 
-            return users;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to access data");
+        } finally {
+            dslContext.close();
         }
+
+        return users;
     }
 
     @Override
-    public boolean update(UserRecord entity) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean update(UserRecord entity) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
+        try {
             dslContext.update(USER)
                     .set(USER.FIRST_NAME, entity.getFirstName())
                     .set(USER.LAST_NAME, entity.getLastName())
@@ -90,17 +115,26 @@ public class UserRepositoryImpl implements UserRepository {
                     .execute();
 
             return true;
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to update data");
+        } finally {
+            dslContext.close();
         }
+
+        return false;
+
     }
 
     @Override
-    public boolean insert(UserRecord entity) throws SQLException {
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+    public boolean insert(UserRecord entity) {
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
+        DSLContext dslContext = getDSLContext();
 
-            com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
+        com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
 
+        try {
             dslContext.insertInto(user)
                     .set(user.FIRST_NAME, entity.getFirstName())
                     .set(user.LAST_NAME, entity.getLastName())
@@ -109,29 +143,43 @@ public class UserRepositoryImpl implements UserRepository {
                     .execute();
 
             return true;
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to insert data");
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 
     @Override
-    public boolean delete(Integer id) throws SQLException {
+    public boolean delete(Integer id) {
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        DSLContext dslContext = getDSLContext();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
-
+        try {
             dslContext.delete(USER).where(USER.ID.eq(id)).execute();
 
             return true;
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to delete data");
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 
     @Override
-    public boolean deleteAll() throws SQLException {
+    public boolean deleteAll() {
 
-        try (Connection connection = DriverManager.getConnection(Configuration.DATABASE_URL, Configuration.DATABASE_USER, Configuration.DATABASE_PASSWORD)) {
+        DSLContext dslContext = getDSLContext();
 
-            DSLContext dslContext = DSL.using(connection, SQLDialect.MYSQL);
-
+        try {
             Result<Record> result = dslContext.select().from(USER).fetch();
 
             for (Record r : result) {
@@ -140,6 +188,14 @@ public class UserRepositoryImpl implements UserRepository {
             }
 
             return true;
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            logger.error("Unable to delete data");
+        } finally {
+            dslContext.close();
         }
+
+        return false;
     }
 }
