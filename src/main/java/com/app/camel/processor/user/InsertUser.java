@@ -30,11 +30,20 @@ public class InsertUser implements Processor {
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
         userRecord.setStatus(user.getStatus());
-        userRepository.insert(userRecord);
+        Boolean status = userRepository.insert(userRecord);
 
-        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
-        response.setStatus(Status.SUCCESS_CREATED);
-        exchange.getOut().setBody(response);
-        logger.info("Insert user success");
+        if (status) {
+            Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+            response.setStatus(Status.SUCCESS_CREATED);
+            exchange.getOut().setBody(response);
+            logger.info("Insert user success");
+        } else {
+            Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+            response.setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+            exchange.getOut().setBody(response);
+            logger.info("Insert user failed");
+        }
+
+
     }
 }
