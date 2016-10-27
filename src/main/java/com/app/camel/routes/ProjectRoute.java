@@ -17,6 +17,10 @@ public class ProjectRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        onException(DataAccessException.class)
+                .process(new DataAccessExceptionProcessor())
+                .transform().body();
+
         from(PROJECT_REST_URL + METHOD_GET).to("direct:projectSelect");
         from(PROJECT_REST_URL + PARAM_ID + METHOD_GET).to("direct:projectSelectId");
         from(PROJECT_REST_URL + METHOD_POST).to("direct:projectPost");
@@ -47,9 +51,7 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new DeleteByIdProject())
                 .transform().body();
 
-        onException(DataAccessException.class)
-                .process(new DataAccessExceptionProcessor())
-                .transform().body();
+
 
     }
 

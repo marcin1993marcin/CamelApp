@@ -16,6 +16,10 @@ public class UserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        onException(DataAccessException.class)
+                .process(new DataAccessExceptionProcessor())
+                .transform().body();
+
 
         from(USER_REST_URL + METHOD_GET).to("direct:select");
         from(USER_REST_URL + PARAM_ID + METHOD_GET).to("direct:idSelect");
@@ -49,8 +53,6 @@ public class UserRoute extends RouteBuilder {
         from("direct:deleteId").process(new DeleteByIdUser())
                 .transform().body();
 
-        onException(DataAccessException.class)
-                .process(new DataAccessExceptionProcessor())
-                .transform().body();
+
     }
 }
