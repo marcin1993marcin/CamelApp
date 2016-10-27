@@ -4,9 +4,11 @@ import com.app.camel.dao.ProjectRepository;
 import com.app.camel.dao.impl.ProjectRepositoryImpl;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.log4j.Logger;
 
 public class DeleteAllProject implements Processor {
 
+    final static Logger logger = Logger.getLogger(DeleteAllProject.class);
    private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
 
     @Override

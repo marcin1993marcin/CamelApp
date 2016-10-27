@@ -1,7 +1,9 @@
 package com.app.camel.routes;
 
+import com.app.camel.processor.DataAccessExceptionProcessor;
 import com.app.camel.processor.user.*;
 import org.apache.camel.builder.RouteBuilder;
+import org.jooq.exception.DataAccessException;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;
 
@@ -45,6 +47,10 @@ public class UserRoute extends RouteBuilder {
                 .process(new DeleteAllUser());
 
         from("direct:deleteId").process(new DeleteByIdUser())
+                .transform().body();
+
+        onException(DataAccessException.class)
+                .process(new DataAccessExceptionProcessor())
                 .transform().body();
     }
 }
