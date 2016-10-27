@@ -8,11 +8,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.log4j.Logger;
 
 public class PutUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
+    private final static Logger logger = Logger.getLogger(PutUser.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -27,5 +29,7 @@ public class PutUser implements Processor {
         userRecord.setFirstName(user.getEmail());
         userRecord.setStatus(user.getStatus());
         userRepository.update(userRecord);
+        logger.info("put user by id " + id + "success");
+
     }
 }

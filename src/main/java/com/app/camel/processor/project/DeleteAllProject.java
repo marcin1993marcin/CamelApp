@@ -8,12 +8,13 @@ import org.apache.log4j.Logger;
 
 public class DeleteAllProject implements Processor {
 
-    final static Logger logger = Logger.getLogger(DeleteAllProject.class);
+   private final static Logger logger = Logger.getLogger(DeleteAllProject.class);
    private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         projectRepository.deleteAll();
+        logger.info("Delete all users success");
     }
 }

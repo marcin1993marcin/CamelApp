@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
+import org.apache.log4j.Logger;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 public class SelectByIdUser implements Processor {
 
+    private final static Logger logger = Logger.getLogger(SelectAllUser.class);
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -34,10 +36,12 @@ public class SelectByIdUser implements Processor {
                     .build();
 
             exchange.getIn().setBody(gson.toJson(user));
+            logger.info("select user by id: " + id + "success");
         } else {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_NO_CONTENT);
             exchange.getOut().setBody(response);
+            logger.info("user not exists");
         }
     }
 }

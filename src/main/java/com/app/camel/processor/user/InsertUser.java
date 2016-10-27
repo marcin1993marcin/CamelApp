@@ -9,11 +9,13 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
+import org.apache.log4j.Logger;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
 public class InsertUser implements Processor {
 
+    private final static Logger logger = Logger.getLogger(InsertUser.class);
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -33,5 +35,6 @@ public class InsertUser implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
         exchange.getOut().setBody(response);
+        logger.info("Insert user success");
     }
 }

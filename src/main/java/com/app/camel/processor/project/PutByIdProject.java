@@ -8,9 +8,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.log4j.Logger;
 
 public class PutByIdProject implements Processor {
 
+    private final Logger logger = Logger.getLogger(PutByIdProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -24,5 +26,6 @@ public class PutByIdProject implements Processor {
         projectRecord.setProjectName(project.getProjectName());
         projectRecord.setId(Integer.parseInt(id));
         projectRepository.update(projectRecord);
+        logger.info("Update project by id " + id + " success");
     }
 }
