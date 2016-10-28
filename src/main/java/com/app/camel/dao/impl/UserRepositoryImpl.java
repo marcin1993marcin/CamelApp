@@ -8,7 +8,6 @@ import org.jooq.Record5;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     public UserRepositoryImpl() {
     }
 
-    public String getAllUserWithProject() throws SQLException {
+    public String getAllUserWithProject() {
 
         return executeQuery(ctx -> {
             Result<Record5<Integer, String, String, String, Integer>> result = ctx
@@ -42,7 +41,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
 
 
     @Override
-    public Optional<UserRecord> get(Integer id) throws SQLException {
+    public Optional<UserRecord> get(Integer id) {
         return executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(USER)
                         .where(USER.ID.equal(id))
@@ -50,7 +49,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     }
 
     @Override
-    public Collection<UserRecord> getAll() throws SQLException {
+    public Collection<UserRecord> getAll() {
 
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(USER).fetch();
@@ -72,7 +71,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     }
 
     @Override
-    public boolean update(UserRecord entity) throws SQLException {
+    public boolean update(UserRecord entity) {
 
         return executeQuery(ctx -> {
             int count = ctx.update(USER)
@@ -88,7 +87,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     }
 
     @Override
-    public boolean insert(UserRecord entity) throws SQLException {
+    public boolean insert(UserRecord entity) {
 
         return executeQuery(ctx -> {
             com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
@@ -105,7 +104,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     }
 
     @Override
-    public boolean delete(Integer id) throws SQLException {
+    public boolean delete(Integer id) {
 
         return executeQuery(ctx -> {
             int count = ctx.delete(USER).where(USER.ID.eq(id)).execute();
@@ -115,7 +114,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     }
 
     @Override
-    public boolean deleteAll() throws SQLException {
+    public boolean deleteAll() {
 
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(USER).fetch();

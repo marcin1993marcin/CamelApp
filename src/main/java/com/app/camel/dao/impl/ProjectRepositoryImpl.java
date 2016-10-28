@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import org.jooq.Record;
 import org.jooq.Result;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ import static com.app.camel.model.tables.Project.PROJECT;
 public class ProjectRepositoryImpl extends GenericRepository implements ProjectRepository {
 
     @Override
-    public Optional<ProjectRecord> get(Integer id) throws SQLException {
+    public Optional<ProjectRecord> get(Integer id) {
 
         return executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(PROJECT)
@@ -24,7 +23,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
     }
 
     @Override
-    public Collection<ProjectRecord> getAll() throws SQLException {
+    public Collection<ProjectRecord> getAll() {
 
         return executeQuery(ctx -> {
 
@@ -47,7 +46,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
 
 
     @Override
-    public boolean update(ProjectRecord project) throws SQLException {
+    public boolean update(ProjectRecord project) {
 
         return executeQuery(ctx -> {
             int count = ctx.update(PROJECT)
@@ -61,7 +60,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
 
 
     @Override
-    public boolean insert(ProjectRecord project) throws SQLException {
+    public boolean insert(ProjectRecord project) {
 
         return executeQuery(ctx -> {
             com.app.camel.model.tables.Project p = com.app.camel.model.tables.Project.PROJECT;
@@ -76,7 +75,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
 
 
     @Override
-    public boolean delete(Integer id) throws SQLException {
+    public boolean delete(Integer id) {
 
         return executeQuery(ctx -> {
             int count = ctx.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
@@ -87,7 +86,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
 
 
     @Override
-    public boolean deleteAll() throws SQLException {
+    public boolean deleteAll() {
 
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(PROJECT).fetch();
