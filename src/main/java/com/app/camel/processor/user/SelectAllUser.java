@@ -26,7 +26,7 @@ public class SelectAllUser implements Processor {
         Collection<UserRecord> users = userRepository.getAll();
 
         List<User> userList = users.stream().map(userEntity -> User.builder()
-                .id(userEntity.getId())
+                .id(Long.valueOf(userEntity.getId()))
                 .firstName(userEntity.getFirstName())
                 .build()
         ).collect(toList());

@@ -28,7 +28,10 @@ public class SelectByIdProject implements Processor {
         String id = exchange.getIn().getHeader("id", String.class);
         Optional<ProjectRecord> projectRecord = projectRepository.get(Integer.parseInt(id));
         if (projectRecord.isPresent()) {
-            Project project = new Project(projectRecord.get().getId(), projectRecord.get().getProjectName());
+            Project project = Project.builder()
+                    .id(Long.valueOf(projectRecord.get().getId()))
+                    .projectName(projectRecord.get().getProjectName())
+                    .build();
             String json = gson.toJson(project);
             exchange.getIn().setBody(json);
         }

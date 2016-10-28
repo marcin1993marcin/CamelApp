@@ -28,7 +28,7 @@ public class SelectByIdUser implements Processor {
 
         if (userRecord.isPresent()) {
             User user = User.builder()
-                    .id(userRecord.get().getId())
+                    .id(Long.valueOf(userRecord.get().getId()))
                     .firstName(userRecord.get().getFirstName())
                     .email(userRecord.get().getEmail())
                     .status(userRecord.get().getStatus())
