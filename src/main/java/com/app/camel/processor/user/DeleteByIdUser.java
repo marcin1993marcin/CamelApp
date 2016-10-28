@@ -11,7 +11,7 @@ import org.restlet.data.Status;
 
 public class DeleteByIdUser implements Processor {
 
-    private final static Logger logger = Logger.getLogger(DeleteByIdUser.class);
+    private final static Logger LOGGER = Logger.getLogger(DeleteByIdUser.class);
     private final UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
@@ -22,7 +22,7 @@ public class DeleteByIdUser implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
         exchange.getOut().setBody(response);
-        logger.info("Delete user by id "+ id +" success");
+        LOGGER.info("Delete user by id "+ id +" success");
 
     }
 }

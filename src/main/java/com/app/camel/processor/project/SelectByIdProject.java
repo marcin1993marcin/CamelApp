@@ -18,7 +18,7 @@ import java.util.Optional;
 
 public class SelectByIdProject implements Processor {
 
-    private final Logger logger = Logger.getLogger(SelectAllProject.class);
+    private final static Logger LOGGER = Logger.getLogger(SelectAllProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -34,7 +34,7 @@ public class SelectByIdProject implements Processor {
                     .build();
             String json = gson.toJson(project);
             exchange.getIn().setBody(json);
-            logger.info("Select project by id " + id + " success");
+            LOGGER.info("Select project by id " + id + " success");
         }
         else{
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);

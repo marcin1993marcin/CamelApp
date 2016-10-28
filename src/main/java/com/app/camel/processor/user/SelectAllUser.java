@@ -19,7 +19,7 @@ public class SelectAllUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
-    private final static Logger logger = Logger.getLogger(SelectAllUser.class);
+    private final static Logger LOGGER = Logger.getLogger(SelectAllUser.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -30,7 +30,7 @@ public class SelectAllUser implements Processor {
                 .firstName(userEntity.getFirstName())
                 .build()
         ).collect(toList());
-        logger.info("Processing all users");
+        LOGGER.info("Processing all users");
         exchange.getIn().setBody(gson.toJson(userList));
     }
 }

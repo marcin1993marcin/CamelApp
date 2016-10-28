@@ -10,20 +10,20 @@ import org.restlet.data.Status;
 
 public class DataAccessExceptionProcessor implements Processor {
 
-    private final static Logger logger = Logger.getLogger(DataAccessExceptionProcessor.class);
+    private final static Logger LOGGER = Logger.getLogger(DataAccessExceptionProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         DataAccessException exception = exchange.getException(DataAccessException.class);
 
-        logger.error("In processor: DataAccessException");
-        logger.error(exception.getStackTrace());
-        logger.error(exception.getCause().getMessage());
-        logger.error(exception.getMessage());
+        LOGGER.error("In processor: DataAccessException");
+        LOGGER.error(exception.getStackTrace());
+        LOGGER.error(exception.getCause().getMessage());
+        LOGGER.error(exception.getMessage());
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
-        response.setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
+        response.setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
         exchange.getOut().setBody(response);
 
     }

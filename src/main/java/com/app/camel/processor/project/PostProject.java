@@ -15,7 +15,7 @@ import org.restlet.data.Status;
 
 public class PostProject implements Processor {
 
-    private final Logger logger = Logger.getLogger(PostProject.class);
+    private final static Logger LOGGER = Logger.getLogger(PostProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -33,6 +33,6 @@ public class PostProject implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
         exchange.getOut().setBody(response);
-        logger.info("Insert project success");
+        LOGGER.info("Insert project success");
     }
 }

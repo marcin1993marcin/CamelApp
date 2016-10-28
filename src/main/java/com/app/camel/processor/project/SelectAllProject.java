@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SelectAllProject implements Processor {
 
-    private final Logger logger = Logger.getLogger(SelectAllProject.class);
+    private final static Logger LOGGER = Logger.getLogger(SelectAllProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -31,6 +31,6 @@ public class SelectAllProject implements Processor {
         ).collect(toList());
 
         exchange.getIn().setBody(gson.toJson(projectList));
-        logger.info("Select all projects success");
+        LOGGER.info("Select all projects success");
     }
 }

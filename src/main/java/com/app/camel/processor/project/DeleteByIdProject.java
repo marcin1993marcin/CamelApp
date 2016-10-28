@@ -11,7 +11,7 @@ import org.restlet.data.Status;
 
 public class DeleteByIdProject implements Processor {
 
-    private final static Logger logger = Logger.getLogger(DeleteAllProject.class);
+    private final static Logger LOGGER = Logger.getLogger(DeleteAllProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
 
     @Override
@@ -23,6 +23,6 @@ public class DeleteByIdProject implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
         exchange.getOut().setBody(response);
-        logger.info("Delete project by id: " + id + " success");
+        LOGGER.info("Delete project by id: " + id + " success");
     }
 }

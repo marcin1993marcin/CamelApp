@@ -14,7 +14,7 @@ public class PutUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
-    private final static Logger logger = Logger.getLogger(PutUser.class);
+    private final static Logger LOGGER = Logger.getLogger(PutUser.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -29,7 +29,7 @@ public class PutUser implements Processor {
         userRecord.setFirstName(user.getEmail());
         userRecord.setStatus(user.getStatus());
         userRepository.update(userRecord);
-        logger.info("put user by id " + id + "success");
+        LOGGER.info("Put user by id " + id + "success");
 
     }
 }
