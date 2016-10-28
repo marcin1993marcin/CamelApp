@@ -8,6 +8,8 @@ import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
+import com.app.camel.model.tables.Customer;
+import com.app.camel.model.tables.CustomerProjects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +41,17 @@ public class Library extends SchemaImpl {
      * The reference instance of <code>library</code>
      */
     public static final Library LIBRARY = new Library();
+
+    /**
+     * The table <code>library.customer</code>.
+     */
+    public final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
+
+    /**
+     * The table <code>library.customer_projects</code>.
+     */
+    public final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
+
 
     /**
      * The table <code>library.project</code>.
@@ -85,6 +98,8 @@ public class Library extends SchemaImpl {
 
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
+            Customer.CUSTOMER,
+            CustomerProjects.CUSTOMER_PROJECTS,
             Project.PROJECT,
             SchemaVersion.SCHEMA_VERSION,
             User.USER,
