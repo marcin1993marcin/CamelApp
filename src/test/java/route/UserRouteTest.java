@@ -70,7 +70,7 @@ public class UserRouteTest {
     public void TestPostUser() throws Exception {
 
         String url = "http://localhost:9091/user";
-        String post = " {  \"id\": 9, \"firstName\": \"Krzysztof\", \"lastName\": \"Lenart\",  \"email\": \"email\",   \"status\": \"pp\" }";
+        String post = " {  \"id\": 9, \"firstName\": \"First\", \"lastName\": \"Name\",  \"email\": \"email\",   \"status\": \"pp\" }";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.POST, url);
 
@@ -84,7 +84,7 @@ public class UserRouteTest {
     public void TestPutUserById() throws Exception {
 
         String url = "http://localhost:9091/user/12";
-        String post = " {  \"id\": 9, \"firstName\": \"Krzysztof\", \"lastName\": \"Lenart\",  \"email\": \"email\",   \"status\": \"pp\" }";
+        String post = " {  \"id\": 9, \"firstName\": \"First\", \"lastName\": \"Name\",  \"email\": \"email\",   \"status\": \"pp\" }";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.PUT, url);
 
