@@ -34,12 +34,13 @@ public class SelectByIdProject implements Processor {
                     .build();
             String json = gson.toJson(project);
             exchange.getIn().setBody(json);
+            logger.info("Select project by id " + id + " success");
         }
         else{
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_NO_CONTENT);
             exchange.getOut().setBody(response);
-            logger.info("Select project by id " + id + " success");
+
         }
     }
     }

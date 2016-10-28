@@ -18,6 +18,7 @@ public class ProjectRoute extends RouteBuilder {
     public void configure() throws Exception {
 
         onException(DataAccessException.class)
+                .handled(true)
                 .process(new DataAccessExceptionProcessor())
                 .transform().body();
 

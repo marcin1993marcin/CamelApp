@@ -59,7 +59,6 @@ public class UserRouteTest {
         if (response.isEntityAvailable()) {
             assertEquals(200, response.getStatus().getCode());
             Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
-            String responseString = response.getEntityAsText();
         } else {
             assertEquals(204, response.getStatus().getCode());
         }
