@@ -23,6 +23,7 @@ public class SelectByIdUser implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+        // review - logowanie parametrów przychodzacych - tutaj i w innych processorach
         String id = exchange.getIn().getHeader("id", String.class);
         Optional<UserRecord> userRecord = userRepository.get(Integer.parseInt(id));
 
@@ -37,6 +38,7 @@ public class SelectByIdUser implements Processor {
 
             exchange.getIn().setBody(gson.toJson(user));
             LOGGER.info("Select user by id: " + id + "success");
+            // review dałbym również na poziomie debug całego JSON'a
         } else {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_NO_CONTENT);

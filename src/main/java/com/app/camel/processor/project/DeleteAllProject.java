@@ -14,6 +14,7 @@ public class DeleteAllProject implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
 
+        // review - nie sprawdzacie czy się udało usunąc?
         projectRepository.deleteAll();
         LOGGER.info("Delete all users success");
     }

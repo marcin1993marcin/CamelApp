@@ -17,11 +17,16 @@ public class ProjectRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        // review czy tutaj zwracamy jakiekolwiek body - jezeli nie to nie zwracajmy
         onException(DataAccessException.class)
                 .handled(true)
                 .process(new DataAccessExceptionProcessor())
                 .transform().body();
 
+        // review a co będzie jeżeli wystąpi inny exception? - nie obsługujemy tylko stacktrace pokazujemy?
+
+
+        // review - w tym przypadku nie ma sensu rozbijac na wewnetrzna kolejkę (IMHO) - do dyskusji jeżeli potrzebne
         from(PROJECT_REST_URL + METHOD_GET).to("direct:projectSelect");
         from(PROJECT_REST_URL + PARAM_ID + METHOD_GET).to("direct:projectSelectId");
         from(PROJECT_REST_URL + METHOD_POST).to("direct:projectPost");
@@ -34,6 +39,7 @@ public class ProjectRoute extends RouteBuilder {
                 .transform().body();
         from("direct:projectSelectId")
                 .process(new SelectByIdProject())
+                .tracing()
                 .transform().body();
         from("direct:projectPost")
                 .process(new PostProject())
@@ -51,8 +57,6 @@ public class ProjectRoute extends RouteBuilder {
         from("direct:projectDeleteId")
                 .process(new DeleteByIdProject())
                 .transform().body();
-
-
 
     }
 

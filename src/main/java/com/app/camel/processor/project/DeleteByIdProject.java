@@ -18,6 +18,7 @@ public class DeleteByIdProject implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
+        // review nie sprawdzacie czy się udało usunąc?
         projectRepository.delete(Integer.parseInt(id));
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);

@@ -18,10 +18,15 @@ public class DeleteByIdUser implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
+
+        // review - serio ufacie klientowi, że prześle wartość integer a nie string?
         userRepository.delete(Integer.parseInt(id));
+
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
         exchange.getOut().setBody(response);
+
+        // review - a jak wyjątek będzie wcześniej, to gdzie się to zapisze?
         LOGGER.info("Delete user by id "+ id +" success");
 
     }

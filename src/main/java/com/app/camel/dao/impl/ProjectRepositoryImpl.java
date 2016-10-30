@@ -13,6 +13,8 @@ import static com.app.camel.model.tables.Project.PROJECT;
 
 public class ProjectRepositoryImpl extends GenericRepository implements ProjectRepository {
 
+    // review - logger jest dziedziczony? - BAD, BAD practice
+
     @Override
     public Optional<ProjectRecord> get(Integer id) {
 
@@ -22,6 +24,11 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
                         .fetchOne()));
     }
 
+
+    // review - brak javadoc - jak juz bedzie w interfejscie to trzeba doac jak ponizej
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<ProjectRecord> getAll() {
 
@@ -44,9 +51,14 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         });
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(ProjectRecord project) {
+
+        // review - na poziomie debug dobrze jest miec na jakich danych pracujemy
+        LOGGER.debug("updating projectRecord (project={})", project);
 
         return executeQuery(ctx -> {
             int count = ctx.update(PROJECT)
@@ -58,7 +70,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         });
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean insert(ProjectRecord project) {
 
@@ -73,7 +87,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         });
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) {
 
@@ -84,7 +100,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         });
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteAll() {
 

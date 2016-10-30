@@ -5,12 +5,15 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 public class Configuration {
 
+    // review - chyba może być final
     private static org.apache.commons.configuration.Configuration configuration;
 
     static {
         try {
             configuration = new PropertiesConfiguration("configuration.properties");
         } catch (ConfigurationException e) {
+            // review - a gdzie logi?
+            // review - po co wyrzucamy RuntimeException?
             throw new RuntimeException(e);
         }
     }

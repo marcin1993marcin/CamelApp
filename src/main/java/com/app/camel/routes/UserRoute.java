@@ -7,7 +7,7 @@ import org.jooq.exception.DataAccessException;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;
 
-
+// review - nazwalbym UserRouteBuilder
 public class UserRoute extends RouteBuilder {
 
     private static final String USER = "user";
@@ -15,6 +15,7 @@ public class UserRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
+        // review identyczny kod wystepuje rowniez w ProjectRoute[Builder] - może da się jakoś zrobić go DRY (ale bez dziedziczenia!!!)
 
         onException(DataAccessException.class)
                 .handled(true)

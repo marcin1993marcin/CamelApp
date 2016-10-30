@@ -6,6 +6,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class UserRouteContext
 {
+    // review chyba może być final
     CamelContext context= new DefaultCamelContext();
 
     public void run() throws Exception {

@@ -6,6 +6,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class ProjectRouteContext {
 
+    // review chyba może być final
     private CamelContext context = new DefaultCamelContext();
 
 

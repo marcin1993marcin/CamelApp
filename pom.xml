@@ -91,6 +91,19 @@
             <version>19.0</version>
         </dependency>
 
+        <!-- review zmienilem system logowania -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -104,6 +117,7 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <!--review ale to juz jest wyżej przecież -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -120,6 +134,12 @@
                 <version>3.8.3</version>
 
                 <!-- The plugin should hook into the generate goal -->
+                <!--review UWAGA - to na razie mało istotne w tej chwili
+                ale generator kodów powinien być raczej uruchamiany w osobnym profilu
+                Kompilacja aplikacji pododuje u mnie zmiany w kodzie (np. pól serialVersionUID)
+
+                Przegadamy później.
+                -->
                 <executions>
                     <execution>
                         <goals>
@@ -140,6 +160,7 @@
                         <database>
                             <name>org.jooq.util.mysql.MySQLDatabase</name>
                             <includes>.*</includes>
+                            <!-- review - minor - chyba można bez tego excludes -->
                             <excludes></excludes>
                             <inputSchema>library</inputSchema>
                         </database>
@@ -181,8 +202,14 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
+                <!--review takie dane nalezy wyrzucic do pliku konfiguracyjnego .properties -->
+                <!-- robi się to tak, że kominujemy plik some.properties.default, gdzie ewentualnie dodajemy nowe propertisy
+                 Propertisy z tego pliku kopiujemy do swojego pliku, na którym działamy. Oczywiście plik ten idze do .gitignore.
+                 -->
+
+                <!--review poza tym mamy zdefiniowane ${jdbc.driver}, ${jdbc.user}, itd-->
                 <jdbc.user>root</jdbc.user>
-                <jdbc.password>root</jdbc.password>
+                <jdbc.password>ala1ma2kota</jdbc.password>
                 <jdbc.url>jdbc:mysql://localhost:3306/library?serverTimezone=UTC</jdbc.url>
                 <jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
             </properties>

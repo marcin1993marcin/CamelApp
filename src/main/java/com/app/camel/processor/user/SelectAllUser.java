@@ -15,6 +15,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+// review - should be plural
 public class SelectAllUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
@@ -26,11 +27,15 @@ public class SelectAllUser implements Processor {
         Collection<UserRecord> users = userRepository.getAll();
 
         List<User> userList = users.stream().map(userEntity -> User.builder()
+                // review - dlaczego entyty ma inny zakres danych niż DTO?
                 .id(Long.valueOf(userEntity.getId()))
+
                 .firstName(userEntity.getFirstName())
                 .build()
         ).collect(toList());
+
         LOGGER.info("Processing all users");
+
         exchange.getIn().setBody(gson.toJson(userList));
     }
 }

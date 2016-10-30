@@ -25,6 +25,7 @@ public class PutByIdProject implements Processor {
         ProjectRecord projectRecord = new ProjectRecord();
         projectRecord.setProjectName(project.getProjectName());
         projectRecord.setId(Integer.parseInt(id));
+        // review update zwraca boolean - nie sprawdzacie czy sie udało?
         projectRepository.update(projectRecord);
         LOGGER.info("Update project by id " + id + " success");
     }
