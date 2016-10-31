@@ -18,6 +18,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
 
     private static final Logger LOGGER = Logger.getLogger(UserRepositoryImpl.class);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<UserRecord> get(Integer id) {
 
@@ -44,6 +47,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
         return userRecord;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<UserRecord> getAll() {
 
@@ -75,6 +81,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean update(UserRecord entity) {
 
@@ -107,6 +116,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean insert(UserRecord entity) {
 
@@ -139,6 +151,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer id) {
 
@@ -164,6 +179,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteAll() {
 
