@@ -1,6 +1,7 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.dao.ProjectRepository;
+import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.records.ProjectRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -126,7 +127,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         LOGGER.info("Adding project with id: " + project.getId());
 
         return executeQuery(ctx -> {
-            com.app.camel.model.tables.Project p = com.app.camel.model.tables.Project.PROJECT;
+            Project p = Project.PROJECT;
 
             int count = ctx.insertInto(p)
                     .set(p.PROJECT_NAME, project.getProjectName())
