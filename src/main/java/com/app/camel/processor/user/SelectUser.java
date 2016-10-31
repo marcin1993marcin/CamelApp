@@ -4,6 +4,8 @@ import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.UserRepositoryImpl;
 import com.app.camel.dto.User;
 import com.app.camel.model.tables.records.UserRecord;
+import com.app.camel.util.Precondition;
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -15,7 +17,7 @@ import org.restlet.data.Status;
 
 import java.util.Optional;
 
-public class SelectByIdUser implements Processor {
+public class SelectUser implements Processor {
 
     private final static Logger LOGGER = Logger.getLogger(SelectAllUser.class);
     private final UserRepository userRepository = new UserRepositoryImpl();
@@ -24,6 +26,8 @@ public class SelectByIdUser implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
+        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+
         Optional<UserRecord> userRecord = userRepository.get(Integer.parseInt(id));
 
         if (userRecord.isPresent()) {
@@ -36,12 +40,11 @@ public class SelectByIdUser implements Processor {
                     .build();
 
             exchange.getIn().setBody(gson.toJson(user));
-            LOGGER.info("Select user by id: " + id + "success");
+
         } else {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_NO_CONTENT);
             exchange.getOut().setBody(response);
-            LOGGER.info("User not exists");
         }
     }
 }

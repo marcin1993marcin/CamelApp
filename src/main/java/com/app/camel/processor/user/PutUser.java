@@ -4,22 +4,30 @@ import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.UserRepositoryImpl;
 import com.app.camel.dto.User;
 import com.app.camel.model.tables.records.UserRecord;
+import com.app.camel.util.Precondition;
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.log4j.Logger;
+import org.apache.camel.component.restlet.RestletConstants;
+import org.restlet.Response;
+import org.restlet.data.Status;
 
 public class PutUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
-    private final static Logger LOGGER = Logger.getLogger(PutUser.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String id = exchange.getIn().getHeader("id", String.class);
+
+        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+
         String json = exchange.getIn().getBody(String.class);
+
         User user = gson.fromJson(json, User.class);
 
         UserRecord userRecord = new UserRecord();
@@ -28,8 +36,17 @@ public class PutUser implements Processor {
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
         userRecord.setStatus(user.getStatus());
-        userRepository.update(userRecord);
-        LOGGER.info("Put user by id " + id + "success");
+
+
+        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+        response.setStatus(Status.SUCCESS_CREATED);
+
+        if (!userRepository.update(userRecord)) {
+            response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
+        }
+
+        exchange.getOut().setBody(response);
+
 
     }
 }

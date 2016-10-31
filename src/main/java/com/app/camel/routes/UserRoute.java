@@ -32,7 +32,7 @@ public class UserRoute extends RouteBuilder {
                 .transform().body();
 
         from(USER_REST_URL + PARAM_ID + METHOD_GET)
-                .process(new SelectByIdUser())
+                .process(new SelectUser())
                 .transform().body();
 
         from(USER_REST_URL + METHOD_POST)
@@ -50,8 +50,9 @@ public class UserRoute extends RouteBuilder {
         from(USER_REST_URL + METHOD_DELETE)
                 .process(new DeleteAllUser())
                 .transform().body();
+
         from(USER_REST_URL + PARAM_ID + METHOD_DELETE)
-                .process(new DeleteByIdUser())
+                .process(new DeleteUser())
                 .transform().body();
     }
 }

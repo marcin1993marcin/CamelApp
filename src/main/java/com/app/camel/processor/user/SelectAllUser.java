@@ -30,7 +30,7 @@ public class SelectAllUser implements Processor {
                 .firstName(userEntity.getFirstName())
                 .build()
         ).collect(toList());
-        LOGGER.info("Processing all users");
+
         exchange.getIn().setBody(gson.toJson(userList));
     }
 }
