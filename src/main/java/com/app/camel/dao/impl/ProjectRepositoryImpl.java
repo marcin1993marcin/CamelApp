@@ -77,11 +77,17 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
     @Override
     public boolean delete(Integer id) {
 
-        return executeQuery(ctx -> {
+        // logujemy, ze usuwamy
+
+        boolean result =  executeQuery(ctx -> {
             int count = ctx.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
 
             return count > 0;
         });
+
+        // logujemy status: result
+
+        return result;
     }
 
 

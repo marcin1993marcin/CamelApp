@@ -45,7 +45,7 @@ public class ProjectRoute extends RouteBuilder {
                 .transform().body();
 
         from(PROJECT_REST_URL + PARAM_ID + METHOD_PUT)
-                .process(new PutByIdProject())
+                .process(new PutProject())
                 .transform().body();
 
         from(PROJECT_REST_URL + METHOD_DELETE)
@@ -53,7 +53,7 @@ public class ProjectRoute extends RouteBuilder {
                 .transform().body();
 
         from(PROJECT_REST_URL + PARAM_ID + METHOD_DELETE)
-                .process(new DeleteByIdProject())
+                .process(new DeleteProject())
                 .transform().body();
 
 

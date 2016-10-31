@@ -13,9 +13,9 @@ import org.apache.log4j.Logger;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
-public class PutByIdProject implements Processor {
+public class PutProject implements Processor {
 
-    private final static Logger LOGGER = Logger.getLogger(PutByIdProject.class);
+    private final static Logger LOGGER = Logger.getLogger(PutProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
