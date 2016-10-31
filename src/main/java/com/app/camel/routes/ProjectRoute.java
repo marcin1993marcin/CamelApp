@@ -1,6 +1,7 @@
 package com.app.camel.routes;
 
 import com.app.camel.processor.DataAccessExceptionProcessor;
+import com.app.camel.processor.ExceptionProcessor;
 import com.app.camel.processor.project.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.jooq.exception.DataAccessException;
@@ -22,35 +23,39 @@ public class ProjectRoute extends RouteBuilder {
                 .process(new DataAccessExceptionProcessor())
                 .transform().body();
 
-        from(PROJECT_REST_URL + METHOD_GET).to("direct:projectSelect");
-        from(PROJECT_REST_URL + PARAM_ID + METHOD_GET).to("direct:projectSelectId");
-        from(PROJECT_REST_URL + METHOD_POST).to("direct:projectPost");
-        from(PROJECT_REST_URL + METHOD_PUT).to("direct:projectPut");
-        from(PROJECT_REST_URL + PARAM_ID + METHOD_PUT).to("direct:projectPutId");
-        from(PROJECT_REST_URL + METHOD_DELETE).to("direct:projectDelete");
-        from(PROJECT_REST_URL + PARAM_ID + METHOD_DELETE).to("direct:projectDeleteId");
-
-        from("direct:projectSelect").process(new SelectAllProject())
+        onException(Exception.class)
+                .handled(true)
+                .process(new ExceptionProcessor())
                 .transform().body();
-        from("direct:projectSelectId")
+
+        from(PROJECT_REST_URL + METHOD_GET)
+                .process(new SelectAllProject())
+                .transform().body();
+
+        from(PROJECT_REST_URL + PARAM_ID + METHOD_GET)
                 .process(new SelectByIdProject())
                 .transform().body();
-        from("direct:projectPost")
+
+        from(PROJECT_REST_URL + METHOD_POST)
                 .process(new PostProject())
                 .transform().body();
 
-        from("direct:projectPut")
-                .process(new PutAllProject());
+        from(PROJECT_REST_URL + METHOD_PUT)
+                .process(new PutAllProject())
+                .transform().body();
 
-        from("direct:projectPutId")
-                .process(new PutByIdProject());
+        from(PROJECT_REST_URL + PARAM_ID + METHOD_PUT)
+                .process(new PutByIdProject())
+                .transform().body();
 
-        from("direct:projectDelete")
-                .process(new DeleteAllProject());
+        from(PROJECT_REST_URL + METHOD_DELETE)
+                .process(new DeleteAllProject())
+                .transform().body();
 
-        from("direct:projectDeleteId")
+        from(PROJECT_REST_URL + PARAM_ID + METHOD_DELETE)
                 .process(new DeleteByIdProject())
                 .transform().body();
+
 
 
 

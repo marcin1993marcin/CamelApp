@@ -6,7 +6,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class ProjectRouteContext {
 
-    private CamelContext context = new DefaultCamelContext();
+    private  final CamelContext context = new DefaultCamelContext();
 
 
     public void run() throws Exception {

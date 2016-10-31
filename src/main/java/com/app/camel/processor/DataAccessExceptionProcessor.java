@@ -17,7 +17,7 @@ public class DataAccessExceptionProcessor implements Processor {
 
         DataAccessException exception = exchange.getException(DataAccessException.class);
 
-        LOGGER.error("In processor: DataAccessException");
+
         LOGGER.error(exception.getStackTrace());
         LOGGER.error(exception.getCause().getMessage());
         LOGGER.error(exception.getMessage());
