@@ -10,6 +10,7 @@ import com.app.camel.model.tables.records.CustomerRecord;
 import com.app.camel.model.tables.records.UserRecord;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.log4j.Logger;

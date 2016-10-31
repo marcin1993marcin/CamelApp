@@ -4,6 +4,7 @@ import com.app.camel.dao.CustomerRepository;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.CustomerRepositoryImpl;
 import com.app.camel.dao.impl.UserRepositoryImpl;
+import com.google.common.base.Preconditions;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;

@@ -1,8 +1,12 @@
 package com.app.camel.processor.customer;
 
+import com.app.camel.dao.CustomerRepository;
 import com.app.camel.dao.UserRepository;
+import com.app.camel.dao.impl.CustomerRepositoryImpl;
 import com.app.camel.dao.impl.UserRepositoryImpl;
+import com.app.camel.dto.Customer;
 import com.app.camel.dto.User;
+import com.app.camel.model.tables.records.CustomerRecord;
 import com.app.camel.model.tables.records.UserRecord;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,31 +21,31 @@ import java.util.Optional;
 
 public class SelectByIdCustomer implements Processor {
 
-    private final static Logger logger = Logger.getLogger(SelectAllCustomer.class);
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final static Logger logger = Logger.getLogger(SelectByIdCustomer.class);
+    private final CustomerRepository customerRepository = new CustomerRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        Optional<UserRecord> userRecord = userRepository.get(Integer.parseInt(id));
+        Optional<CustomerRecord> customerRecord = customerRepository.get(Integer.parseInt(id));
 
-        if (userRecord.isPresent()) {
-            User user = User.builder()
-                    .id(userRecord.get().getId())
-                    .firstName(userRecord.get().getFirstName())
-                    .email(userRecord.get().getEmail())
-                    .status(userRecord.get().getStatus())
-                    .lastName(userRecord.get().getLastName())
+        if (customerRecord.isPresent()) {
+            Customer customer = Customer.builder()
+                    .id(customerRecord.get().getId())
+                    .firstName(customerRecord.get().getFirstName())
+                    .email(customerRecord.get().getEmail())
+                    .status(customerRecord.get().getStatus())
+                    .lastName(customerRecord.get().getLastName())
                     .build();
 
-            exchange.getIn().setBody(gson.toJson(user));
-            logger.info("select user by id: " + id + "success");
+            exchange.getIn().setBody(gson.toJson(customer));
+            logger.info("select customer by id: " + id + "success");
         } else {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_NO_CONTENT);
             exchange.getOut().setBody(response);
-            logger.info("user not exists");
+            logger.info("customer does not exists");
         }
     }
 }

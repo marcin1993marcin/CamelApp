@@ -1,12 +1,17 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.dao.CustomerRepository;
+import com.app.camel.model.tables.Customer;
 import com.app.camel.model.tables.records.CustomerRecord;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
 import org.jooq.Record;
 import org.jooq.Record5;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -16,8 +21,7 @@ import static com.app.camel.model.Tables.*;
 
 public class CustomerRepositoryImpl extends GenericRepository implements CustomerRepository{
 
-    public CustomerRepositoryImpl() {
-    }
+    private final static Logger logger = LoggerFactory.getLogger(CustomerRepositoryImpl.class);
 
     public String getAllCustomerWithProject() throws SQLException {
 
@@ -55,19 +59,18 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(USER).fetch();
 
-            Collection<CustomerRecord> users = Lists.newArrayList();
-            for (Record r : result) {
-                CustomerRecord user = new CustomerRecord(
-                        r.getValue(CUSTOMER.ID),
-                        r.getValue(CUSTOMER.FIRST_NAME),
-                        r.getValue(CUSTOMER.LAST_NAME),
-                        r.getValue(CUSTOMER.EMAIL),
-                        r.getValue(CUSTOMER.STATUS));
+            Collection<CustomerRecord> customers = Lists.newArrayList();
+            result.forEach(record -> {
+                CustomerRecord customer = new CustomerRecord(
+                        record.getValue(CUSTOMER.ID),
+                        record.getValue(CUSTOMER.FIRST_NAME),
+                        record.getValue(CUSTOMER.LAST_NAME),
+                        record.getValue(CUSTOMER.EMAIL),
+                        record.getValue(CUSTOMER.STATUS));
+                customers.add(customer);
+            });
 
-                users.add(user);
-            }
-
-            return users;
+            return customers;
         });
     }
 
@@ -90,10 +93,11 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
     @Override
     public boolean insert(CustomerRecord entity) throws SQLException {
 
+        logger.debug("Inserting new customer");
         return executeQuery(ctx -> {
-            com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
+            Customer customer = new Customer();
 
-            int count = ctx.insertInto(user)
+            int count = ctx.insertInto(customer)
                     .set(CUSTOMER.FIRST_NAME, entity.getFirstName())
                     .set(CUSTOMER.LAST_NAME, entity.getLastName())
                     .set(CUSTOMER.EMAIL, entity.getEmail())
@@ -107,6 +111,7 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
     @Override
     public boolean delete(Integer id) throws SQLException {
 
+        Preconditions.checkNotNull(id, "Customer's id cannot be null");
         return executeQuery(ctx -> {
             int count = ctx.delete(CUSTOMER).where(CUSTOMER.ID.eq(id)).execute();
 

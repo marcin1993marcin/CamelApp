@@ -34,18 +34,18 @@ public class InsertCustomer implements Processor {
         customerRecord.setEmail(customer.getEmail());
         customerRecord.setFirstName(customer.getEmail());
         customerRecord.setStatus(customer.getStatus());
-        Boolean status = customerRepository.insert(customerRecord);
+        boolean status = customerRepository.insert(customerRecord);
 
         if (status) {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.SUCCESS_CREATED);
             exchange.getOut().setBody(response);
-            logger.info("Insert customer success");
+            logger.info("Insert customer "+ customer.getFirstName() +" "+ customer.getLastName() + " success");
         } else {
             Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
             response.setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
             exchange.getOut().setBody(response);
-            logger.info("Insert customer failed");
+            logger.warn("Insert customer "+ customer.getFirstName() +" "+ customer.getLastName() + " failed");
         }
 
 
