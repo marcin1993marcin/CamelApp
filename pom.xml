@@ -2,12 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>testApp</groupId>
+    <groupId>CamelApp</groupId>
     <artifactId>testApp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>testApp</name>
+    <name>CamelApp</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -84,11 +84,16 @@
             <version>2.5.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
         </dependency>
 
         <dependency>
@@ -140,7 +145,6 @@
                         <database>
                             <name>org.jooq.util.mysql.MySQLDatabase</name>
                             <includes>.*</includes>
-                            <excludes></excludes>
                             <inputSchema>library</inputSchema>
                         </database>
                         <target>
