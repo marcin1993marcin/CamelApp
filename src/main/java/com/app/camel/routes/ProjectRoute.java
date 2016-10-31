@@ -2,6 +2,7 @@ package com.app.camel.routes;
 
 import com.app.camel.processor.DataAccessExceptionProcessor;
 import com.app.camel.processor.ExceptionProcessor;
+import com.app.camel.processor.IllegalArgumentExceptionProcessor;
 import com.app.camel.processor.project.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.jooq.exception.DataAccessException;
@@ -26,6 +27,11 @@ public class ProjectRoute extends RouteBuilder {
         onException(Exception.class)
                 .handled(true)
                 .process(new ExceptionProcessor())
+                .transform().body();
+
+        onException(IllegalArgumentException.class)
+                .handled(true)
+                .process(new IllegalArgumentExceptionProcessor())
                 .transform().body();
 
         from(PROJECT_REST_URL + METHOD_GET)

@@ -15,12 +15,11 @@ public class DataAccessExceptionProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        DataAccessException exception = exchange.getException(DataAccessException.class);
+        DataAccessException dataAccessException =
+                exchange.getProperty(Exchange.EXCEPTION_CAUGHT, DataAccessException.class);
 
-
-        LOGGER.error(exception.getStackTrace());
-        LOGGER.error(exception.getCause().getMessage());
-        LOGGER.error(exception.getMessage());
+        LOGGER.error(dataAccessException.getStackTrace());
+        LOGGER.error(dataAccessException.getMessage());
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);

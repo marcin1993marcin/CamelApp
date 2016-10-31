@@ -14,10 +14,9 @@ public class ExceptionProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        Exception exception= exchange.getException(Exception.class);
+        Exception exception=   exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 
         LOGGER.error(exception.getStackTrace());
-        LOGGER.error(exception.getCause().getMessage());
         LOGGER.error(exception.getMessage());
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
