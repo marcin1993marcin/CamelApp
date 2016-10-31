@@ -4,6 +4,7 @@ import com.app.camel.dao.ProjectRepository;
 import com.app.camel.dao.impl.ProjectRepositoryImpl;
 import com.app.camel.dto.Project;
 import com.app.camel.model.tables.records.ProjectRecord;
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -23,6 +24,9 @@ public class PostProject implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String select = exchange.getIn().getBody(String.class);
+
+        Preconditions.checkNotNull(select, "Body is null");
+
         Project project = gson.fromJson(select, Project.class);
 
         ProjectRecord projectRecord = new ProjectRecord();

@@ -48,7 +48,7 @@ public class UserRoute extends RouteBuilder {
                 .transform().body();
 
         from(USER_REST_URL + METHOD_POST)
-                .process(new InsertUser())
+                .process(new PostUser())
                 .transform().body();
 
         from(USER_REST_URL + METHOD_PUT)

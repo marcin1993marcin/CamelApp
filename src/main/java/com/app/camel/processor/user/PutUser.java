@@ -26,9 +26,11 @@ public class PutUser implements Processor {
 
         Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
 
-        String json = exchange.getIn().getBody(String.class);
+        String select = exchange.getIn().getBody(String.class);
 
-        User user = gson.fromJson(json, User.class);
+        Preconditions.checkNotNull(select, "Body is null");
+
+        User user = gson.fromJson(select, User.class);
 
         UserRecord userRecord = new UserRecord();
         userRecord.setId(Integer.parseInt(id));

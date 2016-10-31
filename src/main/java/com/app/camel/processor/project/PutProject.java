@@ -28,6 +28,8 @@ public class PutProject implements Processor {
 
         String select = exchange.getIn().getBody(String.class);
 
+        Preconditions.checkNotNull(select, "Body is null");
+
         Project project = gson.fromJson(select, Project.class);
         ProjectRecord projectRecord = new ProjectRecord();
         projectRecord.setProjectName(project.getProjectName());
