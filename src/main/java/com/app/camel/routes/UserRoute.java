@@ -1,6 +1,7 @@
 package com.app.camel.routes;
 
 import com.app.camel.processor.DataAccessExceptionProcessor;
+import com.app.camel.processor.ExceptionProcessor;
 import com.app.camel.processor.user.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.jooq.exception.DataAccessException;
@@ -21,39 +22,36 @@ public class UserRoute extends RouteBuilder {
                 .process(new DataAccessExceptionProcessor())
                 .transform().body();
 
+        onException(Exception.class)
+                .handled(true)
+                .process(new ExceptionProcessor())
+                .transform().body();
 
-        from(USER_REST_URL + METHOD_GET).to("direct:select");
-        from(USER_REST_URL + PARAM_ID + METHOD_GET).to("direct:idSelect");
-        from(USER_REST_URL + METHOD_POST).to("direct:post");
-        from(USER_REST_URL + METHOD_PUT).to("direct:put");
-        from(USER_REST_URL + PARAM_ID + METHOD_PUT).to("direct:putId");
-        from(USER_REST_URL + METHOD_DELETE).to("direct:delete");
-        from(USER_REST_URL + PARAM_ID + METHOD_DELETE).to("direct:deleteId");
-
-        from("direct:select")
+        from(USER_REST_URL + METHOD_GET)
                 .process(new SelectAllUser())
                 .transform().body();
 
-        from("direct:idSelect")
+        from(USER_REST_URL + PARAM_ID + METHOD_GET)
                 .process(new SelectByIdUser())
                 .transform().body();
 
-        from("direct:post")
+        from(USER_REST_URL + METHOD_POST)
                 .process(new InsertUser())
                 .transform().body();
 
-        from("direct:put")
-                .process(new PutAllUser());
-
-        from("direct:putId")
-                .process(new PutUser());
-
-        from("direct:delete")
-                .process(new DeleteAllUser());
-
-        from("direct:deleteId").process(new DeleteByIdUser())
+        from(USER_REST_URL + METHOD_PUT)
+                .process(new PutAllUser())
                 .transform().body();
 
+        from(USER_REST_URL + PARAM_ID + METHOD_PUT)
+                .process(new PutUser())
+                .transform().body();
 
+        from(USER_REST_URL + METHOD_DELETE)
+                .process(new DeleteAllUser())
+                .transform().body();
+        from(USER_REST_URL + PARAM_ID + METHOD_DELETE)
+                .process(new DeleteByIdUser())
+                .transform().body();
     }
 }
