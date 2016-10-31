@@ -1,61 +1,60 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.dao.UserRepository;
+import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.records.UserRecord;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.apache.log4j.Logger;
 import org.jooq.Record;
-import org.jooq.Record5;
 import org.jooq.Result;
-import org.jooq.impl.DSL;
 
 import java.util.Collection;
 import java.util.Optional;
 
-import static com.app.camel.model.Tables.*;
+import static com.app.camel.model.Tables.USER;
 
 public class UserRepositoryImpl extends GenericRepository implements UserRepository {
 
-    public UserRepositoryImpl() {
-    }
-
-    public String getAllUserWithProject() {
-
-        return executeQuery(ctx -> {
-            Result<Record5<Integer, String, String, String, Integer>> result = ctx
-                    .select(USER.ID,
-                            USER.FIRST_NAME,
-                            USER.LAST_NAME,
-                            DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"),
-                            DSL.count().as("number_of_projects"))
-                    .from(USER)
-                    .join(USER_PROJECTS)
-                    .on(USER.ID.equal(USER_PROJECTS.USERS_ID))
-                    .join(PROJECT)
-                    .on(USER_PROJECTS.PROJECTS_ID.equal(PROJECT.ID))
-                    .groupBy(USER.ID)
-                    .fetch();
-
-            return String.valueOf(result);
-        });
-    }
-
+    private static final Logger LOGGER = Logger.getLogger(UserRepositoryImpl.class);
 
     @Override
     public Optional<UserRecord> get(Integer id) {
-        return executeQuery(ctx -> Optional.ofNullable(
+
+        try {
+            Preconditions.checkNotNull(id);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Getting user failed! Id cannot be null");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Getting user with id: " + id);
+
+        Optional<UserRecord> userRecord = executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(USER)
                         .where(USER.ID.equal(id))
                         .fetchOne()));
+
+        if (userRecord.isPresent()) {
+            LOGGER.info("User with id: " + id + " fetched successfully");
+        } else {
+            LOGGER.info("User with id: " + id + " not found");
+        }
+
+        return userRecord;
     }
 
     @Override
     public Collection<UserRecord> getAll() {
 
+        LOGGER.info("Getting all users from database");
+
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(USER).fetch();
 
             Collection<UserRecord> users = Lists.newArrayList();
-            for (Record r : result) {
+
+            result.forEach(r -> {
                 UserRecord user = new UserRecord(
                         r.getValue(USER.ID),
                         r.getValue(USER.FIRST_NAME),
@@ -64,6 +63,12 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                         r.getValue(USER.STATUS));
 
                 users.add(user);
+            });
+
+            if (users.size() > 0) {
+                LOGGER.info("Successfully fetched all users from database");
+            } else {
+                LOGGER.info("Cannot get all users. No users found in database");
             }
 
             return users;
@@ -72,6 +77,16 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
 
     @Override
     public boolean update(UserRecord entity) {
+
+        try {
+            Preconditions.checkNotNull(entity);
+            Preconditions.checkNotNull(entity.getId());
+        } catch (NullPointerException ex) {
+            LOGGER.error("Updating user record failed! UserRecord or UserRecord id cannot be null");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Updating user with id: " + entity.getId());
 
         return executeQuery(ctx -> {
             int count = ctx.update(USER)
@@ -82,6 +97,12 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                     .where(USER.ID.eq(entity.getId()))
                     .execute();
 
+            if (count > 0) {
+                LOGGER.info("Successfully updated user with id: " + entity.getId());
+            } else {
+                LOGGER.info("Cannot update user with id: " + entity.getId() + ". User not found");
+            }
+
             return count > 0;
         });
     }
@@ -89,8 +110,17 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     @Override
     public boolean insert(UserRecord entity) {
 
+        try {
+            Preconditions.checkNotNull(entity);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Adding user record failed! UserRecord cannot be null");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Adding user with id: " + entity.getId());
+
         return executeQuery(ctx -> {
-            com.app.camel.model.tables.User user = com.app.camel.model.tables.User.USER;
+            User user = User.USER;
 
             int count = ctx.insertInto(user)
                     .set(user.FIRST_NAME, entity.getFirstName())
@@ -99,6 +129,12 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                     .set(user.STATUS, entity.getStatus())
                     .execute();
 
+            if (count > 0) {
+                LOGGER.info("Successfully added user with id: " + entity.getId());
+            } else {
+                LOGGER.info("Cannot add user with id: " + entity.getId());
+            }
+
             return count > 0;
         });
     }
@@ -106,8 +142,23 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     @Override
     public boolean delete(Integer id) {
 
+        try {
+            Preconditions.checkNotNull(id);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Deleting user failed! Id cannot be null");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Deleting user with id: " + id);
+
         return executeQuery(ctx -> {
             int count = ctx.delete(USER).where(USER.ID.eq(id)).execute();
+
+            if (count > 0) {
+                LOGGER.info("User with id: " + id + " deleted successfully");
+            } else {
+                LOGGER.info("User not found! Cannot delete user with id: " + id);
+            }
 
             return count > 0;
         });
@@ -116,13 +167,18 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
     @Override
     public boolean deleteAll() {
 
+        LOGGER.info("Deleting all users");
+
         return executeQuery(ctx -> {
-            Result<Record> result = ctx.select().from(USER).fetch();
 
             int count = 0;
-            for (Record r : result) {
 
-                count = ctx.delete(USER).where(USER.ID.eq(r.getValue(USER.ID))).execute();
+            count = ctx.delete(USER).execute();
+
+            if (count > 0) {
+                LOGGER.info("All users deleted successfully");
+            } else {
+                LOGGER.info("Cannot delete users. Database is already empty");
             }
 
             return count > 0;
