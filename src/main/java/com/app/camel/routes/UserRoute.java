@@ -3,6 +3,7 @@ package com.app.camel.routes;
 import com.app.camel.processor.DataAccessExceptionProcessor;
 import com.app.camel.processor.ExceptionProcessor;
 import com.app.camel.processor.IllegalArgumentExceptionProcessor;
+import com.app.camel.processor.NullPointerExceptionProcessor;
 import com.app.camel.processor.user.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.jooq.exception.DataAccessException;
@@ -31,6 +32,11 @@ public class UserRoute extends RouteBuilder {
         onException(IllegalArgumentException.class)
                 .handled(true)
                 .process(new IllegalArgumentExceptionProcessor())
+                .transform().body();
+
+        onException(NullPointerException.class)
+                .handled(true)
+                .process(new NullPointerExceptionProcessor())
                 .transform().body();
 
         from(USER_REST_URL + METHOD_GET)
