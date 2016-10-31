@@ -16,12 +16,10 @@ public class ExceptionProcessor implements Processor {
 
         Exception exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 
-        LOGGER.error(exception.getStackTrace());
-        LOGGER.error(exception.getMessage());
+        LOGGER.error("ERROR MESSAGE", exception);
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
         exchange.getOut().setBody(response);
-
     }
 }

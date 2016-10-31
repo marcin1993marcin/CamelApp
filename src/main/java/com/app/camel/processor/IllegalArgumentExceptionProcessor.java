@@ -17,8 +17,7 @@ public class IllegalArgumentExceptionProcessor implements Processor{
         IllegalArgumentException illegalArgumentException =
                 exchange.getProperty(Exchange.EXCEPTION_CAUGHT, IllegalArgumentException.class);
 
-        LOGGER.error(illegalArgumentException.getStackTrace());
-        LOGGER.error(illegalArgumentException.getMessage());
+        LOGGER.error("ERROR MESSAGE", illegalArgumentException);
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
