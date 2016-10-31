@@ -18,8 +18,7 @@ public class DataAccessExceptionProcessor implements Processor {
         DataAccessException dataAccessException =
                 exchange.getProperty(Exchange.EXCEPTION_CAUGHT, DataAccessException.class);
 
-        LOGGER.error(dataAccessException.getStackTrace());
-        LOGGER.error(dataAccessException.getMessage());
+        LOGGER.error("ERROR MESSAGE", dataAccessException);
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
