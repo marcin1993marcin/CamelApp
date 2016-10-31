@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +16,6 @@ import static java.util.stream.Collectors.toList;
 
 public class SelectAllProject implements Processor {
 
-    private final static Logger LOGGER = Logger.getLogger(SelectAllProject.class);
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
@@ -31,6 +29,6 @@ public class SelectAllProject implements Processor {
         ).collect(toList());
 
         exchange.getIn().setBody(gson.toJson(projectList));
-        LOGGER.info("Select all projects success");
+
     }
 }

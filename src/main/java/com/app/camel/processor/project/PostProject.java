@@ -28,19 +28,13 @@ public class PostProject implements Processor {
         ProjectRecord projectRecord = new ProjectRecord();
         projectRecord.setProjectName(project.getProjectName());
 
-        if(projectRepository.insert(projectRecord))
-        {
-            Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
-            response.setStatus(Status.SUCCESS_CREATED);
-            exchange.getOut().setBody(response);
-            LOGGER.info("Insert project success");
-        }
-        else
-        {
-            Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+        Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
+        response.setStatus(Status.SUCCESS_CREATED);
+
+        if (!projectRepository.insert(projectRecord)) {
             response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
-            exchange.getOut().setBody(response);
-            LOGGER.info("Insert project failed");
         }
+
+        exchange.getOut().setBody(response);
     }
 }
