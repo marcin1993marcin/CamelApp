@@ -2,15 +2,18 @@ package com.app.camel.configuration;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.Logger;
 
 public class Configuration {
 
-    private static org.apache.commons.configuration.Configuration configuration;
+    private static final org.apache.commons.configuration.Configuration configuration;
+    private static final Logger LOGGER = Logger.getLogger(Configuration.class);
 
     static {
         try {
             configuration = new PropertiesConfiguration("configuration.properties");
         } catch (ConfigurationException e) {
+            LOGGER.error("Unable to load configuration.properties file");
             throw new RuntimeException(e);
         }
     }
