@@ -24,7 +24,7 @@ public class PutUser implements Processor {
 
         String id = exchange.getIn().getHeader("id", String.class);
 
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
 
         String json = exchange.getIn().getBody(String.class);
 
