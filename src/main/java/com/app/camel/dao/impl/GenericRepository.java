@@ -14,8 +14,18 @@ import java.util.function.Function;
 
 public class GenericRepository {
 
-    Logger LOGGER = Logger.getLogger(GenericRepository.class);
+    private static final Logger LOGGER = Logger.getLogger(GenericRepository.class);
 
+    /**
+     * This method open and close Connection to database
+     * using URL, USER and PASSWORD specified in configuration.properties
+     * and initialize DSLContext with MYSQL Dialect.
+     * Method allows you to execute database query
+     *
+     * @param consumer type java.util.function which take DSLContext as input
+     *                 and specify return type
+     * @return result of query
+     */
     protected <T> T executeQuery(Function<DSLContext, T> consumer) {
         try (Connection connection = DriverManager.getConnection(
                 Configuration.DATABASE_URL,
