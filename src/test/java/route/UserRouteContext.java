@@ -6,7 +6,7 @@ import org.apache.camel.impl.DefaultCamelContext;
 
 public class UserRouteContext
 {
-    CamelContext context= new DefaultCamelContext();
+    private final CamelContext context= new DefaultCamelContext();
 
     public void run() throws Exception {
         UserRoute userRoute = new UserRoute();
