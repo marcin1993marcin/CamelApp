@@ -18,7 +18,7 @@ public class DeleteUser implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);

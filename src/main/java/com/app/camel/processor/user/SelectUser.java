@@ -26,7 +26,7 @@ public class SelectUser implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
 
         Optional<UserRecord> userRecord = userRepository.get(Integer.parseInt(id));
 
