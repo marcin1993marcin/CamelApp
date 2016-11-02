@@ -18,30 +18,7 @@ public class ProjectRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        onException(DataAccessException.class)
-                .handled(true)
-                .process(new DataAccessExceptionProcessor())
-                .transform().body();
-
-        onException(Exception.class)
-                .handled(true)
-                .process(new ExceptionProcessor())
-                .transform().body();
-
-        onException(IllegalArgumentException.class)
-                .handled(true)
-                .process(new IllegalArgumentExceptionProcessor())
-                .transform().body();
-
-        onException(NullPointerException.class)
-                .handled(true)
-                .process(new NullPointerExceptionProcessor())
-                .transform().body();
-
-        onException(JsonSyntaxException.class)
-                .handled(true)
-                .process(new JsonSyntaxExceptionProcessor())
-                .transform().body();
+        ExceptionRoutes.buildExceptionRoute(this);
 
         from(PROJECT_REST_URL + METHOD_GET)
                 .process(new SelectAllProject())

@@ -1,5 +1,8 @@
 package com.app.camel.processor;
 
+import com.app.camel.dto.error.ErrorResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -11,6 +14,7 @@ import org.restlet.data.Status;
 public class JsonSyntaxExceptionProcessor implements Processor {
 
     private static final Logger LOGGER = Logger.getLogger(JsonSyntaxExceptionProcessor.class);
+    private final Gson gson = new GsonBuilder().create();
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -22,7 +26,11 @@ public class JsonSyntaxExceptionProcessor implements Processor {
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+
+        String json = gson.toJson(new ErrorResponse("code", jsonSyntaxException.getMessage()));
+
         exchange.getOut().setBody(response);
+        exchange.getOut().setBody(json);
 
     }
 }
