@@ -9,7 +9,7 @@ import org.restlet.data.Status;
 
 public class ExceptionProcessor implements Processor {
 
-    private final static Logger LOGGER = Logger.getLogger(ExceptionProcessor.class);
+    private static final Logger LOGGER = Logger.getLogger(ExceptionProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {

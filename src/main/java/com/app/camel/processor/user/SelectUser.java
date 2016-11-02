@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
-import org.apache.log4j.Logger;
 import org.restlet.Response;
 import org.restlet.data.Status;
 
@@ -19,7 +18,6 @@ import java.util.Optional;
 
 public class SelectUser implements Processor {
 
-    private final static Logger LOGGER = Logger.getLogger(SelectAllUser.class);
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 

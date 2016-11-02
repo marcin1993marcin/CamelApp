@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +18,6 @@ public class SelectAllUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
-    private final static Logger LOGGER = Logger.getLogger(SelectAllUser.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
