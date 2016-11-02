@@ -181,7 +181,6 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
         LOGGER.info("Deleting all projects");
 
         return executeQuery(ctx -> {
-            Result<Record> result = ctx.select().from(PROJECT).fetch();
 
             int count = ctx.delete(PROJECT).execute();
 
