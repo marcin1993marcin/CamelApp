@@ -3,6 +3,7 @@ package com.app.camel.processor.user;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.UserRepositoryImpl;
 import com.app.camel.dto.User;
+import com.app.camel.dto.UserStatus;
 import com.app.camel.model.tables.records.UserRecord;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
@@ -31,12 +32,20 @@ public class PostUser implements Processor {
         userRecord.setLastName(user.getLastName());
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
-        userRecord.setStatus(user.getStatus());
+
+        for (UserStatus userStatus : UserStatus.values()) {
+            if (user.getStatus().equals(userStatus.getStatus())) {
+                userRecord.setStatus(user.getStatus());
+            }
+        }
+
+        Preconditions.checkNotNull(userRecord.getStatus(), "Wrong user status");
+
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
 
-        if (userRepository.insert(userRecord)) {
+        if (!userRepository.insert(userRecord)) {
             response.setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
         }
 

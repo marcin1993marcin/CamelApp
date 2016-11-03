@@ -3,6 +3,7 @@ package com.app.camel.processor.user;
 import com.app.camel.dao.UserRepository;
 import com.app.camel.dao.impl.UserRepositoryImpl;
 import com.app.camel.dto.User;
+import com.app.camel.dto.UserStatus;
 import com.app.camel.model.tables.records.UserRecord;
 import com.app.camel.util.Precondition;
 import com.google.common.base.Preconditions;
@@ -37,7 +38,16 @@ public class PutUser implements Processor {
         userRecord.setLastName(user.getLastName());
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
-        userRecord.setStatus(user.getStatus());
+
+
+
+        for (UserStatus userStatus : UserStatus.values()) {
+            if (user.getStatus().equals(userStatus.getStatus())) {
+                userRecord.setStatus(user.getStatus());
+            }
+        }
+
+        Preconditions.checkNotNull(userRecord.getStatus(), "Wrong user status");
 
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);

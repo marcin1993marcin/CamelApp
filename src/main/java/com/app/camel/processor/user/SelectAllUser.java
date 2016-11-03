@@ -26,6 +26,8 @@ public class SelectAllUser implements Processor {
         List<User> userList = users.stream().map(userEntity -> User.builder()
                 .id(Long.valueOf(userEntity.getId()))
                 .firstName(userEntity.getFirstName())
+                .status(userEntity.getStatus())
+                .lastName(userEntity.getLastName())
                 .build()
         ).collect(toList());
 
