@@ -33,5 +33,9 @@ public class SkillRoute extends RouteBuilder {
         from(SKILL_REST_URL + METHOD_DELETE)
                 .process(new DeleteAllSkill())
                 .transform().body();
+
+        from(SKILL_REST_URL + PARAM_ID + METHOD_DELETE)
+                .process(new DeleteSkill())
+                .transform().body();
     }
 }
