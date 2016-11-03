@@ -3,6 +3,7 @@ package com.app.camel;
 import com.app.camel.routes.PositionRoute;
 import com.app.camel.routes.ProjectRoute;
 import com.app.camel.routes.SalaryRoute;
+import com.app.camel.routes.SkillRoute;
 import com.app.camel.routes.UserRoute;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
@@ -35,11 +36,13 @@ public class Application {
         ProjectRoute projectRoute = new ProjectRoute();
         PositionRoute positionRoute = new PositionRoute();
         SalaryRoute salaryRoute = new SalaryRoute();
+        SkillRoute skillRoute = new SkillRoute();
 
         context.addRoutes(userRoute);
         context.addRoutes(projectRoute);
         context.addRoutes(positionRoute);
         context.addRoutes(salaryRoute);
+        context.addRoutes(skillRoute);
         return context;
     }
 
