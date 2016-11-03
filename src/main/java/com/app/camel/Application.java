@@ -52,7 +52,7 @@ public class Application {
 
         if (migrate > 0) {
             LOGGER.error("Schema named '{}' or database tables not found", FLYWAY_SCHEMA_NAME);
-            LOGGER.info("Automaticly generated '{}' schema and database tables", FLYWAY_SCHEMA_NAME);
+            LOGGER.info("Automatically generated '{}' schema and database tables", FLYWAY_SCHEMA_NAME);
         } else {
             LOGGER.info("Schema '{}' is up to date. No migration necessary.", FLYWAY_SCHEMA_NAME);
         }
