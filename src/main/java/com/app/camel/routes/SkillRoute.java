@@ -1,9 +1,6 @@
 package com.app.camel.routes;
 
-import com.app.camel.processor.skill.DeleteAllSkill;
-import com.app.camel.processor.skill.PostSkill;
-import com.app.camel.processor.skill.SelectAllSkill;
-import com.app.camel.processor.skill.SelectSkill;
+import com.app.camel.processor.skill.*;
 import org.apache.camel.builder.RouteBuilder;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;
@@ -27,6 +24,10 @@ public class SkillRoute extends RouteBuilder {
 
         from(SKILL_REST_URL + METHOD_POST)
                 .process(new PostSkill())
+                .transform().body();
+
+        from(SKILL_REST_URL + PARAM_ID + METHOD_PUT)
+                .process(new PutSkill())
                 .transform().body();
 
         from(SKILL_REST_URL + METHOD_DELETE)
