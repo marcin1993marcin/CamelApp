@@ -1,12 +1,11 @@
 package com.app.camel.routes;
 
+import com.app.camel.processor.skill.DeleteAllSkill;
 import com.app.camel.processor.skill.SelectAllSkill;
 import com.app.camel.processor.skill.SelectSkill;
 import org.apache.camel.builder.RouteBuilder;
 
-import static com.app.camel.restconfiguration.RestConfiguration.METHOD_GET;
-import static com.app.camel.restconfiguration.RestConfiguration.PARAM_ID;
-import static com.app.camel.restconfiguration.RestConfiguration.REST_URL;
+import static com.app.camel.restconfiguration.RestConfiguration.*;
 
 public class SkillRoute extends RouteBuilder {
 
@@ -25,5 +24,8 @@ public class SkillRoute extends RouteBuilder {
                 .process(new SelectSkill())
                 .transform().body();
 
+        from(SKILL_REST_URL + METHOD_DELETE)
+                .process(new DeleteAllSkill())
+                .transform().body();
     }
 }
