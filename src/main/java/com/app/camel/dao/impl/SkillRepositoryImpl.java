@@ -99,6 +99,7 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
             int count = ctx.update(SKILL)
                     .set(SKILL.NAME, skill.getName())
                     .set(SKILL.PARENT_ID, skill.getParentId())
+                    .where(SKILL.ID.eq(skill.getId()))
                     .execute();
 
             if (count > 0) {
