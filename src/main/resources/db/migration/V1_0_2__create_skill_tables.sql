@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `library`.`skill` (
   CONSTRAINT `fk_skill_skill1`
     FOREIGN KEY (`parent_id`)
     REFERENCES `library`.`skill` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
