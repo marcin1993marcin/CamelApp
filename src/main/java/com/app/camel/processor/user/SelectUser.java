@@ -16,6 +16,8 @@ import org.restlet.data.Status;
 
 import java.util.Optional;
 
+import static java.lang.Long.*;
+
 public class SelectUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
@@ -30,7 +32,7 @@ public class SelectUser implements Processor {
 
         if (userRecord.isPresent()) {
             User user = User.builder()
-                    .id(Long.valueOf(userRecord.get().getId()))
+                    .id(valueOf(userRecord.get().getId()))
                     .firstName(userRecord.get().getFirstName())
                     .email(userRecord.get().getEmail())
                     .status(userRecord.get().getStatus())

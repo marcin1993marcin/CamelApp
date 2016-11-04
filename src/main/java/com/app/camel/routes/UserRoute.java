@@ -1,10 +1,7 @@
 package com.app.camel.routes;
 
-import com.app.camel.processor.*;
 import com.app.camel.processor.user.*;
-import com.google.gson.JsonSyntaxException;
 import org.apache.camel.builder.RouteBuilder;
-import org.jooq.exception.DataAccessException;
 
 import static com.app.camel.restconfiguration.RestConfiguration.*;
 
