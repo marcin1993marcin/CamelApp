@@ -5,9 +5,10 @@ import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.records.UserRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import static com.app.camel.model.Tables.USER;
 
 public class UserRepositoryImpl extends GenericRepository implements UserRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(UserRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     /**
      * {@inheritDoc}
@@ -31,7 +32,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
             ex.printStackTrace();
         }
 
-        LOGGER.info("Getting user with id: " + id);
+        LOGGER.info("Getting user with id: {}", id);
 
         Optional<UserRecord> userRecord = executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(USER)
@@ -39,9 +40,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                         .fetchOne()));
 
         if (userRecord.isPresent()) {
-            LOGGER.info("User with id: " + id + " fetched successfully");
+            LOGGER.info("User with id: {} fetched successfully", id);
         } else {
-            LOGGER.info("User with id: " + id + " not found");
+            LOGGER.info("User with id: {} not found", id);
         }
 
         return userRecord;
@@ -95,7 +96,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
             ex.printStackTrace();
         }
 
-        LOGGER.info("Updating user with id: " + entity.getId());
+        LOGGER.info("Updating user with id: {}", entity.getId());
 
         return executeQuery(ctx -> {
             int count = ctx.update(USER)
@@ -107,9 +108,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                     .execute();
 
             if (count > 0) {
-                LOGGER.info("Successfully updated user with id: " + entity.getId());
+                LOGGER.info("Successfully updated user with id: {}", entity.getId());
             } else {
-                LOGGER.info("Cannot update user with id: " + entity.getId() + ". User not found");
+                LOGGER.info("Cannot update user with id: {}. User not found", entity.getId());
             }
 
             return count > 0;
@@ -129,7 +130,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
             ex.printStackTrace();
         }
 
-        LOGGER.info("Adding user with id: " + entity.getId());
+        LOGGER.info("Adding user with id: {}", entity.getId());
 
         return executeQuery(ctx -> {
             User user = User.USER;
@@ -142,9 +143,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                     .execute();
 
             if (count > 0) {
-                LOGGER.info("Successfully added user with id: " + entity.getId());
+                LOGGER.info("Successfully added user with id: {}", entity.getId());
             } else {
-                LOGGER.info("Cannot add user with id: " + entity.getId());
+                LOGGER.info("Cannot add user with id: {}", entity.getId());
             }
 
             return count > 0;
@@ -170,9 +171,9 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
             int count = ctx.delete(USER).where(USER.ID.eq(id)).execute();
 
             if (count > 0) {
-                LOGGER.info("User with id: " + id + " deleted successfully");
+                LOGGER.info("User with id: {} deleted successfully", id);
             } else {
-                LOGGER.info("User not found! Cannot delete user with id: " + id);
+                LOGGER.info("User not found! Cannot delete user with id: {}", id);
             }
 
             return count > 0;

@@ -2,12 +2,13 @@ package com.app.camel.configuration;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Configuration {
 
     private static final org.apache.commons.configuration.Configuration configuration;
-    private static final Logger LOGGER = Logger.getLogger(Configuration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
     static {
         try {

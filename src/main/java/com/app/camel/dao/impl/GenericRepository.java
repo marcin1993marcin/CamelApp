@@ -1,11 +1,12 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.configuration.Configuration;
-import org.apache.log4j.Logger;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +15,7 @@ import java.util.function.Function;
 
 public class GenericRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(GenericRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericRepository.class);
 
     /**
      * This method open and close Connection to database

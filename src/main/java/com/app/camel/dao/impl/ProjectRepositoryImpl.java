@@ -5,9 +5,10 @@ import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.records.ProjectRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import static com.app.camel.model.tables.Project.PROJECT;
 
 public class ProjectRepositoryImpl extends GenericRepository implements ProjectRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(ProjectRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectRepositoryImpl.class);
 
     /**
      * {@inheritDoc}
@@ -31,7 +32,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
             ex.printStackTrace();
         }
 
-        LOGGER.info("Getting project with id: " + id);
+        LOGGER.info("Getting project with id: {}", id);
 
         Optional<ProjectRecord> projectRecord = executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(PROJECT)
@@ -39,9 +40,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
                         .fetchOne()));
 
         if (projectRecord.isPresent()) {
-            LOGGER.info("Project with id: " + id + " fetched successfully");
+            LOGGER.info("Project with id: {} fetched successfully", id);
         } else {
-            LOGGER.info("Project with id: " + id + " not found");
+            LOGGER.info("Project with id: {} not found", id);
         }
 
         return projectRecord;
@@ -93,7 +94,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
             ex.printStackTrace();
         }
 
-        LOGGER.info("Updating project with id: " + project.getId());
+        LOGGER.info("Updating project with id: {}", project.getId());
 
         return executeQuery(ctx -> {
             int count = ctx.update(PROJECT)
@@ -102,9 +103,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
                     .execute();
 
             if (count > 0) {
-                LOGGER.info("Successfully updated project with id: " + project.getId());
+                LOGGER.info("Successfully updated project with id: {}", project.getId());
             } else {
-                LOGGER.info("Cannot update project with id: " + project.getId() + ". Project not found");
+                LOGGER.info("Cannot update project with id: {}. Project not found", project.getId());
             }
 
             return count > 0;
@@ -124,7 +125,7 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
             ex.printStackTrace();
         }
 
-        LOGGER.info("Adding project with id: " + project.getId());
+        LOGGER.info("Adding project with id: {}", project.getId());
 
         return executeQuery(ctx -> {
             Project p = Project.PROJECT;
@@ -134,9 +135,9 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
                     .execute();
 
             if (count > 0) {
-                LOGGER.info("Successfully added project with id: " + project.getId());
+                LOGGER.info("Successfully added project with id: {}", project.getId());
             } else {
-                LOGGER.info("Cannot add project with id: " + project.getId());
+                LOGGER.info("Cannot add project with id: {}", project.getId());
             }
 
             return count > 0;
@@ -156,15 +157,15 @@ public class ProjectRepositoryImpl extends GenericRepository implements ProjectR
             ex.printStackTrace();
         }
 
-        LOGGER.info("Deleting project with id: " + id);
+        LOGGER.info("Deleting project with id: {}", id);
 
         return executeQuery(ctx -> {
             int count = ctx.delete(PROJECT).where(PROJECT.ID.eq(id)).execute();
 
             if (count > 0) {
-                LOGGER.info("Project with id: " + id + " deleted successfully");
+                LOGGER.info("Project with id: {} deleted successfully", id);
             } else {
-                LOGGER.info("Project not found! Cannot delete project with id: " + id);
+                LOGGER.info("Project not found! Cannot delete project with id: {}", id);
             }
 
             return count > 0;
