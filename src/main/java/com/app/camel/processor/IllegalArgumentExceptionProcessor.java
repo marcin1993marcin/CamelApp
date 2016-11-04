@@ -3,13 +3,14 @@ package com.app.camel.processor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
-import org.apache.log4j.Logger;
 import org.restlet.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class IllegalArgumentExceptionProcessor implements Processor{
+public class IllegalArgumentExceptionProcessor implements Processor {
 
-    private static final Logger LOGGER = Logger.getLogger(IllegalArgumentExceptionProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IllegalArgumentExceptionProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {

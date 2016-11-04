@@ -3,14 +3,14 @@ package com.app.camel.processor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
-import org.apache.log4j.Logger;
 import org.jooq.exception.DataAccessException;
 import org.restlet.Response;
 import org.restlet.data.Status;
+import org.slf4j.Logger;
 
 public class DataAccessExceptionProcessor implements Processor {
 
-    private static final Logger LOGGER = Logger.getLogger(DataAccessExceptionProcessor.class);
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DataAccessExceptionProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {
