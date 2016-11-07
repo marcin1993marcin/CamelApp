@@ -1,7 +1,6 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.dao.UserSkillRepository;
-import com.app.camel.model.tables.records.UserRecord;
 import com.app.camel.model.tables.records.UserSkillRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -10,7 +9,6 @@ import org.jooq.Record;
 import org.jooq.Result;
 
 import java.util.Collection;
-import java.util.Optional;
 
 import static com.app.camel.model.Tables.USER_SKILL;
 
