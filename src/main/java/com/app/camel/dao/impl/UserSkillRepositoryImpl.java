@@ -123,7 +123,26 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
     }
 
     @Override
-    public boolean deleteAllUserSkills() {
-        return false;
+    public boolean deleteAllUserSkills(Integer userId) {
+        try {
+            Preconditions.checkNotNull(userId);
+        } catch (NullPointerException ex) {
+            LOGGER.info("Deleting user skills failed! User id cannot be null");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Deleting all user skills for user with id: " + userId);
+
+        return executeQuery(ctx -> {
+            int count = ctx.delete(USER_SKILL).where(USER_SKILL.USER_ID.eq(userId)).execute();
+
+            if (count > 0) {
+                LOGGER.info("User skills for user with id: " + userId + " deleted successfully");
+            } else {
+                LOGGER.info("User skills not found! Cannot delete user skills for user with id: " + userId);
+            }
+
+            return count > 0;
+        });
     }
 }

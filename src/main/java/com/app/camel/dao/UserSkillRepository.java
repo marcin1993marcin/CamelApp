@@ -8,5 +8,5 @@ public interface UserSkillRepository {
     Collection<UserSkillRecord> getAllUserSkillsForUser(Integer userId);
     boolean insertUserSkills(Collection<UserSkillRecord> userSkills);
     boolean deleteUserSkills(Integer userId, Collection<Integer> skillIds);
-    boolean deleteAllUserSkills();
+    boolean deleteAllUserSkills(Integer userId);
 }
