@@ -48,7 +48,7 @@ public class PostUserSkills implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
 
-        if (!userSkillRepository.insertUserSkills(userSkillRecords)) {
+        if (!userSkillRepository.insert(userSkillRecords)) {
             response.setStatus(Status.CLIENT_ERROR_NOT_ACCEPTABLE);
         }
 

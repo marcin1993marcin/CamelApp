@@ -18,7 +18,7 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
     private static final Logger LOGGER = Logger.getLogger(UserSkillRepositoryImpl.class);
 
     @Override
-    public Collection<UserSkillRecord> getAllUserSkillsForUser(Integer userId) {
+    public Collection<UserSkillRecord> getAll(Integer userId) {
 
         try {
             Preconditions.checkNotNull(userId);
@@ -58,7 +58,7 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
     }
 
     @Override
-    public boolean insertUserSkills(Collection<UserSkillRecord> userSkills) {
+    public boolean insert(Collection<UserSkillRecord> userSkills) {
 
         try {
             Preconditions.checkNotNull(userSkills);
@@ -94,7 +94,7 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
     }
 
     @Override
-    public boolean deleteUserSkills(Integer userId, Collection<Integer> skillIds) {
+    public boolean delete(Integer userId, Collection<Integer> skillIds) {
         try {
             Preconditions.checkNotNull(userId);
             Preconditions.checkNotNull(skillIds);
@@ -123,7 +123,7 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
     }
 
     @Override
-    public boolean deleteAllUserSkills(Integer userId) {
+    public boolean deleteAll(Integer userId) {
         try {
             Preconditions.checkNotNull(userId);
         } catch (NullPointerException ex) {
