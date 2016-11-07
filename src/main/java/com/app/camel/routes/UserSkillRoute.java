@@ -1,5 +1,6 @@
 package com.app.camel.routes;
 
+import com.app.camel.processor.userskill.DeleteUserSkills;
 import com.app.camel.processor.userskill.PostUserSkills;
 import com.app.camel.processor.userskill.SelectUserSkills;
 import org.apache.camel.builder.RouteBuilder;
@@ -23,6 +24,10 @@ public class UserSkillRoute extends RouteBuilder {
 
         from(USER_SKILL_REST_URL + METHOD_POST)
                 .process(new PostUserSkills())
+                .transform().body();
+
+        from(USER_SKILL_REST_URL + METHOD_DELETE)
+                .process(new DeleteUserSkills())
                 .transform().body();
     }
 }
