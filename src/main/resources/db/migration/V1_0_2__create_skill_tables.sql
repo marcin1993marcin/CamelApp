@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `library`.`user_skill` (
   `skill_id` INT NOT NULL,
   `user_id` INT(11) NOT NULL,
   `level` INT NOT NULL,
-  `note` BLOB NULL,
+  `note` LONGTEXT NULL,
   PRIMARY KEY (`skill_id`, `user_id`),
   INDEX `fk_skill_has_user_user1_idx` (`user_id` ASC),
   INDEX `fk_skill_has_user_skill1_idx` (`skill_id` ASC),
