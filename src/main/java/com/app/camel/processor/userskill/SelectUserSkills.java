@@ -16,7 +16,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class SelectUserSkill implements Processor {
+public class SelectUserSkills implements Processor {
 
     private final UserSkillRepository userSkillRepository = new UserSkillRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
