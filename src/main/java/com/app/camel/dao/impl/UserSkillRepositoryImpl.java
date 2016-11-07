@@ -17,6 +17,9 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
 
     private static final Logger LOGGER = Logger.getLogger(UserSkillRepositoryImpl.class);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<UserSkillRecord> getAll(Integer userId) {
 
@@ -57,6 +60,9 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean insert(Collection<UserSkillRecord> userSkills) {
 
@@ -93,6 +99,9 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean delete(Integer userId, Collection<Integer> skillIds) {
         try {
@@ -122,6 +131,9 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteAll(Integer userId) {
         try {
