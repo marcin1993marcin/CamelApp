@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserSkill extends TableImpl<UserSkillRecord> {
 
-    private static final long serialVersionUID = 2000990568;
+    private static final long serialVersionUID = -416676816;
 
     /**
      * The reference instance of <code>library.user_skill</code>
@@ -68,7 +68,7 @@ public class UserSkill extends TableImpl<UserSkillRecord> {
     /**
      * The column <code>library.user_skill.note</code>.
      */
-    public final TableField<UserSkillRecord, byte[]> NOTE = createField("note", org.jooq.impl.SQLDataType.BLOB, this, "");
+    public final TableField<UserSkillRecord, String> NOTE = createField("note", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>library.user_skill</code> table reference
