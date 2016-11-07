@@ -25,7 +25,7 @@ public class DeleteAllUserSkills implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
 
-        if(!userSkillRepository.deleteAllUserSkills(Integer.parseInt(userId))) {
+        if(!userSkillRepository.deleteAll(Integer.parseInt(userId))) {
             response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
         }
 

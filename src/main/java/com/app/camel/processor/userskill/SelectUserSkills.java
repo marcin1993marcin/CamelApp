@@ -26,7 +26,7 @@ public class SelectUserSkills implements Processor {
         String userId = exchange.getIn().getHeader("id", String.class);
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user ID of value: \"" + userId + "\"");
 
-        Collection<UserSkillRecord> userSkills = userSkillRepository.getAllUserSkillsForUser(Integer.parseInt(userId));
+        Collection<UserSkillRecord> userSkills = userSkillRepository.getAll(Integer.parseInt(userId));
 
         List<UserSkill> userSkillList = userSkills.stream().map(userSkillEntity -> UserSkill.builder()
                 .skillId(userSkillEntity.getSkillId())

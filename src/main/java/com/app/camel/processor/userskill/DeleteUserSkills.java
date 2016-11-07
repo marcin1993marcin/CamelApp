@@ -37,7 +37,7 @@ public class DeleteUserSkills implements Processor {
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
 
-        if (!userSkillRepository.deleteUserSkills(Integer.parseInt(userId), skillIds)) {
+        if (!userSkillRepository.delete(Integer.parseInt(userId), skillIds)) {
             response.setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
         }
 
