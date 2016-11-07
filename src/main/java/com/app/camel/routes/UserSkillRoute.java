@@ -1,11 +1,10 @@
 package com.app.camel.routes;
 
-import com.app.camel.processor.userskill.SelectUserSkill;
+import com.app.camel.processor.userskill.PostUserSkills;
+import com.app.camel.processor.userskill.SelectUserSkills;
 import org.apache.camel.builder.RouteBuilder;
 
-import static com.app.camel.restconfiguration.RestConfiguration.METHOD_GET;
-import static com.app.camel.restconfiguration.RestConfiguration.PARAM_ID;
-import static com.app.camel.restconfiguration.RestConfiguration.REST_URL;
+import static com.app.camel.restconfiguration.RestConfiguration.*;
 
 public class UserSkillRoute extends RouteBuilder {
 
@@ -19,8 +18,11 @@ public class UserSkillRoute extends RouteBuilder {
         ExceptionRoutes.buildExceptionRoute(this);
 
         from(USER_SKILL_REST_URL + METHOD_GET)
-                .process(new SelectUserSkill())
+                .process(new SelectUserSkills())
                 .transform().body();
 
+        from(USER_SKILL_REST_URL + METHOD_POST)
+                .process(new PostUserSkills())
+                .transform().body();
     }
 }
