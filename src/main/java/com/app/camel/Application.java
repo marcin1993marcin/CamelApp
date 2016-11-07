@@ -5,6 +5,7 @@ import com.app.camel.routes.ProjectRoute;
 import com.app.camel.routes.SalaryRoute;
 import com.app.camel.routes.SkillRoute;
 import com.app.camel.routes.UserRoute;
+import com.app.camel.routes.UserSkillRoute;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.flywaydb.core.Flyway;
@@ -37,12 +38,14 @@ public class Application {
         PositionRoute positionRoute = new PositionRoute();
         SalaryRoute salaryRoute = new SalaryRoute();
         SkillRoute skillRoute = new SkillRoute();
+        UserSkillRoute userSkillRoute = new UserSkillRoute();
 
         context.addRoutes(userRoute);
         context.addRoutes(projectRoute);
         context.addRoutes(positionRoute);
         context.addRoutes(salaryRoute);
         context.addRoutes(skillRoute);
+        context.addRoutes(userSkillRoute);
         return context;
     }
 
