@@ -1,5 +1,6 @@
 package com.app.camel.routes;
 
+import com.app.camel.processor.userskill.DeleteAllUserSkills;
 import com.app.camel.processor.userskill.DeleteUserSkills;
 import com.app.camel.processor.userskill.PostUserSkills;
 import com.app.camel.processor.userskill.SelectUserSkills;
@@ -11,6 +12,7 @@ public class UserSkillRoute extends RouteBuilder {
 
     private static final String USER = "user";
     private static final String SKILL = "/skill";
+    private static final String ALL = "/all";
     private static final String USER_SKILL_REST_URL = REST_URL + USER + PARAM_ID + SKILL;
 
     @Override
@@ -28,6 +30,10 @@ public class UserSkillRoute extends RouteBuilder {
 
         from(USER_SKILL_REST_URL + METHOD_DELETE)
                 .process(new DeleteUserSkills())
+                .transform().body();
+
+        from(USER_SKILL_REST_URL + ALL + METHOD_DELETE)
+                .process(new DeleteAllUserSkills())
                 .transform().body();
     }
 }
