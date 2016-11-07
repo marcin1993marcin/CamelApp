@@ -1,6 +1,7 @@
 package com.app.camel.dao.impl;
 
 import com.app.camel.dao.UserSkillRepository;
+import com.app.camel.model.tables.UserSkill;
 import com.app.camel.model.tables.records.UserSkillRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -58,7 +59,38 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
 
     @Override
     public boolean insertUserSkills(Collection<UserSkillRecord> userSkills) {
-        return false;
+
+        try {
+            Preconditions.checkNotNull(userSkills);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Adding user skills failed! No user skills to add");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Adding " + userSkills.size() + " user skills");
+
+        return executeQuery(ctx -> {
+            UserSkill userSkill = UserSkill.USER_SKILL;
+
+            int count = 0;
+            for (UserSkillRecord userSkillRecord: userSkills) {
+                count += ctx.insertInto(userSkill)
+                        .set(userSkill.SKILL_ID, userSkillRecord.getSkillId())
+                        .set(userSkill.USER_ID, userSkillRecord.getUserId())
+                        .set(userSkill.LEVEL, userSkillRecord.getLevel())
+                        .set(userSkill.NOTE, userSkillRecord.getNote())
+                        .execute();
+            }
+
+            int failed = userSkills.size() - count;
+            if (failed == 0) {
+                LOGGER.info("Successfully added " + count + " user skills");
+            } else {
+                LOGGER.info("Failed to add " + failed + " user skills" );
+            }
+
+            return failed == 0;
+        });
     }
 
     @Override
