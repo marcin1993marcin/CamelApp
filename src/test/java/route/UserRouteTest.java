@@ -120,7 +120,7 @@ public class UserRouteTest {
     }
 
     @Test
-    public void TestDeleteUserById() throws Exception {
+    public void shouldDeleteUserById() throws Exception {
 
         //given
         String url = "/11";
@@ -135,7 +135,7 @@ public class UserRouteTest {
     }
 
     @Test
-    public void TestDeleteAll() throws Exception {
+    public void shouldDeleteUsers() throws Exception {
 
         //given
         request = createRequest(Method.DELETE, "");
