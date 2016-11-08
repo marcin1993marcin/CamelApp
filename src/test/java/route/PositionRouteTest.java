@@ -72,7 +72,7 @@ public class PositionRouteTest {
         assertEquals(201, response.getStatus().getCode());
     }
 
-    @Test
+    //@Test
     public void TestPutPositionById() throws Exception {
         String url = "http://localhost:9091/position/5";
         String post = " { \"id\": 5, \"position\": \"UpdatedTester\"}";
