@@ -7,10 +7,11 @@ import org.jooq.exception.DataAccessException;
 import org.restlet.Response;
 import org.restlet.data.Status;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DataAccessExceptionProcessor implements Processor {
 
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DataAccessExceptionProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessExceptionProcessor.class);
 
     @Override
     public void process(Exchange exchange) throws Exception {

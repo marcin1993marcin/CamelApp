@@ -12,6 +12,7 @@ import org.apache.camel.Processor;
 import java.util.Collection;
 import java.util.List;
 
+import static java.lang.Long.valueOf;
 import static java.util.stream.Collectors.toList;
 
 public class SelectAllUser implements Processor {
@@ -24,7 +25,7 @@ public class SelectAllUser implements Processor {
         Collection<UserRecord> users = userRepository.getAll();
 
         List<User> userList = users.stream().map(userEntity -> User.builder()
-                .id(Long.valueOf(userEntity.getId()))
+                .id(valueOf(userEntity.getId()))
                 .firstName(userEntity.getFirstName())
                 .status(userEntity.getStatus())
                 .lastName(userEntity.getLastName())

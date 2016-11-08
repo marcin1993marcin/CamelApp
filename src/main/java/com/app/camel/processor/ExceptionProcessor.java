@@ -4,13 +4,16 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.component.restlet.RestletConstants;
 import org.restlet.Response;
-import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.restlet.data.Status.SERVER_ERROR_SERVICE_UNAVAILABLE;
 
 public class ExceptionProcessor implements Processor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionProcessor.class);
+
+
 
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -20,7 +23,7 @@ public class ExceptionProcessor implements Processor {
         LOGGER.error("ERROR MESSAGE", exception);
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
-        response.setStatus(Status.SERVER_ERROR_SERVICE_UNAVAILABLE);
+        response.setStatus(SERVER_ERROR_SERVICE_UNAVAILABLE);
         exchange.getOut().setBody(response);
     }
 }
