@@ -1,6 +1,9 @@
 package route;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.restlet.Client;
 import org.restlet.Request;
@@ -8,11 +11,17 @@ import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import util.ReadResources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.restlet.data.Status.*;
 
 public class UserRouteTest {
+
+
+    private final String REQUESTS_LOCATION = "requests/userResource/";
+    private final String REQUEST_URL = "http://localhost:9091/";
+    private final String REQUEST_CONTEXT = "user";
 
     @Rule
     public ExpectedException exception =
@@ -21,11 +30,13 @@ public class UserRouteTest {
     private Client client = new Client(Protocol.HTTP);
     private Request request;
     private Response response;
+    private ReadResources readResources = new ReadResources();
 
     @Before
     public final void before() throws Exception {
         userRouteContext = new UserRouteContext();
         userRouteContext.run();
+        client = new Client(Protocol.HTTP);
     }
 
     @After
@@ -34,85 +45,111 @@ public class UserRouteTest {
     }
 
     @Test
-    public void TestGetAllUser() throws Exception {
+    public void shouldReturnUsers() throws Exception {
 
+        //given
+        request = createRequest(Method.GET, "");
 
-        String url = "http://localhost:9091/user";
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.GET, url);
+        //when
         response = client.handle(request);
-        assertEquals(200, response.getStatus().getCode());
-        assertTrue(response.isEntityAvailable());
-        Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
-        String responseString = response.getEntityAsText();
-        Assert.assertNotNull(responseString);
+
+        //then
+        assertThat(response.getStatus()).as("Returned users list").isEqualTo(SUCCESS_OK);
 
     }
 
-    @Test
-    public void TestGetUserById() throws Exception {
 
-        String url = "http://localhost:9091/user/12";
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.GET, url);
+    @Test
+    public void shouldReturnUserById() throws Exception {
+
+        //given
+        String url = "/12";
+        request = createRequest(Method.GET, url);
+
+        //when
         response = client.handle(request);
 
-        if (response.isEntityAvailable()) {
-            assertEquals(200, response.getStatus().getCode());
-            Assert.assertEquals(MediaType.TEXT_PLAIN, response.getEntity().getMediaType());
-        } else {
-            assertEquals(204, response.getStatus().getCode());
-        }
-
-
+        //then
+        assertThat(response.getStatus()).as("Return user by id %s", url).isEqualTo(SUCCESS_OK);
     }
 
     @Test
-    public void TestPostUser() throws Exception {
+    public void shouldNotReturnUserById() throws Exception {
 
-        String url = "http://localhost:9091/user";
-        String post = " {  \"id\": 9, \"firstName\": \"First\", \"lastName\": \"Name\",  \"email\": \"email\",   \"status\": \"pp\" }";
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.POST, url);
+        //given
+        String url = "/13";
+        request = createRequest(Method.GET, url);
 
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("User with id  %s not exist", url).isEqualTo(SUCCESS_NO_CONTENT);
+    }
+
+    @Test
+    public void shouldCreateUserInDatabase() throws Exception {
+
+        //given
+        String post = readResources.readFile(REQUESTS_LOCATION + "correctlyPostRequestBody.json");
+        request = createRequest(Method.POST, "");
         request.setEntity(post, MediaType.APPLICATION_ALL);
+
+        //when
         response = client.handle(request);
-        assertEquals(400, response.getStatus().getCode());
+
+        //then
+        assertThat(response.getStatus()).as("User created ").isEqualTo(SUCCESS_CREATED);
 
     }
 
     @Test
-    public void TestPutUserById() throws Exception {
+    public void shouldNotUpdateUserWithInvalidStatus() throws Exception {
 
-        String url = "http://localhost:9091/user/12";
-        String post = " {  \"id\": 9, \"firstName\": \"First\", \"lastName\": \"Name\",  \"email\": \"email\",   \"status\": \"pp\" }";
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.PUT, url);
-
+        // given
+        String url = "/12";
+        String post = readResources.readFile(REQUESTS_LOCATION + "invalidStatusRequestBody.json");
+        request = createRequest(Method.PUT, url);
         request.setEntity(post, MediaType.APPLICATION_ALL);
-        response = client.handle(request);
-        assertTrue(response.getStatus().getCode() == 200 || response.getStatus().getCode() == 400);
 
+        //when
+        response = client.handle(request);
+
+        // then
+        assertThat(response.getStatus()).as("returned server response").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Test
     public void TestDeleteUserById() throws Exception {
-        String url = "http://localhost:9091/user/11";
 
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.DELETE, url);
+        //given
+        String url = "/11";
+        request = createRequest(Method.DELETE, url);
+
+        //when
         response = client.handle(request);
-        assertTrue(response.getStatus().getCode() == 204 || response.getStatus().getCode() == 304);
+
+        //then
+        assertThat(response.getStatus()).as("Return user by id %s", url).isEqualTo(SUCCESS_NO_CONTENT);
 
     }
 
     @Test
     public void TestDeleteAll() throws Exception {
-        String url = "http://localhost:9091/user";
-        client = new Client(Protocol.HTTP);
-        request = new Request(Method.DELETE, url);
+
+        //given
+        request = createRequest(Method.DELETE, "");
+
+        //when
         response = client.handle(request);
-        assertEquals(304, response.getStatus().getCode());
+
+        //then
+        assertThat(response.getStatus()).as("Deleta all users").isEqualTo(SUCCESS_NO_CONTENT);
+    }
+
+
+    private Request createRequest(Method method, String url) {
+        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + url);
     }
 
 }
