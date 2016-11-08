@@ -19,9 +19,9 @@ import static org.restlet.data.Status.*;
 public class UserRouteTest {
 
 
-    private final String REQUESTS_LOCATION = "requests/userResource/";
-    private final String REQUEST_URL = "http://localhost:9091/";
-    private final String REQUEST_CONTEXT = "user";
+    private static final String REQUESTS_LOCATION = "requests/userResource/";
+    private static final String REQUEST_URL = "http://localhost:9091/";
+    private static final String REQUEST_CONTEXT = "user";
 
     @Rule
     public ExpectedException exception =
@@ -135,7 +135,7 @@ public class UserRouteTest {
     }
 
     @Test
-    public void shouldDeleteUsers() throws Exception {
+    public void shouldDeleteUsersD() throws Exception {
 
         //given
         request = createRequest(Method.DELETE, "");
