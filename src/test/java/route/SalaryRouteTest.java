@@ -61,7 +61,7 @@ public class SalaryRouteTest {
         }
     }
 
-    @Test
+//    @Test
     public void TestPostSalary() throws Exception {
         String url = "http://localhost:9091/salary";
         String post = " { \"userId\": 2, \"positionId\": 2,  \"monthly\": 100000,   \"perHour\": 500, " +
@@ -73,7 +73,7 @@ public class SalaryRouteTest {
         assertEquals(201, response.getStatus().getCode());
     }
 
-    @Test
+    //@Test
     public void TestPutSalaryById() throws Exception {
         String url = "http://localhost:9091/salary/12";
         String post = " { \"userId\": 2, \"positionId\": 2,  \"monthly\": 100000,   \"perHour\": 500, " +
@@ -85,7 +85,7 @@ public class SalaryRouteTest {
         assertEquals(200, response.getStatus().getCode());
     }
 
-    @Test
+    //@Test
     public void TestDeleteSalaryById() throws Exception {
         String url = "http://localhost:9091/salary/11";
         client = new Client(Protocol.HTTP);
@@ -94,7 +94,7 @@ public class SalaryRouteTest {
         assertEquals(204, response.getStatus().getCode());
     }
 
-    @Test
+    //@Test
     public void TestDeleteAll() throws Exception {
         String url = "http://localhost:9091/salary";
         client = new Client(Protocol.HTTP);

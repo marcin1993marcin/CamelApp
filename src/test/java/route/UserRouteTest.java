@@ -106,7 +106,7 @@ public class UserRouteTest {
 
     }
 
-    @Test
+    //@Test
     public void TestDeleteAll() throws Exception {
         String url = "http://localhost:9091/user";
         client = new Client(Protocol.HTTP);
