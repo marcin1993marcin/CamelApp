@@ -144,7 +144,7 @@ public class UserRouteTest {
         response = client.handle(request);
 
         //then
-        assertThat(response.getStatus()).as("Deleta all users").isEqualTo(SUCCESS_NO_CONTENT);
+        assertThat(response.getStatus()).as("Delete all users").isEqualTo(SUCCESS_NO_CONTENT);
     }
 
 
