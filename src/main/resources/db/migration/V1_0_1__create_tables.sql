@@ -1,49 +1,99 @@
+--
+-- Table structure for table `user`
+--
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- -----------------------------------------------------
--- Table `library`.`project`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library`.`project` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `project_name` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8;
+--
+-- Table structure for table `project`
+--
+CREATE TABLE IF NOT EXISTS `project` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_name` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `schema_version`
+--
+CREATE TABLE IF NOT EXISTS `schema_version` (
+  `installed_rank` int(11) NOT NULL,
+  `version` varchar(50) DEFAULT NULL,
+  `description` varchar(200) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `script` varchar(1000) NOT NULL,
+  `checksum` int(11) DEFAULT NULL,
+  `installed_by` varchar(100) NOT NULL,
+  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `execution_time` int(11) NOT NULL,
+  `success` tinyint(1) NOT NULL,
+  PRIMARY KEY (`installed_rank`),
+  KEY `schema_version_s_idx` (`success`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- -----------------------------------------------------
--- Table `library`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library`.`user` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(255) NOT NULL,
-  `last_name` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `status` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 9
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `library`.`user_projects`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `library`.`user_projects` (
-  `Users_id` INT(11) NOT NULL,
-  `Projects_id` INT(11) NOT NULL,
-  PRIMARY KEY (`Users_id`, `Projects_id`),
-  INDEX `fk_Users_has_Projects_Projects1_idx` (`Projects_id` ASC),
-  INDEX `fk_Users_has_Projects_Users_idx` (`Users_id` ASC),
+--
+-- Table structure for table `user_projects`
+--
+CREATE TABLE IF NOT EXISTS `user_projects` (
+  `Users_id` int(11) NOT NULL,
+  `Projects_id` int(11) NOT NULL,
+  PRIMARY KEY (`Users_id`,`Projects_id`),
+  KEY `fk_Users_has_Projects_Projects1_idx` (`Projects_id`),
+  KEY `fk_Users_has_Projects_Users_idx` (`Users_id`),
   CONSTRAINT `fk_Users_has_Projects_Projects1`
-    FOREIGN KEY (`Projects_id`)
-    REFERENCES `library`.`project` (`id`)
+    FOREIGN KEY (`Projects_id`) REFERENCES `project` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Projects_Users`
-    FOREIGN KEY (`Users_id`)
-    REFERENCES `library`.`user` (`id`)
+    FOREIGN KEY (`Users_id`) REFERENCES `user` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `position`
+--
+CREATE TABLE IF NOT EXISTS `position` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `User_id` int(11),
+  `position` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_User_has_position_idx` (`User_id`),
+  CONSTRAINT `fk_User_has_Positions_Users`
+    FOREIGN KEY (`User_id`) REFERENCES `user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `salary`
+--
+CREATE TABLE IF NOT EXISTS `salary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `Users_id` int(11),
+  `Positions_id` int(11),
+  `monthly` int(11) NOT NULL,
+  `per_hour` int(11) NOT NULL,
+  `date_from` date NOT NULL,
+  `date_to` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Users_has_salary_idx` (`Users_id`),
+  KEY `fk_Position_has_salary_idx` (`Positions_id`),
+  CONSTRAINT `fk_Position_has_Salaries_Positions`
+    FOREIGN KEY (`Positions_id`) REFERENCES `position` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Users_has_Salaries_Positions`
+    FOREIGN KEY (`Users_id`) REFERENCES `user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+

@@ -4,7 +4,9 @@
 package com.app.camel.model;
 
 
+import com.app.camel.model.tables.Position;
 import com.app.camel.model.tables.Project;
+import com.app.camel.model.tables.Salary;
 import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
@@ -26,9 +28,19 @@ import javax.annotation.Generated;
 public class Tables {
 
     /**
+     * The table <code>library.position</code>.
+     */
+    public static final Position POSITION = com.app.camel.model.tables.Position.POSITION;
+
+    /**
      * The table <code>library.project</code>.
      */
     public static final Project PROJECT = com.app.camel.model.tables.Project.PROJECT;
+
+    /**
+     * The table <code>library.salary</code>.
+     */
+    public static final Salary SALARY = com.app.camel.model.tables.Salary.SALARY;
 
     /**
      * The table <code>library.schema_version</code>.
