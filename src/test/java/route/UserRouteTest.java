@@ -91,7 +91,7 @@ public class UserRouteTest {
 
         request.setEntity(post, MediaType.APPLICATION_ALL);
         response = client.handle(request);
-        assertTrue(response.getStatus().getCode()== 200 || response.getStatus().getCode()==400);
+        assertTrue(response.getStatus().getCode() == 200 || response.getStatus().getCode() == 400);
 
     }
 
@@ -102,7 +102,7 @@ public class UserRouteTest {
         client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
         response = client.handle(request);
-        assertTrue(response.getStatus().getCode()== 204 || response.getStatus().getCode()==304);
+        assertTrue(response.getStatus().getCode() == 204 || response.getStatus().getCode() == 304);
 
     }
 
