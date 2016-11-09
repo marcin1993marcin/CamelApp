@@ -7,7 +7,6 @@ package com.app.camel.model;
 import com.app.camel.model.tables.Position;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
-import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
 
@@ -35,7 +34,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = 1031961171;
+    private static final long serialVersionUID = -183303161;
 
     /**
      * The reference instance of <code>library</code>
@@ -56,11 +55,6 @@ public class Library extends SchemaImpl {
      * The table <code>library.salary</code>.
      */
     public final Salary SALARY = com.app.camel.model.tables.Salary.SALARY;
-
-    /**
-     * The table <code>library.schema_version</code>.
-     */
-    public final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
 
     /**
      * The table <code>library.user</code>.
@@ -100,7 +94,6 @@ public class Library extends SchemaImpl {
             Position.POSITION,
             Project.PROJECT,
             Salary.SALARY,
-            SchemaVersion.SCHEMA_VERSION,
             User.USER,
             UserProjects.USER_PROJECTS);
     }
