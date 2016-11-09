@@ -20,13 +20,10 @@ public class PostSkill implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         String select = exchange.getIn().getBody(String.class);
-
         Preconditions.checkNotNull(select, "Body is null");
 
         Skill skill = gson.fromJson(select, Skill.class);
-
         SkillRecord skillRecord = new SkillRecord();
         skillRecord.setName(skill.getName());
         skillRecord.setParentId(skill.getParentId());

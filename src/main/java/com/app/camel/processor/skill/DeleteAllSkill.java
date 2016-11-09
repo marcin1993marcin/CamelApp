@@ -14,7 +14,6 @@ public class DeleteAllSkill implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
 

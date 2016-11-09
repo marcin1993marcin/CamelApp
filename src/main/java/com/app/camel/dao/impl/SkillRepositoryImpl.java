@@ -5,9 +5,10 @@ import com.app.camel.model.tables.Skill;
 import com.app.camel.model.tables.records.SkillRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,34 +17,27 @@ import static com.app.camel.model.tables.Skill.SKILL;
 
 public class SkillRepositoryImpl extends GenericRepository implements SkillRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(SkillRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SkillRepositoryImpl.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Optional<SkillRecord> get(Integer id) {
-
         try {
             Preconditions.checkNotNull(id);
         } catch (NullPointerException ex) {
             LOGGER.error("Getting skill failed! Id cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Getting project with id: " + id);
+        LOGGER.info("Getting project with id: {}", id);
 
         Optional<SkillRecord> skillRecord = executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(SKILL)
                         .where(SKILL.ID.equal(id))
                         .fetchOne()));
 
-        if (skillRecord.isPresent()) {
-            LOGGER.info("Skill with id: " + id + " fetched successfully");
-        } else {
-            LOGGER.info("Skill with id: " + id + " not found");
-        }
-
+        LOGGER.info("Skill with id: {} fetched successfully", id);
         return skillRecord;
     }
 
@@ -55,7 +49,6 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
         LOGGER.info("Getting all skills from database");
 
         return executeQuery(ctx -> {
-
             Result<Record> result = ctx.select().from(SKILL).fetch();
 
             Collection<SkillRecord> skills = Lists.newArrayList();
@@ -69,12 +62,7 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
                 skills.add(skill);
             });
 
-            if (skills.size() > 0) {
-                LOGGER.info("Successfully fetched all skills from database");
-            } else {
-                LOGGER.info("Cannot get all skills. No skills found in database");
-            }
-
+            LOGGER.info("Successfully fetched all skills from database");
             return skills;
         });
     }
@@ -84,16 +72,14 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
      */
     @Override
     public boolean update(SkillRecord skill) {
-
         try {
             Preconditions.checkNotNull(skill);
             Preconditions.checkNotNull(skill.getId());
         } catch (NullPointerException ex) {
             LOGGER.error("Updating skill record failed! SkillRecord or SkillRecord id cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Updating skill with id: " + skill.getId());
+        LOGGER.info("Updating skill with id: {}", skill.getId());
 
         return executeQuery(ctx -> {
             int count = ctx.update(SKILL)
@@ -102,12 +88,7 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
                     .where(SKILL.ID.eq(skill.getId()))
                     .execute();
 
-            if (count > 0) {
-                LOGGER.info("Successfully updated skill with id: " + skill.getId());
-            } else {
-                LOGGER.info("Cannot update skill with id: " + skill.getId() + ". Skill not found");
-            }
-
+            LOGGER.info("Successfully updated skill with id: {}" , skill.getId());
             return count > 0;
         });
     }
@@ -117,15 +98,13 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
      */
     @Override
     public boolean insert(SkillRecord skill) {
-
         try {
             Preconditions.checkNotNull(skill);
         } catch (NullPointerException ex) {
             LOGGER.error("Adding skill record failed! SkillRecord cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Adding skill with id: " + skill.getId());
+        LOGGER.info("Adding skill with id: {}", skill.getId());
 
         return executeQuery(ctx -> {
             Skill s = Skill.SKILL;
@@ -135,12 +114,7 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
                     .set(s.PARENT_ID, skill.getParentId())
                     .execute();
 
-            if (count > 0) {
-                LOGGER.info("Successfully added skill with id: " + skill.getId());
-            } else {
-                LOGGER.info("Cannot add skill with id: " + skill.getId());
-            }
-
+            LOGGER.info("Successfully added skill with id: {}", skill.getId());
             return count > 0;
         });
     }
@@ -150,25 +124,18 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
      */
     @Override
     public boolean delete(Integer id) {
-
         try {
             Preconditions.checkNotNull(id);
         } catch (NullPointerException ex) {
             LOGGER.error("Deleting skill failed! Id cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Deleting skill with id: " + id);
+        LOGGER.info("Deleting skill with id: {}", id);
 
         return executeQuery(ctx -> {
             int count = ctx.delete(SKILL).where(SKILL.ID.eq(id)).execute();
 
-            if (count > 0) {
-                LOGGER.info("Skill with id: " + id + " deleted successfully");
-            } else {
-                LOGGER.info("Skill not found! Cannot delete skill with id : " + id);
-            }
-
+            LOGGER.info("Skill with id: {} deleted successfully", id);
             return count > 0;
         });
     }
@@ -178,19 +145,12 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
      */
     @Override
     public boolean deleteAll() {
-
         LOGGER.info("Deleting all skills");
 
         return executeQuery(ctx -> {
-
             int count = ctx.delete(SKILL).execute();
 
-            if (count > 0) {
-                LOGGER.info("All skills deleted successfully");
-            } else {
-                LOGGER.info("Cannot delete skills. Database is empty");
-            }
-
+            LOGGER.info("All skills deleted successfully");
             return count > 0;
         });
     }
