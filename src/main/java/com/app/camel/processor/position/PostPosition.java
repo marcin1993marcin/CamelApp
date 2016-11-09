@@ -20,6 +20,7 @@ public class PostPosition implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String select = exchange.getIn().getBody(String.class);
 
         Preconditions.checkNotNull(select, "Body is null");

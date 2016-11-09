@@ -23,6 +23,7 @@ public class SelectAllSalary implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         Collection<SalaryRecord> salaries = salaryRepository.getAll();
+
         List<Salary> salaryList = salaries.stream().map(salaryEntity -> Salary.builder()
             .id(Long.valueOf(salaryEntity.getId()))
             .monthly(Long.valueOf(salaryEntity.getMonthly()))

@@ -1,4 +1,13 @@
 --
+-- Table structure for table `position`
+--
+CREATE TABLE IF NOT EXISTS `position` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `position` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `user`
 --
 CREATE TABLE IF NOT EXISTS `user` (
@@ -7,8 +16,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   `last_name` varchar(255) NOT NULL,
   `email` varchar(45) NOT NULL,
   `status` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `Position_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_Position_has_Users_Positions_idx` (`Position_id`),
+    CONSTRAINT `fk_Position_has_Users_Positions`
+    FOREIGN KEY (`Position_id`) REFERENCES `position` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `project`
@@ -39,21 +54,6 @@ CREATE TABLE IF NOT EXISTS `user_projects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `position`
---
-CREATE TABLE IF NOT EXISTS `position` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `User_id` int(11),
-  `position` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_User_has_position_idx` (`User_id`),
-  CONSTRAINT `fk_User_has_Positions_Users`
-    FOREIGN KEY (`User_id`) REFERENCES `user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `salary`
 --
 CREATE TABLE IF NOT EXISTS `salary` (
@@ -76,6 +76,4 @@ CREATE TABLE IF NOT EXISTS `salary` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
