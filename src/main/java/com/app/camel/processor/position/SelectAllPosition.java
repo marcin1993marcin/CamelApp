@@ -21,6 +21,7 @@ public class SelectAllPosition implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         Collection<PositionRecord> positions = positionRepository.getAll();
 
         List<Position> positionList = positions.stream().map(positionEntity -> Position.builder()

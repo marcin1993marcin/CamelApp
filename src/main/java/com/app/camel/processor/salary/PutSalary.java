@@ -32,14 +32,7 @@ public class PutSalary implements Processor {
 
         Preconditions.checkNotNull(select, "Body is null");
 
-        Salary salary = gson.fromJson(select, Salary.class);
-
-        SalaryRecord salaryRecord = new SalaryRecord();
-        salaryRecord.setId(Integer.parseInt(id));
-        salaryRecord.setMonthly(Math.toIntExact(salary.getMonthly()));
-        salaryRecord.setPerHour(Math.toIntExact(salary.getPerHour()));
-        salaryRecord.setDateFrom(Date.valueOf(salary.getDateFrom()));
-        salaryRecord.setDateTo(Date.valueOf(salary.getDateTo()));
+        SalaryRecord salaryRecord = getSalaryRecord(id, gson.fromJson(select, Salary.class));
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
@@ -49,5 +42,15 @@ public class PutSalary implements Processor {
         }
 
         exchange.getOut().setBody(response);
+    }
+
+    private SalaryRecord getSalaryRecord(String id, Salary salary) {
+        SalaryRecord salaryRecord = new SalaryRecord();
+        salaryRecord.setId(Integer.parseInt(id));
+        salaryRecord.setMonthly(Math.toIntExact(salary.getMonthly()));
+        salaryRecord.setPerHour(Math.toIntExact(salary.getPerHour()));
+        salaryRecord.setDateFrom(Date.valueOf(salary.getDateFrom()));
+        salaryRecord.setDateTo(Date.valueOf(salary.getDateTo()));
+        return salaryRecord;
     }
 }

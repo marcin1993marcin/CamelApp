@@ -67,7 +67,8 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                         r.getValue(USER.FIRST_NAME),
                         r.getValue(USER.LAST_NAME),
                         r.getValue(USER.EMAIL),
-                        r.getValue(USER.STATUS));
+                        r.getValue(USER.STATUS),
+                        r.getValue(USER.POSITION_ID));
 
                 users.add(user);
             });

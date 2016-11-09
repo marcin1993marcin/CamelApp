@@ -16,6 +16,7 @@ public class DeletePosition implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
+
         String id = exchange.getIn().getHeader("id", String.class);
         Preconditions.checkArgument(Precondition.isInteger(id), "Invalid position ID of value: \"" + id + "\"");
 

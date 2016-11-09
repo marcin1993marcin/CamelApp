@@ -5,9 +5,10 @@ import com.app.camel.model.tables.Position;
 import com.app.camel.model.tables.records.PositionRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import static com.app.camel.model.Tables.POSITION;
 
 public class PositionRepositoryImpl extends GenericRepository implements PositionRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(PositionRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PositionRepositoryImpl.class);
 
     @Override
     public Optional<PositionRecord> get(Integer id) {
