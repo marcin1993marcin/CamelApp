@@ -123,7 +123,11 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0-alpha-2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -163,6 +167,24 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>properties-maven-plugin</artifactId>
+                        <version>1.0-alpha-2</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>read-project-properties</goal>
+                                </goals>
+                                <configuration>
+                                    <files>
+                                        <file>src\main\resources\configuration.properties</file>
+                                    </files>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.jooq</groupId>
                         <artifactId>jooq-codegen-maven</artifactId>
                         <version>3.8.3</version>
@@ -176,11 +198,12 @@
                         </executions>
 
                         <configuration>
+                            <!-- Inject values from configuration.properties file-->
                             <jdbc>
-                                <driver>${jdbc.driver}</driver>
-                                <url>${jdbc.url}</url>
-                                <user>${jdbc.user}</user>
-                                <password>${jdbc.password}</password>
+                                <driver>${database.DRIVER}</driver>
+                                <url>${database.URL}</url>
+                                <user>${database.USER}</user>
+                                <password>${database.PASSWORD}</password>
                             </jdbc>
 
                             <generator>
@@ -198,12 +221,6 @@
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <jdbc.user>root</jdbc.user>
-                <jdbc.password>root</jdbc.password>
-                <jdbc.url>jdbc:mysql://localhost:3306/library?serverTimezone=UTC</jdbc.url>
-                <jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
-            </properties>
         </profile>
     </profiles>
 </project>
