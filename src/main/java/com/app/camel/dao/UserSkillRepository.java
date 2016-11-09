@@ -20,6 +20,14 @@ public interface UserSkillRepository {
     boolean insert(Collection<UserSkillRecord> userSkills);
 
     /**
+     * Update user skills by values of given user skills entity properties
+     * @param userSkills user skills which skill ids and user ids must match with
+     *                   skill ids and user ids of records you want to update
+     * @return true if all records was updated successfully otherwise false
+     */
+    boolean update(Collection<UserSkillRecord> userSkills);
+
+    /**
      * Removes user skills with given skill id and assigned to given user id
      * @param userId user id
      * @param skillIds collection of skill ids
