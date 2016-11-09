@@ -4,6 +4,9 @@ import com.app.camel.model.tables.records.UserSkillRecord;
 
 import java.util.Collection;
 
+/**
+ * Interface which execute simple CRUD operations.
+ */
 public interface UserSkillRepository {
     /**
      * Gets all user skill records assigned to given user id

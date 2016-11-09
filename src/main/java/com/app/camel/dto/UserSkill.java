@@ -8,7 +8,6 @@ import lombok.ToString;
 @ToString
 @Builder
 public class UserSkill {
-
     private Integer skillId;
     private Integer userId;
     private Integer level;

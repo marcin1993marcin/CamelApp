@@ -27,7 +27,6 @@ public class PutUserSkills implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         String userId = exchange.getIn().getHeader("id", String.class);
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user ID of value: \"" + userId + "\"");
 
@@ -50,7 +49,7 @@ public class PutUserSkills implements Processor {
         response.setStatus(Status.SUCCESS_ACCEPTED);
 
         if (!userSkillRepository.update(userSkillRecords)) {
-            response.setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
+            response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
         }
     }
 }

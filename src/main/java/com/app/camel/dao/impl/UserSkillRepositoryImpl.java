@@ -5,9 +5,10 @@ import com.app.camel.model.tables.UserSkill;
 import com.app.camel.model.tables.records.UserSkillRecord;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import org.apache.log4j.Logger;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
@@ -15,22 +16,20 @@ import static com.app.camel.model.Tables.USER_SKILL;
 
 public class UserSkillRepositoryImpl extends GenericRepository implements UserSkillRepository {
 
-    private static final Logger LOGGER = Logger.getLogger(UserSkillRepositoryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserSkillRepositoryImpl.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Collection<UserSkillRecord> getAll(Integer userId) {
-
         try {
             Preconditions.checkNotNull(userId);
         } catch (NullPointerException ex) {
             LOGGER.error("Getting user skills failed! User id cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Getting user skills with user id: " + userId);
+        LOGGER.info("Getting user skills with user id: {}", userId);
 
         return executeQuery(ctx -> {
             Result<Record> result = ctx.select().from(USER_SKILL)
@@ -50,12 +49,7 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
                 userSkills.add(userSkill);
             });
 
-            if (userSkills.size() > 0) {
-                LOGGER.info("Successfully fetched user skills for requested user from database");
-            } else {
-                LOGGER.info("Cannot get requested user skills. No user skills with given user id found in database");
-            }
-
+            LOGGER.info("Successfully fetched user skills for requested user from database");
             return userSkills;
         });
     }
@@ -65,15 +59,13 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
      */
     @Override
     public boolean insert(Collection<UserSkillRecord> userSkills) {
-
         try {
             Preconditions.checkNotNull(userSkills);
         } catch (NullPointerException ex) {
             LOGGER.error("Adding user skills failed! No user skills to add");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Adding " + userSkills.size() + " user skills");
+        LOGGER.info("Adding {} user skills", userSkills.size());
 
         return executeQuery(ctx -> {
             UserSkill userSkill = UserSkill.USER_SKILL;
@@ -88,28 +80,20 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
                         .execute();
             }
 
-            int failed = userSkills.size() - count;
-            if (failed == 0) {
-                LOGGER.info("Successfully added " + count + " user skills");
-            } else {
-                LOGGER.info("Failed to add " + failed + " user skills" );
-            }
-
-            return failed == 0;
+            LOGGER.info("Successfully added {} user skills", count);
+            return count > 0;
         });
     }
 
     @Override
     public boolean update(Collection<UserSkillRecord> userSkills) {
-
         try {
             Preconditions.checkNotNull(userSkills);
         } catch (NullPointerException ex) {
             LOGGER.error("Updating user skill records failed! No user records to update");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Updating " + userSkills.size() + " user skills");
+        LOGGER.info("Updating {} user skills", userSkills.size());
 
         return executeQuery(ctx -> {
             int count = 0;
@@ -129,14 +113,8 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
                         .execute();
             }
 
-            int failed = userSkills.size() - count;
-            if(failed == 0) {
-                LOGGER.info("Successfully updated " + count + " user skills");
-            } else {
-                LOGGER.info("Failed to update " + failed + " user skills");
-            }
-
-            return failed == 0;
+            LOGGER.info("Successfully updated {} user skills", count);
+            return count > 0;
         });
     }
 
@@ -150,10 +128,9 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
             Preconditions.checkNotNull(skillIds);
         } catch (NullPointerException ex) {
             LOGGER.error("Deleting user skills failed! No user skills to delete or no user id");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Deleting " + skillIds.size() + " user skills");
+        LOGGER.info("Deleting {} user skills", skillIds.size());
 
         return executeQuery(ctx -> {
             int count = ctx.delete(USER_SKILL)
@@ -161,14 +138,8 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
                     .and(USER_SKILL.USER_ID.eq(userId))
                     .execute();
 
-            int failed = skillIds.size() - count;
-            if (failed == 0) {
-                LOGGER.info("Deleted " + count + " user skills");
-            } else {
-                LOGGER.info("Failed to delete " + failed + " user skills");
-            }
-
-            return failed == 0;
+            LOGGER.info("Deleted {} user skills", count);
+            return count > 0;
         });
     }
 
@@ -181,20 +152,14 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
             Preconditions.checkNotNull(userId);
         } catch (NullPointerException ex) {
             LOGGER.info("Deleting user skills failed! User id cannot be null");
-            ex.printStackTrace();
         }
 
-        LOGGER.info("Deleting all user skills for user with id: " + userId);
+        LOGGER.info("Deleting all user skills for user with id: {}", userId);
 
         return executeQuery(ctx -> {
             int count = ctx.delete(USER_SKILL).where(USER_SKILL.USER_ID.eq(userId)).execute();
 
-            if (count > 0) {
-                LOGGER.info("User skills for user with id: " + userId + " deleted successfully");
-            } else {
-                LOGGER.info("User skills not found! Cannot delete user skills for user with id: " + userId);
-            }
-
+            LOGGER.info("User skills for user with id: {} deleted successfully", userId);
             return count > 0;
         });
     }

@@ -8,7 +8,6 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Skill {
-
     private Long id;
     private String name;
     private Integer parentId;

@@ -38,7 +38,7 @@ public class DeleteUserSkills implements Processor {
         response.setStatus(Status.SUCCESS_NO_CONTENT);
 
         if (!userSkillRepository.delete(Integer.parseInt(userId), skillIds)) {
-            response.setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
+            response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
         }
 
         exchange.getOut().setBody(response);

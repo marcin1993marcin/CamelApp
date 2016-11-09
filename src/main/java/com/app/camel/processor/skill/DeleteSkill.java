@@ -16,7 +16,6 @@ public class DeleteSkill implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         String id = exchange.getIn().getHeader("id", String.class);
         Preconditions.checkArgument(Precondition.isInteger(id), "Invalid skill ID of value: \"" + id + "\"");
 

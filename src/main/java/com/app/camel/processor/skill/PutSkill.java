@@ -21,17 +21,13 @@ public class PutSkill implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-
         String id = exchange.getIn().getHeader("id", String.class);
-
         Preconditions.checkArgument(Precondition.isInteger(id), "Invalid skill ID of value: \"" + id + "\"");
 
         String select = exchange.getIn().getBody(String.class);
-
         Preconditions.checkNotNull(select, "Body is null");
 
         Skill skill = gson.fromJson(select, Skill.class);
-
         SkillRecord skillRecord = new SkillRecord();
         skillRecord.setId(Integer.parseInt(id));
         skillRecord.setName(skill.getName());
