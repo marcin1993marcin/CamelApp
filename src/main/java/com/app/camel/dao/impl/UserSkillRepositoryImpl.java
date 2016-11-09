@@ -99,6 +99,47 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
         });
     }
 
+    @Override
+    public boolean update(Collection<UserSkillRecord> userSkills) {
+
+        try {
+            Preconditions.checkNotNull(userSkills);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Updating user skill records failed! No user records to update");
+            ex.printStackTrace();
+        }
+
+        LOGGER.info("Updating " + userSkills.size() + " user skills");
+
+        return executeQuery(ctx -> {
+            int count = 0;
+            for (UserSkillRecord userSkill: userSkills) {
+                try {
+                    Preconditions.checkNotNull(userSkill);
+                    Preconditions.checkNotNull(userSkill.getSkillId());
+                    Preconditions.checkNotNull(userSkill.getUserId());
+                } catch (NullPointerException ex) {
+                    LOGGER.error("Updating user skill record failed! UserSkillRecord, UserSkillRecord skill id or UserSkillRecord user id cannot be null");
+                }
+                count += ctx.update(USER_SKILL)
+                        .set(USER_SKILL.LEVEL, userSkill.getLevel())
+                        .set(USER_SKILL.NOTE, userSkill.getNote())
+                        .where(USER_SKILL.SKILL_ID.eq(userSkill.getSkillId()))
+                        .and(USER_SKILL.USER_ID.eq(userSkill.getUserId()))
+                        .execute();
+            }
+
+            int failed = userSkills.size() - count;
+            if(failed == 0) {
+                LOGGER.info("Successfully updated " + count + " user skills");
+            } else {
+                LOGGER.info("Failed to update " + failed + " user skills");
+            }
+
+            return failed == 0;
+        });
+    }
+
     /**
      * {@inheritDoc}
      */
