@@ -43,7 +43,9 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<PositionRecord, Integer> IDENTITY_POSITION = Identities0.IDENTITY_POSITION;
     public static final Identity<ProjectRecord, Integer> IDENTITY_PROJECT = Identities0.IDENTITY_PROJECT;
+    public static final Identity<SalaryRecord, Integer> IDENTITY_SALARY = Identities0.IDENTITY_SALARY;
     public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
 
     // -------------------------------------------------------------------------
@@ -61,7 +63,9 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<SalaryRecord, PositionRecord> FK_POSITIONS_HAS_SALARY = ForeignKeys0.FK_POSITIONS_HAS_SALARY;
+    public static final ForeignKey<SalaryRecord, UserRecord> FK_USERS_HAS_SALARIES_POSITIONS = ForeignKeys0.FK_USERS_HAS_SALARIES_POSITIONS;
+    public static final ForeignKey<SalaryRecord, PositionRecord> FK_POSITION_HAS_SALARIES_POSITIONS = ForeignKeys0.FK_POSITION_HAS_SALARIES_POSITIONS;
+    public static final ForeignKey<UserRecord, PositionRecord> FK_POSITION_HAS_USERS_POSITIONS = ForeignKeys0.FK_POSITION_HAS_USERS_POSITIONS;
     public static final ForeignKey<UserProjectsRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = ForeignKeys0.FK_USERS_HAS_PROJECTS_USERS;
     public static final ForeignKey<UserProjectsRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = ForeignKeys0.FK_USERS_HAS_PROJECTS_PROJECTS1;
 
@@ -70,7 +74,9 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     private static class Identities0 extends AbstractKeys {
+        public static Identity<PositionRecord, Integer> IDENTITY_POSITION = createIdentity(Position.POSITION, Position.POSITION.ID);
         public static Identity<ProjectRecord, Integer> IDENTITY_PROJECT = createIdentity(Project.PROJECT, Project.PROJECT.ID);
+        public static Identity<SalaryRecord, Integer> IDENTITY_SALARY = createIdentity(Salary.SALARY, Salary.SALARY.ID);
         public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
     }
 
@@ -84,7 +90,9 @@ public class Keys {
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
-        public static final ForeignKey<SalaryRecord, PositionRecord> FK_POSITIONS_HAS_SALARY = createForeignKey(com.app.camel.model.Keys.KEY_POSITION_PRIMARY, Salary.SALARY, "fk_Positions_has_salary", Salary.SALARY.POSITIONS_ID);
+        public static final ForeignKey<SalaryRecord, UserRecord> FK_USERS_HAS_SALARIES_POSITIONS = createForeignKey(com.app.camel.model.Keys.KEY_USER_PRIMARY, Salary.SALARY, "fk_Users_has_Salaries_Positions", Salary.SALARY.USERS_ID);
+        public static final ForeignKey<SalaryRecord, PositionRecord> FK_POSITION_HAS_SALARIES_POSITIONS = createForeignKey(com.app.camel.model.Keys.KEY_POSITION_PRIMARY, Salary.SALARY, "fk_Position_has_Salaries_Positions", Salary.SALARY.POSITIONS_ID);
+        public static final ForeignKey<UserRecord, PositionRecord> FK_POSITION_HAS_USERS_POSITIONS = createForeignKey(com.app.camel.model.Keys.KEY_POSITION_PRIMARY, User.USER, "fk_Position_has_Users_Positions", User.USER.POSITION_ID);
         public static final ForeignKey<UserProjectsRecord, UserRecord> FK_USERS_HAS_PROJECTS_USERS = createForeignKey(com.app.camel.model.Keys.KEY_USER_PRIMARY, UserProjects.USER_PROJECTS, "fk_Users_has_Projects_Users", UserProjects.USER_PROJECTS.USERS_ID);
         public static final ForeignKey<UserProjectsRecord, ProjectRecord> FK_USERS_HAS_PROJECTS_PROJECTS1 = createForeignKey(com.app.camel.model.Keys.KEY_PROJECT_PRIMARY, UserProjects.USER_PROJECTS, "fk_Users_has_Projects_Projects1", UserProjects.USER_PROJECTS.PROJECTS_ID);
     }

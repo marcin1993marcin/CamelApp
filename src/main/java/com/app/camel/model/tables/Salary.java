@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Salary extends TableImpl<SalaryRecord> {
 
-    private static final long serialVersionUID = 1467422123;
+    private static final long serialVersionUID = 2031972955;
 
     /**
      * The reference instance of <code>library.salary</code>
@@ -59,12 +60,12 @@ public class Salary extends TableImpl<SalaryRecord> {
     /**
      * The column <code>library.salary.Users_id</code>.
      */
-    public final TableField<SalaryRecord, Integer> USERS_ID = createField("Users_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<SalaryRecord, Integer> USERS_ID = createField("Users_id", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>library.salary.Positions_id</code>.
      */
-    public final TableField<SalaryRecord, Integer> POSITIONS_ID = createField("Positions_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<SalaryRecord, Integer> POSITIONS_ID = createField("Positions_id", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>library.salary.monthly</code>.
@@ -120,6 +121,14 @@ public class Salary extends TableImpl<SalaryRecord> {
      * {@inheritDoc}
      */
     @Override
+    public Identity<SalaryRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_SALARY;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public UniqueKey<SalaryRecord> getPrimaryKey() {
         return Keys.KEY_SALARY_PRIMARY;
     }
@@ -137,7 +146,7 @@ public class Salary extends TableImpl<SalaryRecord> {
      */
     @Override
     public List<ForeignKey<SalaryRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<SalaryRecord, ?>>asList(Keys.FK_POSITIONS_HAS_SALARY);
+        return Arrays.<ForeignKey<SalaryRecord, ?>>asList(Keys.FK_USERS_HAS_SALARIES_POSITIONS, Keys.FK_POSITION_HAS_SALARIES_POSITIONS);
     }
 
     /**

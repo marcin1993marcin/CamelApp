@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Position extends TableImpl<PositionRecord> {
 
-    private static final long serialVersionUID = -606489968;
+    private static final long serialVersionUID = 2046626427;
 
     /**
      * The reference instance of <code>library.position</code>
@@ -87,6 +88,14 @@ public class Position extends TableImpl<PositionRecord> {
     @Override
     public Schema getSchema() {
         return Library.LIBRARY;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<PositionRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_POSITION;
     }
 
     /**

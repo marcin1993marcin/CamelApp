@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
@@ -35,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = 1315759166;
+    private static final long serialVersionUID = -1238064184;
 
     /**
      * The reference instance of <code>library.user</code>
@@ -74,6 +75,11 @@ public class User extends TableImpl<UserRecord> {
      * The column <code>library.user.status</code>.
      */
     public final TableField<UserRecord, String> STATUS = createField("status", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
+
+    /**
+     * The column <code>library.user.Position_id</code>.
+     */
+    public final TableField<UserRecord, Integer> POSITION_ID = createField("Position_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>library.user</code> table reference
@@ -127,6 +133,14 @@ public class User extends TableImpl<UserRecord> {
     @Override
     public List<UniqueKey<UserRecord>> getKeys() {
         return Arrays.<UniqueKey<UserRecord>>asList(Keys.KEY_USER_PRIMARY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ForeignKey<UserRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<UserRecord, ?>>asList(Keys.FK_POSITION_HAS_USERS_POSITIONS);
     }
 
     /**
