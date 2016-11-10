@@ -15,11 +15,12 @@ import util.ReadResources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.restlet.data.Status.*;
-import static restconfiguration.RestConfiguration.*;
+import static restconfiguration.RestConfiguration.REQUEST_URL;
 
 public class UserRouteTest {
 
     private static final String REQUEST_CONTEXT = "user";
+    private static final String REQUEST_JSON_LOCATION = "requests/userResource/";
 
     @Rule
     public ExpectedException exception =
@@ -128,12 +129,12 @@ public class UserRouteTest {
         response = client.handle(request);
 
         //then
-        assertThat(response.getStatus()).as("Return user by id %s", url).isEqualTo(SUCCESS_NO_CONTENT);
+        assertThat(response.getStatus()).as("Delete user by id %s", url).isEqualTo(SUCCESS_NO_CONTENT);
 
     }
 
     @Test
-    public void shouldDeleteUsersD() throws Exception {
+    public void shouldDeleteUsers() throws Exception {
 
         //given
         request = createRequest(Method.DELETE, "");
