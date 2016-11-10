@@ -1,5 +1,8 @@
 package route;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.builder.RouteBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,7 +23,7 @@ public class UserRouteTest {
 
 
     private static final String REQUESTS_LOCATION = "requests/userResource/";
-    private static final String REQUEST_URL = "http://localhost:9091/";
+    private static final String REQUEST_URL = "http://localhost:9071/";
     private static final String REQUEST_CONTEXT = "user";
 
     @Rule
