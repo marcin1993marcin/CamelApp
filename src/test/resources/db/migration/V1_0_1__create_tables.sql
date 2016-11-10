@@ -1,6 +1,6 @@
 
 -- -----------------------------------------------------
--- Table `library`.`position`
+-- Table `position`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `position` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `position` (
 
 
 -- -----------------------------------------------------
--- Table `library`.`project`
+-- Table `project`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `project` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 
 -- -----------------------------------------------------
--- Table `library`.`user`
+-- Table `user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   INDEX `fk_Position_has_Users_Positions_idx` (`Position_id` ASC),
   CONSTRAINT `fk_Position_has_Users_Positions`
   FOREIGN KEY (`Position_id`)
-  REFERENCES `library`.`position` (`id`)
+  REFERENCES `position` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
   ENGINE = InnoDB
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 
 -- -----------------------------------------------------
--- Table `library`.`salary`
+-- Table `salary`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `salary` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -61,19 +61,19 @@ CREATE TABLE IF NOT EXISTS `salary` (
   INDEX `fk_Position_has_salary_idx` (`Positions_id` ASC),
   CONSTRAINT `fk_Position_has_Salaries_Positions`
   FOREIGN KEY (`Positions_id`)
-  REFERENCES `library`.`position` (`id`)
+  REFERENCES `position` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Salaries_Positions`
   FOREIGN KEY (`Users_id`)
-  REFERENCES `library`.`user` (`id`)
+  REFERENCES `user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
 
 -- -----------------------------------------------------
--- Table `library`.`user_projects`
+-- Table `user_projects`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user_projects` (
   `Users_id` INT(11) NOT NULL,
@@ -83,12 +83,12 @@ CREATE TABLE IF NOT EXISTS `user_projects` (
   INDEX `fk_Users_has_Projects_Users_idx` (`Users_id` ASC),
   CONSTRAINT `fk_Users_has_Projects_Projects1`
   FOREIGN KEY (`Projects_id`)
-  REFERENCES `library`.`project` (`id`)
+  REFERENCES `project` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Users_has_Projects_Users`
   FOREIGN KEY (`Users_id`)
-  REFERENCES `library`.`user` (`id`)
+  REFERENCES `user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
   ENGINE = InnoDB
