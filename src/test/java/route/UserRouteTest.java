@@ -1,8 +1,5 @@
 package route;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
-import org.apache.camel.builder.RouteBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,6 +11,7 @@ import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import restconfiguration.RestConfiguration;
 import util.ReadResources;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -152,7 +150,7 @@ public class UserRouteTest {
 
 
     private Request createRequest(Method method, String url) {
-        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + url);
+        return new Request(method, RestConfiguration.REQUEST_URL +REQUEST_CONTEXT + url);
     }
 
 }

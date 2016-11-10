@@ -39,7 +39,7 @@ public class ProjectRouteTest {
     public void TestGetAllProject() throws Exception {
 
 
-        String url = "http://localhost:9091/project";
+        String url = "http://localhost:9071/project";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.GET, url);
         response = client.handle(request);
@@ -53,7 +53,7 @@ public class ProjectRouteTest {
     @Test
     public void TestGetProjectById() throws Exception {
 
-        String url = "http://localhost:9091/project/2";
+        String url = "http://localhost:9071/project/2";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.GET, url);
         response = client.handle(request);
@@ -74,7 +74,7 @@ public class ProjectRouteTest {
     @Test
     public void TestPostProject() throws Exception {
 
-        String url = "http://localhost:9091/project";
+        String url = "http://localhost:9071/project";
         String post = "{\"projectName\": \"JUnitTest\"}";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.POST, url);
@@ -87,7 +87,7 @@ public class ProjectRouteTest {
     @Test
     public void TestPutProjectById() throws Exception {
 
-        String url = "http://localhost:9091/project/11";
+        String url = "http://localhost:9071/project/11";
         String post = "{\"projectName\": \"put test\"}";
         client = new Client(Protocol.HTTP);
         request = new Request(Method.PUT, url);
@@ -99,7 +99,7 @@ public class ProjectRouteTest {
 
     @Test
     public void TestDeleteProjectById() throws Exception {
-        String url = "http://localhost:9091/project/11";
+        String url = "http://localhost:9071/project/11";
 
         client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
@@ -109,7 +109,7 @@ public class ProjectRouteTest {
 
     @Test
     public void TestDeleteAllProject() throws Exception {
-        String url = "http://localhost:9091/project";
+        String url = "http://localhost:9071/project";
 
         client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);

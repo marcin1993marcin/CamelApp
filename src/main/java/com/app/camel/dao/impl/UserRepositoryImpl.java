@@ -141,6 +141,7 @@ public class UserRepositoryImpl extends GenericRepository implements UserReposit
                     .set(user.LAST_NAME, entity.getLastName())
                     .set(user.EMAIL, entity.getEmail())
                     .set(user.STATUS, entity.getStatus())
+                    .set(user.POSITION_ID, 1)
                     .execute();
 
             if (count > 0) {

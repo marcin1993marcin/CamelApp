@@ -210,7 +210,7 @@
                                 <database>
                                     <name>org.jooq.util.mysql.MySQLDatabase</name>
                                     <includes>.*</includes>
-                                    <inputSchema>${flyway.SCHEMA_NAME}</inputSchema>
+                                    <inputSchema>Library</inputSchema>
                                 </database>
                                 <target>
                                     <packageName>com.app.camel.model</packageName>
