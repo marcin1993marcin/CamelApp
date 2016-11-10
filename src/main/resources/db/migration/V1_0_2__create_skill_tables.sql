@@ -1,5 +1,5 @@
 -- -----------------------------------------------------
--- Table `library`.`skill`
+-- Table `skill`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `skill` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -16,7 +16,7 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `library`.`user_skill`
+-- Table `user_skill`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `user_skill` (
   `skill_id` INT NOT NULL,
