@@ -7,8 +7,10 @@ package com.app.camel.model;
 import com.app.camel.model.tables.Position;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
+import com.app.camel.model.tables.Skill;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
+import com.app.camel.model.tables.UserSkill;
 
 import javax.annotation.Generated;
 
@@ -42,6 +44,11 @@ public class Tables {
     public static final Salary SALARY = com.app.camel.model.tables.Salary.SALARY;
 
     /**
+     * The table <code>library.skill</code>.
+     */
+    public static final Skill SKILL = com.app.camel.model.tables.Skill.SKILL;
+
+    /**
      * The table <code>library.user</code>.
      */
     public static final User USER = com.app.camel.model.tables.User.USER;
@@ -50,4 +57,9 @@ public class Tables {
      * The table <code>library.user_projects</code>.
      */
     public static final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
+
+    /**
+     * The table <code>library.user_skill</code>.
+     */
+    public static final UserSkill USER_SKILL = com.app.camel.model.tables.UserSkill.USER_SKILL;
 }
