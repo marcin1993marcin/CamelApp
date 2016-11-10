@@ -30,7 +30,7 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
             LOGGER.error("Getting skill failed! Id cannot be null");
         }
 
-        LOGGER.info("Getting project with id: {}", id);
+        LOGGER.info("Getting skill with id: {}", id);
 
         Optional<SkillRecord> skillRecord = executeQuery(ctx -> Optional.ofNullable(
                 ctx.selectFrom(SKILL)
