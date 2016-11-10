@@ -178,7 +178,7 @@
                                 </goals>
                                 <configuration>
                                     <files>
-                                        <file>configuration.properties</file>
+                                        <file>src\main\resources\configuration.properties</file>
                                     </files>
                                 </configuration>
                             </execution>
@@ -210,7 +210,7 @@
                                 <database>
                                     <name>org.jooq.util.mysql.MySQLDatabase</name>
                                     <includes>.*</includes>
-                                    <inputSchema>Library</inputSchema>
+                                    <inputSchema>${flyway.SCHEMA_NAME}</inputSchema>
                                 </database>
                                 <target>
                                     <packageName>com.app.camel.model</packageName>
