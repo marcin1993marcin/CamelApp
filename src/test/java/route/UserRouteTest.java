@@ -11,17 +11,14 @@ import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
-import restconfiguration.RestConfiguration;
 import util.ReadResources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.restlet.data.Status.*;
+import static restconfiguration.RestConfiguration.*;
 
 public class UserRouteTest {
 
-
-    private static final String REQUESTS_LOCATION = "requests/userResource/";
-    private static final String REQUEST_URL = "http://localhost:9071/";
     private static final String REQUEST_CONTEXT = "user";
 
     @Rule
@@ -92,7 +89,7 @@ public class UserRouteTest {
     public void shouldCreateUserInDatabase() throws Exception {
 
         //given
-        String post = readResources.readFile(REQUESTS_LOCATION + "correctlyPostRequestBody.json");
+        String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
         request = createRequest(Method.POST, "");
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
@@ -109,7 +106,7 @@ public class UserRouteTest {
 
         // given
         String url = "/12";
-        String post = readResources.readFile(REQUESTS_LOCATION + "invalidStatusRequestBody.json");
+        String post = readResources.readFile(REQUEST_JSON_LOCATION + "invalidStatusRequestBody.json");
         request = createRequest(Method.PUT, url);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
@@ -150,7 +147,7 @@ public class UserRouteTest {
 
 
     private Request createRequest(Method method, String url) {
-        return new Request(method, RestConfiguration.REQUEST_URL +REQUEST_CONTEXT + url);
+        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + url);
     }
 
 }

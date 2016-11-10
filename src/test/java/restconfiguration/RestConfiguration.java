@@ -18,7 +18,8 @@ public class RestConfiguration {
         }
     }
 
-    public static final String REST_URL = configuration.getString("RestUrl");
     public static final String REQUEST_URL = configuration.getString("RequestUrl");
+    public static final String REQUEST_JSON_LOCATION =  configuration.getString("RequestJsonLocation");
+
 
 }
