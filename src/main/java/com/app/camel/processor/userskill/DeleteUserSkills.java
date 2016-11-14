@@ -28,6 +28,7 @@ public class DeleteUserSkills implements Processor {
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user id of value \"" + userId + "\"");
 
         String select = exchange.getIn().getBody(String.class);
+        System.out.println(select);
         Preconditions.checkNotNull(select, "Body is null");
 
         Type listType = new TypeToken<List<String>>() {}.getType();

@@ -1,5 +1,6 @@
 package route;
 
+import databaseoperation.Migrate;
 import org.junit.*;
 import org.restlet.Client;
 import org.restlet.Request;
@@ -22,19 +23,25 @@ public class SkillRouteTest extends RouteTest {
     private Request request;
     private Response response;
     private ReadResources readResources = new ReadResources();
+    private Migrate migrate = new Migrate();
 
     public SkillRouteTest() {
         super("skill");
     }
 
     @BeforeClass
-    public static void before() throws Exception {
+    public static void beforeClass() throws Exception {
         skillRouteContext.run();
     }
 
     @AfterClass
-    public static void after() throws Exception {
+    public static void afterClass() throws Exception {
         skillRouteContext.stop();
+    }
+
+    @Before
+    public void before() {
+        migrate.migrateDatabase();
     }
 
     @Test
@@ -78,7 +85,7 @@ public class SkillRouteTest extends RouteTest {
     @Test
     public void shouldCreateSkill() throws Exception {
         // given
-        String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
+        String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctPostRequestBody.json");
         request = createRequest(Method.POST);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
@@ -116,21 +123,6 @@ public class SkillRouteTest extends RouteTest {
 
         // then
         assertThat(response.getStatus()).as("Skill update").isEqualTo(SUCCESS_ACCEPTED);
-    }
-
-    @Test
-    public void shouldNotUpdateSkill() throws Exception {
-        // given
-        String id = "1";
-        String post = readResources.readFile(REQUEST_JSON_LOCATION + "invalidPutRequestBody.json");
-        request = createRequest(Method.PUT, id);
-        request.setEntity(post, MediaType.APPLICATION_ALL);
-
-        // when
-        response = client.handle(request);
-
-        // then
-        assertThat(response.getStatus()).as("Returned server response").isEqualTo(REDIRECTION_NOT_MODIFIED);
     }
 
     @Test

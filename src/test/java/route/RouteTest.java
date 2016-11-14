@@ -24,7 +24,12 @@ public abstract class RouteTest {
         return createRequest(method, "");
     }
 
-    protected Request createRequest(Method method, String url) {
-        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + SEPARATOR + url + SEPARATOR + POST_REQUEST_CONTEXT);
+    protected Request createRequest(Method method, String param) {
+        return createRequest(method, param, "");
+    }
+
+    protected Request createRequest(Method method, String param, String postParam) {
+        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + SEPARATOR + param + SEPARATOR
+                + POST_REQUEST_CONTEXT + SEPARATOR + postParam);
     }
 }
