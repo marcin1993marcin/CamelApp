@@ -99,10 +99,6 @@ CREATE TABLE IF NOT EXISTS `user_projects` (
 -- Set Records for test
 -- -----------------------------------------------------
 
--- -----------------------------------------------------
--- Table `user_projects`
--- -----------------------------------------------------
-
 INSERT INTO .`position`
 (`position`)
 VALUES
@@ -112,3 +108,8 @@ INSERT INTO `libraryfortest`.`user`
 (`first_name`, `last_name`, `email`, `status`, `Position_id`)
 VALUES
   ("Test name", "Test last name", "Email test", "Retired", 13);
+
+INSERT INTO `libraryfortest`.`project`
+(`project_name`)
+VALUES
+  ("Project Name");
