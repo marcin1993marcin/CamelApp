@@ -31,7 +31,7 @@ public class ProjectRouteTest {
     private Request request;
     private Response response;
     private ReadResources readResources = new ReadResources();
-    private Migrate migrate= new Migrate();
+    private Migrate migrate = new Migrate();
 
     @Before
     public final void before() throws Exception {
@@ -93,8 +93,7 @@ public class ProjectRouteTest {
     }
 
     @Test
-    public void shouldNotReturnProjectByIncorrectId()
-    {
+    public void shouldNotReturnProjectByIncorrectId() {
         //given
         String url = "/ijiojoij";
         request = createRequest(Method.GET, url);
@@ -153,6 +152,7 @@ public class ProjectRouteTest {
 
     @Test
     public void TestDeleteAllProject() throws Exception {
+
         //given
         request = createRequest(Method.DELETE, "");
 
