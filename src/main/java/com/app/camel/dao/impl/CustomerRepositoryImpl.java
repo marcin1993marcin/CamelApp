@@ -190,8 +190,4 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
         });
     }
 
-    @Override
-    public String getAllCustomerWithProject() throws SQLException {
-        return null;
-    }
 }
