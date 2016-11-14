@@ -4,12 +4,12 @@
 package com.app.camel.model;
 
 
+import com.app.camel.model.tables.Customer;
+import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
-import com.app.camel.model.tables.Customer;
-import com.app.camel.model.tables.CustomerProjects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +35,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = 137156991;
+    private static final long serialVersionUID = -844903417;
 
     /**
      * The reference instance of <code>library</code>
@@ -51,7 +51,6 @@ public class Library extends SchemaImpl {
      * The table <code>library.customer_projects</code>.
      */
     public final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
-
 
     /**
      * The table <code>library.project</code>.

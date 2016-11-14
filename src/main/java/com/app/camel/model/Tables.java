@@ -4,12 +4,12 @@
 package com.app.camel.model;
 
 
+import com.app.camel.model.tables.Customer;
+import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
-import com.app.camel.model.tables.Customer;
-import com.app.camel.model.tables.CustomerProjects;
 
 import javax.annotation.Generated;
 
@@ -26,6 +26,16 @@ import javax.annotation.Generated;
 )
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>library.customer</code>.
+     */
+    public static final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
+
+    /**
+     * The table <code>library.customer_projects</code>.
+     */
+    public static final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
 
     /**
      * The table <code>library.project</code>.
@@ -46,15 +56,4 @@ public class Tables {
      * The table <code>library.user_projects</code>.
      */
     public static final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
-
-    /**
-     * The table <code>library.customer</code>.
-     */
-    public static final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
-
-    /**
-     * The table <code>library.customer_projects</code>.
-     */
-    public static final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
-
 }
