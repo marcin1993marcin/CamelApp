@@ -8,6 +8,7 @@ import com.app.camel.dto.Customer;
 import com.app.camel.dto.User;
 import com.app.camel.model.tables.records.CustomerRecord;
 import com.app.camel.model.tables.records.UserRecord;
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -27,6 +28,7 @@ public class InsertCustomer implements Processor {
     public void process(Exchange exchange) throws Exception {
 
         String json = exchange.getIn().getBody(String.class);
+        Preconditions.checkNotNull(json, "Body is null");
         Customer customer = gson.fromJson(json, Customer.class);
 
         CustomerRecord customerRecord = new CustomerRecord();

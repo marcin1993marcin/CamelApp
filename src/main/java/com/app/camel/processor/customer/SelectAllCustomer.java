@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import java.util.Collection;
 import java.util.List;
 
+import static java.lang.Long.valueOf;
 import static java.util.stream.Collectors.toList;
 
 public class SelectAllCustomer implements Processor {
@@ -26,12 +27,15 @@ public class SelectAllCustomer implements Processor {
     public void process(Exchange exchange) throws Exception {
         Collection<CustomerRecord> customers = customerRepository.getAll();
 
+        logger.info("Processing all customers");
         List<Customer> customerList = customers.stream().map(customerEntity -> Customer.builder()
-                .id(customerEntity.getId())
+                .id(valueOf(customerEntity.getId()))
                 .firstName(customerEntity.getFirstName())
+                .status(customerEntity.getStatus())
+                .lastName(customerEntity.getLastName())
                 .build()
         ).collect(toList());
-        logger.info("Processing all customers");
+
         exchange.getIn().setBody(gson.toJson(customerList));
     }
 }
