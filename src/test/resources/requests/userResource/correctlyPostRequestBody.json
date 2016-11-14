@@ -2,5 +2,6 @@
   "firstName": "test",
   "lastName": "testName",
   "email": "testMail",
-  "status": "Retired"
+  "status": "Retired",
+  "position": 13
 }

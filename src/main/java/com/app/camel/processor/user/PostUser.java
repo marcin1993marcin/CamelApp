@@ -32,6 +32,7 @@ public class PostUser implements Processor {
         userRecord.setLastName(user.getLastName());
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
+        userRecord.setPositionId(user.getPosition());
 
         for (UserStatus userStatus : UserStatus.values()) {
             if (user.getStatus().equals(userStatus.getStatus())) {
