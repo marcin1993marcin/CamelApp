@@ -93,7 +93,21 @@ public class ProjectRouteTest {
     }
 
     @Test
-    public void shouldCreateProjectInDatabase() throws Exception {
+    public void shouldNotReturnProjectByIncorrectId()
+    {
+        //given
+        String url = "/ijiojoij";
+        request = createRequest(Method.GET, url);
+
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("Request with incorrect ID  %s", url).isEqualTo(CLIENT_ERROR_BAD_REQUEST);
+    }
+
+    @Test
+    public void shouldCreateProject() throws Exception {
 
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
         request = createRequest(Method.POST, "");
