@@ -95,7 +95,7 @@ public class ProjectRouteTest {
     @Test
     public void shouldNotReturnProjectByIncorrectId() {
         //given
-        String url = "/ijiojoij";
+        String url = "/text";
         request = createRequest(Method.GET, url);
 
         //when
@@ -151,7 +151,7 @@ public class ProjectRouteTest {
     }
 
     @Test
-    public void TestDeleteAllProject() throws Exception {
+    public void shouldDeleteAllProject() throws Exception {
 
         //given
         request = createRequest(Method.DELETE, "");
