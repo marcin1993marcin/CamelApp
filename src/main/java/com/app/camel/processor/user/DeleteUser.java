@@ -13,12 +13,13 @@ import org.restlet.data.Status;
 public class DeleteUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
+    private static final String INVALID_USER_ID = "Invalid user ID of value: ";
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), INVALID_USER_ID + id);
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);

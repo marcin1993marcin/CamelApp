@@ -18,13 +18,14 @@ public class PutProject implements Processor {
 
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
+    private static final String INVALID_PROJECT_ID = "Invalid user ID of value: ";
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
 
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), INVALID_PROJECT_ID + id);
 
         String select = exchange.getIn().getBody(String.class);
 

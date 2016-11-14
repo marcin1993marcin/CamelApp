@@ -60,7 +60,6 @@ public class UserRouteTest {
 
     }
 
-
     @Test
     public void shouldReturnUserById() throws Exception {
 
@@ -90,7 +89,21 @@ public class UserRouteTest {
     }
 
     @Test
-    public void shouldCreateUserInDatabase() throws Exception {
+    public void shouldNotReturnedUserByIncorrectId() throws Exception {
+
+        //given
+        String url = "/noijoi";
+        request = createRequest(Method.GET, url);
+
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("Incorrect ID", url).isEqualTo(CLIENT_ERROR_BAD_REQUEST);
+    }
+
+    @Test
+    public void shouldCreateUser() throws Exception {
 
         //given
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
@@ -101,8 +114,37 @@ public class UserRouteTest {
         response = client.handle(request);
 
         //then
-        assertThat(response.getStatus()).as("User created ").isEqualTo(SUCCESS_CREATED);
+        assertThat(response.getStatus()).as("User created").isEqualTo(SUCCESS_CREATED);
+    }
 
+    @Test
+    public void shouldNotCreateUserWithEmptyBody() throws Exception {
+
+        //given
+        String post = "";
+        request = createRequest(Method.POST, "");
+        request.setEntity(post, MediaType.APPLICATION_ALL);
+
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("User with empty body").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
+    }
+
+    @Test
+    public void shouldNotCreateUserWithWrongStatus() throws Exception
+    {
+        //given
+        String post = readResources.readFile(REQUEST_JSON_LOCATION + "invalidStatusRequestBody.json");
+        request = createRequest(Method.POST, "");
+        request.setEntity(post, MediaType.APPLICATION_ALL);
+
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("User with bad Status").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Test
@@ -119,6 +161,22 @@ public class UserRouteTest {
 
         // then
         assertThat(response.getStatus()).as("returned server response").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
+    }
+
+    @Test
+    public void shouldUpdateUserById() throws  Exception
+    {
+        // given
+        String url = "/2";
+        String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
+        request = createRequest(Method.PUT, url);
+        request.setEntity(post, MediaType.APPLICATION_ALL);
+
+        //when
+        response = client.handle(request);
+
+        // then
+        assertThat(response.getStatus()).as("returned server response").isEqualTo(SUCCESS_CREATED);
     }
 
     @Test
