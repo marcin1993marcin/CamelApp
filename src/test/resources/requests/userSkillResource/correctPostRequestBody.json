@@ -1,0 +1,12 @@
+[
+  {
+    "skillId": 1,
+    "level": 5,
+    "note": "Just starting"
+  },
+  {
+    "skillId": 2,
+    "level": 20,
+    "note": "Have some basic skills"
+  }
+]
