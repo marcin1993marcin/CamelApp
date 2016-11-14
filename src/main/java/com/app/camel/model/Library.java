@@ -5,6 +5,8 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Position;
+import com.app.camel.model.tables.Customer;
+import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
 import com.app.camel.model.tables.SchemaVersion;
@@ -37,7 +39,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = 1608238935;
+    private static final long serialVersionUID = 137156991;
 
     /**
      * The reference instance of <code>library</code>
@@ -48,6 +50,16 @@ public class Library extends SchemaImpl {
      * The table <code>library.position</code>.
      */
     public final Position POSITION = com.app.camel.model.tables.Position.POSITION;
+
+    /**
+     * The table <code>library.customer</code>.
+     */
+    public final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
+
+    /**
+     * The table <code>library.customer_projects</code>.
+     */
+    public final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
 
     /**
      * The table <code>library.project</code>.
@@ -110,6 +122,8 @@ public class Library extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Position.POSITION,
+            Customer.CUSTOMER,
+            CustomerProjects.CUSTOMER_PROJECTS,
             Project.PROJECT,
             Salary.SALARY,
             SchemaVersion.SCHEMA_VERSION,
