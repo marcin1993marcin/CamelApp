@@ -3,7 +3,9 @@ package com.app.camel;
 import com.app.camel.routes.PositionRoute;
 import com.app.camel.routes.ProjectRoute;
 import com.app.camel.routes.SalaryRoute;
+import com.app.camel.routes.SkillRoute;
 import com.app.camel.routes.UserRoute;
+import com.app.camel.routes.UserSkillRoute;
 import org.apache.camel.CamelContext;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.flywaydb.core.Flyway;
@@ -35,11 +37,15 @@ public class Application {
         ProjectRoute projectRoute = new ProjectRoute();
         PositionRoute positionRoute = new PositionRoute();
         SalaryRoute salaryRoute = new SalaryRoute();
+        SkillRoute skillRoute = new SkillRoute();
+        UserSkillRoute userSkillRoute = new UserSkillRoute();
 
         context.addRoutes(userRoute);
         context.addRoutes(projectRoute);
         context.addRoutes(positionRoute);
         context.addRoutes(salaryRoute);
+        context.addRoutes(skillRoute);
+        context.addRoutes(userSkillRoute);
         return context;
     }
 
@@ -52,7 +58,7 @@ public class Application {
 
         if (migrate > 0) {
             LOGGER.error("Schema named '{}' or database tables not found", FLYWAY_SCHEMA_NAME);
-            LOGGER.info("Automaticly generated '{}' schema and database tables", FLYWAY_SCHEMA_NAME);
+            LOGGER.info("Automatically generated '{}' schema and database tables", FLYWAY_SCHEMA_NAME);
         } else {
             LOGGER.info("Schema '{}' is up to date. No migration necessary.", FLYWAY_SCHEMA_NAME);
         }

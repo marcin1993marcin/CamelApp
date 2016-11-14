@@ -3,5 +3,6 @@
   "firstName": "First",
   "lastName": "Name",
   "email": "email",
-  "status": "INVALID_STATUS"
+  "status": "INVALID_STATUS",
+  "position": 13
 }

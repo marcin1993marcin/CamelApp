@@ -16,17 +16,19 @@ import org.restlet.data.Status;
 
 import java.util.Optional;
 
-import static java.lang.Long.*;
+import static java.lang.Long.valueOf;
 
 public class SelectUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
+    private static final String INVALID_USER_ID = "Invalid user ID of value: ";
+
 
     @Override
     public void process(Exchange exchange) throws Exception {
         String id = exchange.getIn().getHeader("id", String.class);
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), INVALID_USER_ID + id);
 
         Optional<UserRecord> userRecord = userRepository.get(Integer.parseInt(id));
 

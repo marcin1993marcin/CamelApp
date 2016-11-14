@@ -8,8 +8,10 @@ import com.app.camel.model.tables.Position;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
 import com.app.camel.model.tables.SchemaVersion;
+import com.app.camel.model.tables.Skill;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
+import com.app.camel.model.tables.UserSkill;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +37,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = 1031961171;
+    private static final long serialVersionUID = 1608238935;
 
     /**
      * The reference instance of <code>library</code>
@@ -63,6 +65,11 @@ public class Library extends SchemaImpl {
     public final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
 
     /**
+     * The table <code>library.skill</code>.
+     */
+    public final Skill SKILL = com.app.camel.model.tables.Skill.SKILL;
+
+    /**
      * The table <code>library.user</code>.
      */
     public final User USER = com.app.camel.model.tables.User.USER;
@@ -71,6 +78,11 @@ public class Library extends SchemaImpl {
      * The table <code>library.user_projects</code>.
      */
     public final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
+
+    /**
+     * The table <code>library.user_skill</code>.
+     */
+    public final UserSkill USER_SKILL = com.app.camel.model.tables.UserSkill.USER_SKILL;
 
     /**
      * No further instances allowed
@@ -101,7 +113,9 @@ public class Library extends SchemaImpl {
             Project.PROJECT,
             Salary.SALARY,
             SchemaVersion.SCHEMA_VERSION,
+            Skill.SKILL,
             User.USER,
-            UserProjects.USER_PROJECTS);
+            UserProjects.USER_PROJECTS,
+            UserSkill.USER_SKILL);
     }
 }
