@@ -23,41 +23,41 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
 
     private final static Logger logger = LoggerFactory.getLogger(CustomerRepositoryImpl.class);
 
-    public String getAllCustomerWithProject() throws SQLException {
-
-        return executeQuery(ctx -> {
-            Result<Record5<Integer, String, String, String, Integer>> result = ctx
-                    .select(CUSTOMER.ID,
-                            CUSTOMER.FIRST_NAME,
-                            CUSTOMER.LAST_NAME,
-                            DSL.groupConcat(PROJECT.PROJECT_NAME, "; ").as("project_name"),
-                            DSL.count().as("number_of_projects"))
-                    .from(CUSTOMER)
-                    .join(CUSTOMER_PROJECTS)
-                    .on(CUSTOMER.ID.equal(CUSTOMER_PROJECTS.CUSTOMER_ID))
-                    .join(PROJECT)
-                    .on(USER_PROJECTS.PROJECTS_ID.equal(PROJECT.ID))
-                    .groupBy(CUSTOMER.ID)
-                    .fetch();
-
-            return String.valueOf(result);
-        });
-    }
-
 
     @Override
-    public Optional<CustomerRecord> get(Integer id) throws SQLException {
-        return executeQuery(ctx -> Optional.ofNullable(
-                ctx.selectFrom(CUSTOMER)
-                        .where(CUSTOMER.ID.equal(id))
-                        .fetchOne()));
+    public Optional<CustomerRecord> get(Integer id){
+
+        try {
+            Preconditions.checkNotNull(id);
+        } catch (NullPointerException ex) {
+            logger.error("Getting customer failed. Id cannot be null");
+            ex.printStackTrace();
+        }
+
+        logger.info("Getting customer with id: " + id);
+
+        Optional<CustomerRecord> customerRecord = executeQuery(ctx -> Optional.ofNullable(
+            ctx.selectFrom(CUSTOMER)
+                    .where(CUSTOMER.ID.equals(id))
+                    .fetchOne()
+        ));
+
+        if(customerRecord.isPresent()){
+            logger.info("Customer with id " + id + "fetched successfully");
+        } else {
+            logger.info("Customer with id " + id + "not found");
+        }
+
+        return customerRecord;
     }
 
     @Override
-    public Collection<CustomerRecord> getAll() throws SQLException {
+    public Collection<CustomerRecord> getAll() {
+
+        logger.info("Getting all customers from database");
 
         return executeQuery(ctx -> {
-            Result<Record> result = ctx.select().from(USER).fetch();
+            Result<Record> result = ctx.select().from(CUSTOMER).fetch();
 
             Collection<CustomerRecord> customers = Lists.newArrayList();
             result.forEach(record -> {
@@ -70,12 +70,28 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
                 customers.add(customer);
             });
 
+            if(customers.size() > 0){
+                logger.info("Success fetching all customers from database");
+            } else {
+                logger.info("Cannot get all users. No users found in database");
+            }
+
             return customers;
         });
     }
 
     @Override
-    public boolean update(CustomerRecord entity) throws SQLException {
+    public boolean update(CustomerRecord entity) {
+
+        try {
+            Preconditions.checkNotNull(entity);
+            Preconditions.checkNotNull(entity.getId());
+        } catch (NullPointerException ex) {
+            logger.error("Updating customer record failed. CustomerRecord or CustomerRecordId is null");
+            ex.printStackTrace();
+        }
+
+        logger.info("Updating customer with id: " + entity.getId());
 
         return executeQuery(ctx -> {
             int count = ctx.update(CUSTOMER)
@@ -86,16 +102,30 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
                     .where(CUSTOMER.ID.eq(entity.getId()))
                     .execute();
 
+            if(count > 0){
+                logger.info("Success updating customer with id: " + entity.getId());
+            } else {
+                logger.info("Cannot update customer with id: " + entity.getId());
+            }
+
             return count > 0;
         });
     }
 
     @Override
-    public boolean insert(CustomerRecord entity) throws SQLException {
+    public boolean insert(CustomerRecord entity) {
 
-        logger.debug("Inserting new customer");
+        try {
+            Preconditions.checkNotNull(entity);
+        } catch (NullPointerException ex) {
+            logger.error("Adding customer record failed. CustomerRecord cannot be null");
+            ex.printStackTrace();
+        }
+
+        logger.debug("Inserting new customer with id: " + entity.getId());
+
         return executeQuery(ctx -> {
-            Customer customer = new Customer();
+            Customer customer = Customer.CUSTOMER;
 
             int count = ctx.insertInto(customer)
                     .set(CUSTOMER.FIRST_NAME, entity.getFirstName())
@@ -104,35 +134,64 @@ public class CustomerRepositoryImpl extends GenericRepository implements Custome
                     .set(CUSTOMER.STATUS, entity.getStatus())
                     .execute();
 
-            return count > 0;
-        });
-    }
-
-    @Override
-    public boolean delete(Integer id) throws SQLException {
-
-        Preconditions.checkNotNull(id, "Customer's id cannot be null");
-        return executeQuery(ctx -> {
-            int count = ctx.delete(CUSTOMER).where(CUSTOMER.ID.eq(id)).execute();
-
-            return count > 0;
-        });
-    }
-
-    @Override
-    public boolean deleteAll() throws SQLException {
-
-        return executeQuery(ctx -> {
-            Result<Record> result = ctx.select().from(CUSTOMER).fetch();
-
-            int count = 0;
-            for (Record r : result) {
-
-                count = ctx.delete(CUSTOMER).where(CUSTOMER.ID.eq(r.getValue(CUSTOMER.ID))).execute();
+            if(count > 0) {
+                logger.info("Success adding customer with id: " + entity.getId());
+            } else {
+                logger.info("Cannot add customer with id: " + entity.getId());
             }
 
             return count > 0;
         });
     }
 
+    @Override
+    public boolean delete(Integer id) {
+
+        try {
+            Preconditions.checkNotNull(id);
+        } catch (NullPointerException ex) {
+            logger.error("Deleting customer failed. Id cannot be null");
+            ex.printStackTrace();
+        }
+
+
+        return executeQuery(ctx -> {
+            int count = ctx.delete(CUSTOMER)
+                    .where(CUSTOMER.ID.eq(id))
+                    .execute();
+
+            if (count > 0){
+                logger.info("Customer with id: " + id + " deleted successfully");
+            } else {
+                logger.info("Customer not found. Cannot delete user with id: " + id);
+            }
+
+            return count > 0;
+        });
+    }
+
+    @Override
+    public boolean deleteAll() {
+
+        logger.info("Deleting all customers");
+
+        return executeQuery(ctx -> {
+
+            int count = 0;
+            count = ctx.delete(CUSTOMER).execute();
+
+            if (count > 0) {
+                logger.info("All customers deleted successfully");
+            } else {
+                logger.info("Cannot delete all Customers. DB is already empty");
+            }
+
+            return count > 0;
+        });
+    }
+
+    @Override
+    public String getAllCustomerWithProject() throws SQLException {
+        return null;
+    }
 }
