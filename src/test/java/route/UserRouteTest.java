@@ -1,5 +1,6 @@
 package route;
 
+import databaseoperation.Migrate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,12 +31,14 @@ public class UserRouteTest {
     private Request request;
     private Response response;
     private ReadResources readResources = new ReadResources();
+    private Migrate migrate = new Migrate();
 
     @Before
     public final void before() throws Exception {
         userRouteContext = new UserRouteContext();
         userRouteContext.run();
         client = new Client(Protocol.HTTP);
+        migrate.migrateDatabase();
     }
 
     @After
@@ -62,7 +65,7 @@ public class UserRouteTest {
     public void shouldReturnUserById() throws Exception {
 
         //given
-        String url = "/12";
+        String url = "/2";
         request = createRequest(Method.GET, url);
 
         //when
@@ -122,7 +125,7 @@ public class UserRouteTest {
     public void shouldDeleteUserById() throws Exception {
 
         //given
-        String url = "/11";
+        String url = "/2";
         request = createRequest(Method.DELETE, url);
 
         //when
