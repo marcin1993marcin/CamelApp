@@ -5,6 +5,8 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Position;
+import com.app.camel.model.tables.Customer;
+import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
 import com.app.camel.model.tables.Skill;
@@ -32,6 +34,16 @@ public class Tables {
      * The table <code>library.position</code>.
      */
     public static final Position POSITION = com.app.camel.model.tables.Position.POSITION;
+
+    /**
+     * The table <code>library.customer</code>.
+     */
+    public static final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
+
+    /**
+     * The table <code>library.customer_projects</code>.
+     */
+    public static final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
 
     /**
      * The table <code>library.project</code>.
