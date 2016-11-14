@@ -19,13 +19,15 @@ public class PutUser implements Processor {
 
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
+    private static final String INVALID_USER_ID = "Invalid user ID of value: ";
+
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
 
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid user ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), INVALID_USER_ID + id);
 
         String select = exchange.getIn().getBody(String.class);
 
@@ -38,7 +40,6 @@ public class PutUser implements Processor {
         userRecord.setLastName(user.getLastName());
         userRecord.setEmail(user.getEmail());
         userRecord.setFirstName(user.getEmail());
-
 
 
         for (UserStatus userStatus : UserStatus.values()) {

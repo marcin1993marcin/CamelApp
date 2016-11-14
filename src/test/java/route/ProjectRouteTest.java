@@ -1,5 +1,6 @@
 package route;
 
+import databaseoperation.Migrate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,12 +31,14 @@ public class ProjectRouteTest {
     private Request request;
     private Response response;
     private ReadResources readResources = new ReadResources();
+    private Migrate migrate= new Migrate();
 
     @Before
     public final void before() throws Exception {
         projectRouteContext = new ProjectRouteContext();
         projectRouteContext.run();
         client = new Client(Protocol.HTTP);
+        migrate.migrateDatabase();
     }
 
     @After
@@ -62,7 +65,7 @@ public class ProjectRouteTest {
 
 
         //given
-        String url = "/12";
+        String url = "/3";
         request = createRequest(Method.GET, url);
 
         //when
@@ -70,6 +73,22 @@ public class ProjectRouteTest {
 
         //then
         assertThat(response.getStatus()).as("Return project by id %s", url).isEqualTo(SUCCESS_OK);
+
+    }
+
+    @Test
+    public void shouldNotReturnProjectById() throws Exception {
+
+
+        //given
+        String url = "/15";
+        request = createRequest(Method.GET, url);
+
+        //when
+        response = client.handle(request);
+
+        //then
+        assertThat(response.getStatus()).as("Return project by id  %s", url).isEqualTo(SUCCESS_NO_CONTENT);
 
     }
 
@@ -91,7 +110,7 @@ public class ProjectRouteTest {
     public void shouldUpdateProject() throws Exception {
 
         // given
-        String url = "/10";
+        String url = "/3";
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
         request = createRequest(Method.PUT, url);
         request.setEntity(post, MediaType.APPLICATION_ALL);
@@ -107,7 +126,7 @@ public class ProjectRouteTest {
     public void shouldDeleteProjectById() throws Exception {
 
         //given
-        String url = "/10";
+        String url = "/3";
         request = createRequest(Method.DELETE, url);
 
         //when

@@ -15,12 +15,14 @@ import static org.restlet.data.Status.SUCCESS_NO_CONTENT;
 public class DeleteProject implements Processor {
 
     private final ProjectRepository projectRepository = new ProjectRepositoryImpl();
+    private static final String INVALID_PROJECT_ID = "Invalid user ID of value: ";
+
 
     @Override
     public void process(Exchange exchange) throws Exception {
 
         String id = exchange.getIn().getHeader("id", String.class);
-        Preconditions.checkArgument(Precondition.isInteger(id), "Invalid project ID of value: \"" + id + "\"");
+        Preconditions.checkArgument(Precondition.isInteger(id), INVALID_PROJECT_ID + id);
 
         Response response = exchange.getIn().getHeader(RESTLET_RESPONSE, Response.class);
         response.setStatus(SUCCESS_NO_CONTENT);
