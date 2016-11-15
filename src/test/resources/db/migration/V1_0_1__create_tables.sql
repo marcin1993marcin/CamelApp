@@ -104,12 +104,23 @@ INSERT INTO .`position`
 VALUES
   ("Test position");
 
+INSERT INTO .`position`
+    (`id`, `position`)
+VALUES
+    (1,"Test position 2");
+
+
 INSERT INTO `libraryfortest`.`user`
 (`first_name`, `last_name`, `email`, `status`, `Position_id`)
 VALUES
-  ("Test name", "Test last name", "Email test", "Retired", 13);
-
+  ("Test name", "Test last name", "Email test", "Retired", 13),
+  ("Jan", "Kowalski", "jk@j.k", "Retired", 13);
 INSERT INTO `libraryfortest`.`project`
 (`project_name`)
 VALUES
   ("Project Name");
+
+INSERT INTO `libraryfortest`.`salary`
+    (`Users_id`, `Positions_id`, `monthly`, `per_hour`, `date_from`, `date_to`)
+VALUES
+    (3, 13, 100000, 500, '2010-01-15', '2012-06-02');

@@ -27,7 +27,7 @@ public class PutPosition implements Processor {
         String select = exchange.getIn().getBody(String.class);
         Preconditions.checkNotNull(select, "Body is null");
 
-        PositionRecord positionRecord = getPositionRecord(gson.fromJson(select, Position.class));
+        PositionRecord positionRecord = getPositionRecord(id, gson.fromJson(select, Position.class));
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_CREATED);
@@ -38,8 +38,9 @@ public class PutPosition implements Processor {
         exchange.getOut().setBody(response);
     }
 
-    private PositionRecord getPositionRecord(Position position) {
+    private PositionRecord getPositionRecord(String id, Position position) {
         PositionRecord positionRecord = new PositionRecord();
+        positionRecord.setId(Integer.parseInt(id));
         positionRecord.setPosition(position.getPosition());
         return positionRecord;
     }
