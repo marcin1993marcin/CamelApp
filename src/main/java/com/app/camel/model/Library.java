@@ -5,15 +5,11 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Position;
-import com.app.camel.model.tables.Customer;
-import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
 import com.app.camel.model.tables.SchemaVersion;
-import com.app.camel.model.tables.Skill;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
-import com.app.camel.model.tables.UserSkill;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +35,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Library extends SchemaImpl {
 
-    private static final long serialVersionUID = 1608238935;
+    private static final long serialVersionUID = 1031961171;
 
     /**
      * The reference instance of <code>library</code>
@@ -50,16 +46,6 @@ public class Library extends SchemaImpl {
      * The table <code>library.position</code>.
      */
     public final Position POSITION = com.app.camel.model.tables.Position.POSITION;
-
-    /**
-     * The table <code>library.customer</code>.
-     */
-    public final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
-
-    /**
-     * The table <code>library.customer_projects</code>.
-     */
-    public final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
 
     /**
      * The table <code>library.project</code>.
@@ -77,11 +63,6 @@ public class Library extends SchemaImpl {
     public final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
 
     /**
-     * The table <code>library.skill</code>.
-     */
-    public final Skill SKILL = com.app.camel.model.tables.Skill.SKILL;
-
-    /**
      * The table <code>library.user</code>.
      */
     public final User USER = com.app.camel.model.tables.User.USER;
@@ -90,11 +71,6 @@ public class Library extends SchemaImpl {
      * The table <code>library.user_projects</code>.
      */
     public final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
-
-    /**
-     * The table <code>library.user_skill</code>.
-     */
-    public final UserSkill USER_SKILL = com.app.camel.model.tables.UserSkill.USER_SKILL;
 
     /**
      * No further instances allowed
@@ -122,14 +98,10 @@ public class Library extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Position.POSITION,
-            Customer.CUSTOMER,
-            CustomerProjects.CUSTOMER_PROJECTS,
             Project.PROJECT,
             Salary.SALARY,
             SchemaVersion.SCHEMA_VERSION,
-            Skill.SKILL,
             User.USER,
-            UserProjects.USER_PROJECTS,
-            UserSkill.USER_SKILL);
+            UserProjects.USER_PROJECTS);
     }
 }

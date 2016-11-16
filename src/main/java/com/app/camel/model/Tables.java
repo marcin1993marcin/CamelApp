@@ -5,14 +5,11 @@ package com.app.camel.model;
 
 
 import com.app.camel.model.tables.Position;
-import com.app.camel.model.tables.Customer;
-import com.app.camel.model.tables.CustomerProjects;
 import com.app.camel.model.tables.Project;
 import com.app.camel.model.tables.Salary;
-import com.app.camel.model.tables.Skill;
+import com.app.camel.model.tables.SchemaVersion;
 import com.app.camel.model.tables.User;
 import com.app.camel.model.tables.UserProjects;
-import com.app.camel.model.tables.UserSkill;
 
 import javax.annotation.Generated;
 
@@ -36,16 +33,6 @@ public class Tables {
     public static final Position POSITION = com.app.camel.model.tables.Position.POSITION;
 
     /**
-     * The table <code>library.customer</code>.
-     */
-    public static final Customer CUSTOMER = com.app.camel.model.tables.Customer.CUSTOMER;
-
-    /**
-     * The table <code>library.customer_projects</code>.
-     */
-    public static final CustomerProjects CUSTOMER_PROJECTS = com.app.camel.model.tables.CustomerProjects.CUSTOMER_PROJECTS;
-
-    /**
      * The table <code>library.project</code>.
      */
     public static final Project PROJECT = com.app.camel.model.tables.Project.PROJECT;
@@ -56,9 +43,9 @@ public class Tables {
     public static final Salary SALARY = com.app.camel.model.tables.Salary.SALARY;
 
     /**
-     * The table <code>library.skill</code>.
+     * The table <code>library.schema_version</code>.
      */
-    public static final Skill SKILL = com.app.camel.model.tables.Skill.SKILL;
+    public static final SchemaVersion SCHEMA_VERSION = com.app.camel.model.tables.SchemaVersion.SCHEMA_VERSION;
 
     /**
      * The table <code>library.user</code>.
@@ -69,9 +56,4 @@ public class Tables {
      * The table <code>library.user_projects</code>.
      */
     public static final UserProjects USER_PROJECTS = com.app.camel.model.tables.UserProjects.USER_PROJECTS;
-
-    /**
-     * The table <code>library.user_skill</code>.
-     */
-    public static final UserSkill USER_SKILL = com.app.camel.model.tables.UserSkill.USER_SKILL;
 }
