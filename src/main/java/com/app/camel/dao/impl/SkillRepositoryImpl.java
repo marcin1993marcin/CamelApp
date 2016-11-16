@@ -146,13 +146,6 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
      */
     @Override
     public boolean deleteAll() {
-        LOGGER.info("Deleting all skills");
-
-        return executeQuery(ctx -> {
-            int count = ctx.delete(SKILL).execute();
-
-            LOGGER.info("All skills deleted successfully");
-            return count > 0;
-        });
+        return false;
     }
 }
