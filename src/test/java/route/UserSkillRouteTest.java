@@ -106,26 +106,24 @@ public class UserSkillRouteTest extends RouteTest {
     }
 
     @Test
-    public void shouldDeleteUserSkillsByUserId() throws Exception {
+    public void shouldDeleteUserSkillByUserId() throws Exception {
         // given
-        String id = "2";
-        String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctDeleteRequestBody.json");
-        System.out.println(post);
-        request = createRequest(Method.DELETE, id);
-        request.setEntity(post, MediaType.APPLICATION_ALL);
+        String userId = "2";
+        String skillId = "3";
+        request = createRequest(Method.DELETE, userId, skillId);
 
         // when
         response = client.handle(request);
 
         // then
-        assertThat(response.getStatus()).as("Delete user skills by user id %s", id).isEqualTo(SUCCESS_NO_CONTENT);
+        assertThat(response.getStatus()).as("Delete user skills with user id: %s; skill id: %s", userId, skillId).isEqualTo(SUCCESS_NO_CONTENT);
     }
 
     @Test
     public void shouldDeleteAllUserSkillsByUserId() throws Exception {
         // given
         String id = "2";
-        request = createRequest(Method.DELETE, id, "all");
+        request = createRequest(Method.DELETE, id);
 
         // when
         response = client.handle(request);

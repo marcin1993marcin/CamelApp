@@ -27,7 +27,7 @@ public class PostUserSkills implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String userId = exchange.getIn().getHeader("id", String.class);
+        String userId = exchange.getIn().getHeader("userId", String.class);
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user id of value \"" + userId + "\"");
 
         String select = exchange.getIn().getBody(String.class);

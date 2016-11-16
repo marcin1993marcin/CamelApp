@@ -135,18 +135,6 @@ public class SkillRouteTest extends RouteTest {
         response = client.handle(request);
 
         // then
-        assertThat(response.getStatus()).as("Delete user by id %s", id).isEqualTo(SUCCESS_NO_CONTENT);
-    }
-
-    @Test
-    public void shouldDeleteAllSkills() {
-        // given
-        request = createRequest(Method.DELETE);
-
-        // when
-        response = client.handle(request);
-
-        // then
-        assertThat(response.getStatus()).as("Delete all skills").isEqualTo(SUCCESS_NO_CONTENT);
+        assertThat(response.getStatus()).as("Delete user by id %s", id).isEqualTo(SERVER_ERROR_SERVICE_UNAVAILABLE);
     }
 }

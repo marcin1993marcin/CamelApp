@@ -9,8 +9,9 @@ public class UserSkillRoute extends RouteBuilder {
 
     private static final String USER = "user";
     private static final String SKILL = "/skill";
-    private static final String ALL = "/all";
-    private static final String USER_SKILL_REST_URL = REST_URL + USER + PARAM_ID + SKILL;
+    private static final String USER_PARAM_ID = "/{userId}";
+    private static final String SKILL_PARAM_ID = "/{skillId}";
+    private static final String USER_SKILL_REST_URL = REST_URL + USER + USER_PARAM_ID + SKILL;
 
     @Override
     public void configure() throws Exception {
@@ -29,11 +30,11 @@ public class UserSkillRoute extends RouteBuilder {
                 .process(new PutUserSkills())
                 .transform().body();
 
-        from(USER_SKILL_REST_URL + METHOD_DELETE)
-                .process(new DeleteUserSkills())
+        from(USER_SKILL_REST_URL + SKILL_PARAM_ID + METHOD_DELETE)
+                .process(new DeleteUserSkill())
                 .transform().body();
 
-        from(USER_SKILL_REST_URL + ALL + METHOD_DELETE)
+        from(USER_SKILL_REST_URL + METHOD_DELETE)
                 .process(new DeleteAllUserSkills())
                 .transform().body();
     }

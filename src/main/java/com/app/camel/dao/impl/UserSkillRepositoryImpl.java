@@ -122,19 +122,19 @@ public class UserSkillRepositoryImpl extends GenericRepository implements UserSk
      * {@inheritDoc}
      */
     @Override
-    public boolean delete(Integer userId, Collection<Integer> skillIds) {
+    public boolean delete(Integer userId, Integer skillId) {
         try {
             Preconditions.checkNotNull(userId);
-            Preconditions.checkNotNull(skillIds);
+            Preconditions.checkNotNull(skillId);
         } catch (NullPointerException ex) {
-            LOGGER.error("Deleting user skills failed! No user skills to delete or no user id");
+            LOGGER.error("Deleting user skill failed! No skill id or no user id");
         }
 
-        LOGGER.info("Deleting {} user skills", skillIds.size());
+        LOGGER.info("Deleting user skill with skill id: {}; user id: {}", skillId, userId);
 
         return executeQuery(ctx -> {
             int count = ctx.delete(USER_SKILL)
-                    .where(USER_SKILL.SKILL_ID.in(skillIds))
+                    .where(USER_SKILL.SKILL_ID.eq(skillId))
                     .and(USER_SKILL.USER_ID.eq(userId))
                     .execute();
 

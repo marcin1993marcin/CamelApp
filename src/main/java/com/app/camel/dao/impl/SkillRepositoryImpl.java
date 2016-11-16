@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,10 +134,10 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
         LOGGER.info("Deleting skill with id: {}", id);
 
         return executeQuery(ctx -> {
-            int count = ctx.delete(SKILL).where(SKILL.ID.eq(id)).execute();
+            ctx.transaction(nested -> DSL.using(nested).delete(SKILL).where(SKILL.ID.eq(id)).execute());
 
             LOGGER.info("Skill with id: {} deleted successfully", id);
-            return count > 0;
+            return true;
         });
     }
 

@@ -16,7 +16,7 @@ public class DeleteAllUserSkills implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String userId = exchange.getIn().getHeader("id", String.class);
+        String userId = exchange.getIn().getHeader("userId", String.class);
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user id of value \"" + userId + "\"");
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);

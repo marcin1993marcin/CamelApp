@@ -17,28 +17,24 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DeleteUserSkills implements Processor {
+public class DeleteUserSkill implements Processor {
 
     private final UserSkillRepository userSkillRepository = new UserSkillRepositoryImpl();
     private final Gson gson = new GsonBuilder().create();
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        String userId = exchange.getIn().getHeader("id", String.class);
+        String userId = exchange.getIn().getHeader("userId", String.class);
         Preconditions.checkArgument(Precondition.isInteger(userId), "Invalid user id of value \"" + userId + "\"");
 
-        String select = exchange.getIn().getBody(String.class);
-        System.out.println(select);
-        Preconditions.checkNotNull(select, "Body is null");
+        String skillId = exchange.getIn().getHeader("skillId", String.class);
+        Preconditions.checkArgument(Precondition.isInteger(skillId), "Invalid skill id of value \"" + skillId + "\"");
 
-        Type listType = new TypeToken<List<String>>() {}.getType();
-        List<String> skillIdList = gson.fromJson(select, listType);
-        List<Integer> skillIds = skillIdList.stream().map(Integer::parseInt).collect(Collectors.toList());
 
         Response response = exchange.getIn().getHeader(RestletConstants.RESTLET_RESPONSE, Response.class);
         response.setStatus(Status.SUCCESS_NO_CONTENT);
 
-        if (!userSkillRepository.delete(Integer.parseInt(userId), skillIds)) {
+        if (!userSkillRepository.delete(Integer.parseInt(userId), Integer.parseInt(skillId))) {
             response.setStatus(Status.REDIRECTION_NOT_MODIFIED);
         }
 
