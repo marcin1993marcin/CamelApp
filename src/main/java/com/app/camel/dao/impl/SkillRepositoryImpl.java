@@ -141,9 +141,6 @@ public class SkillRepositoryImpl extends GenericRepository implements SkillRepos
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean deleteAll() {
         return false;
