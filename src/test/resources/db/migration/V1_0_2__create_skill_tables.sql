@@ -34,6 +34,6 @@ CREATE TABLE IF NOT EXISTS `user_skill` (
   CONSTRAINT `fk_skill_has_user_user1`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

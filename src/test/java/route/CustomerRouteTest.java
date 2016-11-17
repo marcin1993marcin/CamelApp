@@ -1,40 +1,34 @@
 package route;
 
+import com.app.camel.routes.CustomerRoute;
 import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.restlet.Client;
 import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
 
 import static org.junit.Assert.assertEquals;
 
-public class CustomerRouteTest {
+public class CustomerRouteTest extends RouteTest {
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    private CustomerRouteContext customerRouteContext = new CustomerRouteContext();
-    private Client client = new Client(Protocol.HTTP);
-    private Request request;
-    private Response response;
+    private static final RouteContext routeContext = new RouteContext(new CustomerRoute());
 
-    @Before
-    public final void before() throws Exception{
-        customerRouteContext = new CustomerRouteContext();
-        customerRouteContext.run();
+    public CustomerRouteTest() {
+        super("customer");
     }
 
-    @After
-    public void after() throws Exception{
-        customerRouteContext.stop();
+    @BeforeClass
+    public static void beforeClass() throws Exception{
+        routeContext.run();
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception{
+        routeContext.stop();
     }
 
     @Test
     public void TestGetAllCustomer() throws Exception{
         String url = "http://localhost:9091/customer";
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.GET, url);
         response = client.handle(request);
         assertEquals(200, response.getStatus().getCode());
@@ -48,7 +42,6 @@ public class CustomerRouteTest {
     public void TestGetCustomerById() throws Exception {
 
         String url = "http://localhost:9091/customer/12";
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.GET, url);
         response = client.handle(request);
 
@@ -68,7 +61,6 @@ public class CustomerRouteTest {
 
         String url = "http://localhost:9091/customer";
         String post = " {  \"id\": 4, \"firstName\": \"Adam\", \"lastName\": \"Adam\",  \"email\": \"email\",   \"status\": \"pp\" }";
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.POST, url);
 
         request.setEntity(post, MediaType.APPLICATION_ALL);
@@ -82,7 +74,6 @@ public class CustomerRouteTest {
 
         String url = "http://localhost:9091/customer/12";
         String post = " {  \"id\": 9, \"firstName\": \"Adam\", \"lastName\": \"Adam\",  \"email\": \"email\",   \"status\": \"pp\" }";
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.PUT, url);
 
         request.setEntity(post, MediaType.APPLICATION_ALL);
@@ -95,7 +86,6 @@ public class CustomerRouteTest {
     public void TestDeleteCustomerById() throws Exception {
         String url = "http://localhost:9091/customer/11";
 
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
         response = client.handle(request);
         assertEquals(204, response.getStatus().getCode());
@@ -105,7 +95,6 @@ public class CustomerRouteTest {
     @Test
     public void TestDeleteAll() throws Exception {
         String url = "http://localhost:9091/customer";
-        client = new Client(Protocol.HTTP);
         request = new Request(Method.DELETE, url);
         response = client.handle(request);
         assertEquals(200, response.getStatus().getCode());

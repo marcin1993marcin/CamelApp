@@ -49,7 +49,7 @@ public class Application {
         return context;
     }
 
-    private static void initializeDatabase() {
+    public static void initializeDatabase() {
         Flyway flyway = new Flyway();
         flyway.setBaselineOnMigrate(true);
         flyway.setDataSource(FLYWAY_URL, DATABASE_USER, DATABASE_PASSWORD);

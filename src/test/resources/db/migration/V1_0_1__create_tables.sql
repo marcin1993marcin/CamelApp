@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `salary` (
   CONSTRAINT `fk_Users_has_Salaries_Positions`
   FOREIGN KEY (`Users_id`)
   REFERENCES `user` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 )
   ENGINE = InnoDB

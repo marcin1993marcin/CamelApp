@@ -1,32 +1,20 @@
 package route;
 
-import databaseoperation.Migrate;
+import com.app.camel.routes.UserSkillRoute;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.restlet.Client;
-import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
-import route.context.UserSkillRouteContext;
-import util.ReadResources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.restlet.data.Status.*;
 
 public class UserSkillRouteTest extends RouteTest {
 
-    private static final UserSkillRouteContext userSkillRouteContext = new UserSkillRouteContext();
-    private static final Client client = new Client(Protocol.HTTP);
+    private static final RouteContext routeContext = new RouteContext(new UserSkillRoute());
     private static final String REQUEST_JSON_LOCATION = "requests/userSkillResource/";
-
-    private Request request;
-    private Response response;
-    private ReadResources readResources = new ReadResources();
-    private Migrate migrate = new Migrate();
 
 
     public UserSkillRouteTest() {
@@ -35,12 +23,12 @@ public class UserSkillRouteTest extends RouteTest {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        userSkillRouteContext.run();
+        routeContext.run();
     }
 
     @AfterClass
     public static void afterClass() throws Exception {
-        userSkillRouteContext.stop();
+        routeContext.stop();
     }
 
     @Before

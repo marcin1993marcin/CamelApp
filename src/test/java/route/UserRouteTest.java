@@ -1,162 +1,141 @@
 package route;
 
-import databaseoperation.Migrate;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.restlet.Client;
-import org.restlet.Request;
-import org.restlet.Response;
+import com.app.camel.routes.UserRoute;
+import org.junit.*;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Protocol;
-import util.ReadResources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.restlet.data.Status.*;
-import static restconfiguration.RestConfiguration.REQUEST_URL;
 
-public class UserRouteTest {
+public class UserRouteTest extends RouteTest {
 
-    private static final String REQUEST_CONTEXT = "user";
+    private static final RouteContext routeContext = new RouteContext(new UserRoute());
     private static final String REQUEST_JSON_LOCATION = "requests/userResource/";
 
-    @Rule
-    public ExpectedException exception =
-            ExpectedException.none();
-    private UserRouteContext userRouteContext = new UserRouteContext();
-    private Client client = new Client(Protocol.HTTP);
-    private Request request;
-    private Response response;
-    private ReadResources readResources = new ReadResources();
-    private Migrate migrate = new Migrate();
 
-    @Before
-    public final void before() throws Exception {
-        userRouteContext = new UserRouteContext();
-        userRouteContext.run();
-        client = new Client(Protocol.HTTP);
-        migrate.migrateDatabase();
+    public UserRouteTest() {
+        super("user");
     }
 
-    @After
-    public void after() throws Exception {
-        userRouteContext.stop();
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        routeContext.run();
+    }
+
+    @AfterClass
+    public static void afterClass() throws Exception {
+        routeContext.stop();
+    }
+
+    @Before
+    public void before() {
+        migrate.migrateDatabase();
     }
 
     @Test
     public void shouldReturnUsers() throws Exception {
+        // given
+        request = createRequest(Method.GET);
 
-        //given
-        request = createRequest(Method.GET, "");
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
+        // then
         assertThat(response.getStatus()).as("Returned users list").isEqualTo(SUCCESS_OK);
 
     }
 
     @Test
     public void shouldReturnUserById() throws Exception {
+        // given
+        String id = "2";
+        request = createRequest(Method.GET, id);
 
-        //given
-        String url = "/2";
-        request = createRequest(Method.GET, url);
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
-        assertThat(response.getStatus()).as("Return user by id %s", url).isEqualTo(SUCCESS_OK);
+        // then
+        assertThat(response.getStatus()).as("Return user by id %s", id).isEqualTo(SUCCESS_OK);
     }
 
     @Test
     public void shouldNotReturnUserById() throws Exception {
+        // given
+        String id = "13";
+        request = createRequest(Method.GET, id);
 
-        //given
-        String url = "/13";
-        request = createRequest(Method.GET, url);
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
-        assertThat(response.getStatus()).as("User with id  %s not exist", url).isEqualTo(SUCCESS_NO_CONTENT);
+        // then
+        assertThat(response.getStatus()).as("User with id  %s not exist", id).isEqualTo(SUCCESS_NO_CONTENT);
     }
 
     @Test
-    public void shouldNotReturnedUserByIncorrectId() throws Exception {
+    public void shouldNotReturnUserByInvalidId() throws Exception {
+        // given
+        String id = "noijoi";
+        request = createRequest(Method.GET, id);
 
-        //given
-        String url = "/noijoi";
-        request = createRequest(Method.GET, url);
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
-        assertThat(response.getStatus()).as("Incorrect ID", url).isEqualTo(CLIENT_ERROR_BAD_REQUEST);
+        // then
+        assertThat(response.getStatus()).as("Incorrect ID", id).isEqualTo(CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Test
     public void shouldCreateUser() throws Exception {
-
-        //given
+        // given
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
-        request = createRequest(Method.POST, "");
+        request = createRequest(Method.POST);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
-        //when
+        // when
         response = client.handle(request);
 
-        //then
+        // then
         assertThat(response.getStatus()).as("User created").isEqualTo(SUCCESS_CREATED);
     }
 
     @Test
     public void shouldNotCreateUserWithEmptyBody() throws Exception {
-
-        //given
+        // given
         String post = "";
-        request = createRequest(Method.POST, "");
+        request = createRequest(Method.POST);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
-        //when
+        // when
         response = client.handle(request);
 
-        //then
+        // then
         assertThat(response.getStatus()).as("User with empty body").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Test
-    public void shouldNotCreateUserWithWrongStatus() throws Exception
-    {
-        //given
+    public void shouldNotCreateUserWithInvalidStatus() throws Exception {
+        // given
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "invalidStatusRequestBody.json");
-        request = createRequest(Method.POST, "");
+        request = createRequest(Method.POST);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
-        //when
+        // when
         response = client.handle(request);
 
-        //then
+        // then
         assertThat(response.getStatus()).as("User with bad Status").isEqualTo(CLIENT_ERROR_BAD_REQUEST);
     }
 
     @Test
     public void shouldNotUpdateUserWithInvalidStatus() throws Exception {
-
         // given
-        String url = "/12";
+        String id = "12";
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "invalidStatusRequestBody.json");
-        request = createRequest(Method.PUT, url);
+        request = createRequest(Method.PUT, id);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
-        //when
+        // when
         response = client.handle(request);
 
         // then
@@ -164,15 +143,14 @@ public class UserRouteTest {
     }
 
     @Test
-    public void shouldUpdateUserById() throws  Exception
-    {
+    public void shouldUpdateUserById() throws  Exception {
         // given
-        String url = "/2";
+        String id = "2";
         String post = readResources.readFile(REQUEST_JSON_LOCATION + "correctlyPostRequestBody.json");
-        request = createRequest(Method.PUT, url);
+        request = createRequest(Method.PUT, id);
         request.setEntity(post, MediaType.APPLICATION_ALL);
 
-        //when
+        // when
         response = client.handle(request);
 
         // then
@@ -181,35 +159,27 @@ public class UserRouteTest {
 
     @Test
     public void shouldDeleteUserById() throws Exception {
+        // given
+        String id = "2";
+        request = createRequest(Method.DELETE, id);
 
-        //given
-        String url = "/2";
-        request = createRequest(Method.DELETE, url);
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
-        assertThat(response.getStatus()).as("Delete user by id %s", url).isEqualTo(SUCCESS_NO_CONTENT);
+        // then
+        assertThat(response.getStatus()).as("Delete user by id %s", id).isEqualTo(SUCCESS_NO_CONTENT);
 
     }
 
     @Test
     public void shouldDeleteUsers() throws Exception {
+        // given
+        request = createRequest(Method.DELETE);
 
-        //given
-        request = createRequest(Method.DELETE, "");
-
-        //when
+        // when
         response = client.handle(request);
 
-        //then
+        // then
         assertThat(response.getStatus()).as("Delete all users").isEqualTo(SUCCESS_NO_CONTENT);
     }
-
-
-    private Request createRequest(Method method, String url) {
-        return new Request(method, REQUEST_URL + REQUEST_CONTEXT + url);
-    }
-
 }
